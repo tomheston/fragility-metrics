@@ -21,8 +21,8 @@ Click the badge below to open and run the notebook in Colab:
 
 ## Usage
 
-1. Open the notebook in Colab (link above) and click run (the arrow at the upper left of the code)  
-2. Enter your 2×2 contingency table values (`a, b, c, d`) at the prompts at the bottom of the page.  
+1. Open the notebook in Colab (link above) and click Run.  
+2. Enter your 2×2 contingency table values (`a, b, c, d`) at the prompts.  
 3. The script will compute:
    - **UFI** (unit fragility index)
    - **PFI** (percent fragility index)
@@ -35,12 +35,12 @@ Click the badge below to open and run the notebook in Colab:
 
 If you use any of the tools in this repository, please cite:
 
-> Heston, T. (2025). *Fragility Metrics Toolkit* (Version 1.0) [Computer software]. GitHub. https://github.com/USERNAME/fragility-metrics  
-> Licensed under CC-BY 4.0.
+> Heston, T. (2025). *Fragility Metrics Toolkit* (Version 1.0) [Computer software]. GitHub. https://github.com/tomheston/fragility-metrics  
+> Licensed under CC BY 4.0.
 
 ---
 
 ## License
 
 This repository is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).  
-You are free to share and
+You are free to share and adapt the material, provided appropriate credit is given. See the `LICENSE` file for details.
