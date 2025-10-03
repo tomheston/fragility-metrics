@@ -19,28 +19,30 @@ Click the badge below to open and run the notebook in Colab:
 
 ---
 
-## Usage
-
-1. Open the notebook in Colab (link above) and click Run.  
-2. Enter your 2×2 contingency table values (`a, b, c, d`) at the prompts.  
-3. The script will compute:
-   - **UFI** (unit fragility index)
-   - **PFI** (percent fragility index)
-   - **RRI** (risk residual index)
-   - **RQ** (risk quotient)
-
----
-
 ## Citation
 
-If you use any of the tools in this repository, please cite:
+If you use this toolkit, please cite:
 
-> Heston, T. (2025). *Fragility Metrics Toolkit* (Version 1.0) [Computer software]. GitHub. https://github.com/tomheston/fragility-metrics  
-> Licensed under CC BY 4.0.
+> Heston, T. F. (2025). *Fragility Metrics Toolkit* (Version 1.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.17254764
+
+### DOI Badge
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17254764.svg)](https://doi.org/10.5281/zenodo.17254764)
 
 ---
 
 ## License
 
-This repository is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).  
-You are free to share and adapt the material, provided appropriate credit is given. See the `LICENSE` file for details.
+© Thomas F. Heston 2025. Licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).  
+You are free to share and adapt the material, provided appropriate credit is given.  
+
+---
+
+## Development
+
+- Primary language: Python (via Jupyter/Colab notebooks).  
+- Contributions: Fork and submit pull requests.  
+- Issues: Report bugs or suggest features in the GitHub “Issues” tab.
+
+---
+
