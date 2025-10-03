@@ -15,14 +15,14 @@ Additional calculators (FI, MeCI, etc.) will be added.
 
 Click the badge below to open and run the notebook in Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/USERNAME/fragility-metrics/blob/main/notebooks/pfi_rri_rq.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/pfi_rri_rq.ipynb)
 
 ---
 
 ## Usage
 
-1. Open the notebook in Colab (link above).  
-2. Enter your 2×2 contingency table values (`a, b, c, d`).  
+1. Open the notebook in Colab (link above) and click run (the arrow at the upper left of the code)  
+2. Enter your 2×2 contingency table values (`a, b, c, d`) at the prompts at the bottom of the page.  
 3. The script will compute:
    - **UFI** (unit fragility index)
    - **PFI** (percent fragility index)
