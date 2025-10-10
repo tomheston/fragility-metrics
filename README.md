@@ -35,7 +35,7 @@ If you use this toolkit, please cite:
 
 ### DOI Badge
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17254764.svg)](https://doi.org/10.5281/zenodo.17254764)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17254763.svg)](https://doi.org/10.5281/zenodo.17254763)
 
 ---
 
