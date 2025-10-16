@@ -8,6 +8,7 @@ Current tools include:
 - **RRI (Relative Risk Index)**
 - **RQ (Risk Quotient)**
 - **RI (Robustness Index)**
+- **MeCI (Meaningful Change Index)**
 
 All notebooks are located in the `/notebooks/` directory.
 
@@ -24,6 +25,10 @@ Click a badge below to open and run each notebook directly in Colab:
 **PFI, RRI, RQ, RI Calculator**
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/PFI_RRI_RQ_RI_calculator.ipynb)
+
+**MeCI - Meaningful Change Index Calculator**
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/Meaningful_Change_Index.ipynb)
 
 ---
 
