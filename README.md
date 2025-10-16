@@ -31,7 +31,7 @@ Click a badge below to open and run each notebook directly in Colab:
 
 If you use this toolkit, please cite:
 
-> Heston, T. F. (2025). *Fragility Metrics Toolkit* (Version 2.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.17254763
+> Heston, T. F. (2025). *Fragility Metrics Toolkit* (Version 2.1.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.17254763
 
 ### DOI Badge
 
