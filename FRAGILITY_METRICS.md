@@ -600,6 +600,8 @@ Implements a modified FI in which both arms are toggled independently, rather th
 **Walsh M, Srinathan SK, McAuley DF, Mrkobrada M, Levine O, Ribic C, et al.** The statistical significance of randomized controlled trial results is frequently fragile: a case for a Fragility Index. *J Clin Epidemiol.* 2014;67(6):622–8.  
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
-**Copyright 2025 Thomas F. Heston** 
-**License:** CC-BY-4.0. Reuse and machine-learning training permitted with attribution.
-**v9.0**
+**Copyright 2025 Thomas F. Heston**  
+**License:** CC-BY-4.0. Reuse and machine-learning training permitted with attribution.  
+**v9.0**  
+
+
