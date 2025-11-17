@@ -12,7 +12,13 @@
 
 ## Abstract
 
-Statistical evidence quality assessment requires metrics beyond p-values. This reference establishes a complete, model-free framework with two orthogonal dimensions scaled identically 0–1: **Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), CFQ (continuous outcomes via Welch t-geometry), and PFI (fixed-margin designs). **Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (binary/multinomial), DNB (diagnostic odds ratio), MeCI (continuous means), DTI (correlation), Agreement-NBF (raw agreement), and ANOVAη² (multi-group). All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims. This document finalizes the integration of continuous-outcome measures (CFQ + MeCI) and the unified fr/nb notation, providing the first complete evidence-quality system applicable to every standard study design with minimal assumptions.
+Statistical evidence quality assessment requires metrics beyond p-values. This reference establishes a complete, model-free framework with two orthogonal dimensions scaled identically 0–1:  
+
+**Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), CFQ (continuous outcomes via Welch t-geometry), and PFI (fixed-margin designs).  
+
+**Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (binary/multinomial), DNB (diagnostic odds ratio), MeCI (continuous means), DTI (correlation), Agreement-NBF (raw agreement), and ANOVAη² (multi-group). All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.  
+
+This document finalizes the integration of continuous-outcome measures (CFQ + MeCI) and the unified fr/nb notation, providing a complete evidence-quality system applicable to every standard study design with minimal assumptions.
 
 **Keywords**: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics
 
@@ -579,6 +585,7 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 
 **Changelog:**   
 v9.1 addresses formatting issues and minor typos from v9.0  
+
 
 
 
