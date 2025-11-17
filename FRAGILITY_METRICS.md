@@ -1,8 +1,8 @@
 # The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 
 **Thomas F. Heston**  
-*Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
+*Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
 
 **Version:** 9.0  
@@ -570,3 +570,4 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 
 **License:** CC-BY-4.0  
 **© 2025 Tom F. Heston**
+
