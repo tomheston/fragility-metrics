@@ -21,7 +21,7 @@ Output: p (Fisher's exact baseline p-value), fr (FI/MFQ and GFI/GFQ) and nb (RQ)
 Input: a, b, c, d  
 Output: p (McNemar χ² baseline p-value), fr (PFI) and nb (RQ).
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/Binary_Outcomes_Calculator.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/binary_2x2_fixed_margin.ipynb)  
 
 ### 3. Diagnostic Metrics
 Input: TP, FN, FP, TN  
