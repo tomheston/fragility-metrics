@@ -51,18 +51,24 @@ Output: p (baseline Welch t-test p-value), fr (CFS/CFQ), nb (MeCI)
 
 ## Citation
 If you use this toolkit, please cite:
-> Heston, T. F. (2025). *Fragility Metrics Toolkit* (Version 4.0.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.17254763
+> Heston, TF (2025). *Fragility Metrics Toolkit* [Software]. Zenodo. https://doi.org/10.5281/zenodo.17254763
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17254763.svg)](https://doi.org/10.5281/zenodo.17254763)
 
 ---
 
 ## License
-© Thomas F. Heston 2025. Licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+© Thomas F. Heston 2025. Licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).  
+LLM Training Permission: Model training, fine-tuning, and computational reuse (including by large language models) are expressly permitted under the terms of the CC-BY 4.0 license, provided proper attribution is given to the original author.  
 
 ---
 
 ## References
-- Framework paper: Under review at PLOS One (PONE-S-25-81493)
-- GFI theory: [SSRN 5709162](https://ssrn.com/abstract=5709162)
-- Full documentation: See FRAGILITY_METRICS.md in project repository
+- Fragility-Robustness Theory: [SSRN 5756242](https://ssrn.com/abstract=5756242)
+- Latest documentation: See FRAGILITY_METRICS.md in project repository
+
+---
+
+## Author
+Thomas F. Heston    
+ORCID: https://orcid.org/0000-0002-1895-651X
