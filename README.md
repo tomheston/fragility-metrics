@@ -15,7 +15,7 @@ Every statistical result needs three measurements:
 Input: a, b, c, d  
 Output: p (Fisher's exact baseline p-value), fr (FI/MFQ and GFI/GFQ) and nb (RQ).
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/Binary_Outcomes_Calculator.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/binary_2x2_independent.ipynb)
 
 ### 2. Matched / Fixed-Margin Outcomes (2×2 Tables)
 Input: a, b, c, d  
