@@ -111,22 +111,22 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **MFQ**           | Fragility  | 0–1   | PRIMARY           | FI/n_mod                                  | Proportion to flip (arm-specific)         |
 | **GFQ**           | Fragility  | 0–1   | PRIMARY           | GFI/N                                     | Proportion to flip (global, r×c)          |
 | **DFQ**           | Fragility  | 0–1   | PRIMARY           | DFI/n_relevant                            | Proportion to flip (diagnostic)           |
-| **CFQ**           | Fragility  | 0–1   | PRIMARY           | \|\|T\| − t*\| / (1 + \|\|T\| − t*\|)    | SE-scaled distance to p=0.05 (continuous) |
+| **CFQ**           | Fragility  | 0–1   | PRIMARY           | \|\|T\| − t*\| / (1 + \|\|T\| − t*\|)    | SE-scaled distance to p=0.05 (continuous)  |
 | **RQ**            | Robustness | 0–1   | PRIMARY           | RRI/(N/k); 2×2 balanced: \|ad−bc\|/(N²/4) | Distance from independence                |
 | **DNB**           | Robustness | 0–1   | PRIMARY           | \|ln(DOR)\|/(\|ln(DOR)\|+SE)              | Diagnostic distance from neutrality       |
 | **MeCI**          | Robustness | 0–1   | PRIMARY           | D/(1+D)                                   | Continuous distance from neutrality       |
 | **DTI**           | Robustness | 0–1   | PRIMARY           | \|atanh(r)\|/(1+\|atanh(r)\|)             | Correlation distance from independence    |
-| **Agreement-NBF** | Robustness | 0–1   | PRIMARY           | \|p̂−0.5\|/(\|p̂−0.5\|+0.5/√n)             | Agreement distance from chance            |
+| **Agreement-NBF** | Robustness | 0–1   | PRIMARY           | \|p̂−0.5\|/(\|p̂−0.5\|+0.5/√n)              | Agreement distance from chance            |
 | **ANOVAη²**       | Robustness | 0–1   | PRIMARY           | df_b·F/(df_b·F+df_w)                      | Multi-group distance from equality        |
-| **PFI**           | Fragility  | 0–1   | PRIMARY           | 4⋅ \|x\|/N (x = McNemar path shift)       | Fixed-margin fragility (matched designs)     |
-| **FI**            | Count      | 0–∞   | Secondary         | Toggle count (classic)                   | Raw fragility count (binary)              |
-| **SFI**           | Count      | 0–∞   | Secondary         | Toggle count (standardized)              | Label-invariant count                     |
-| **GFI**           | Count      | 0–∞   | Secondary         | Move count (global)                      | Path-independent count                    |
-| **DFI**           | Count      | 0–∞   | Secondary         | Toggle count vs benchmark                | Diagnostic count                          |
-| **CFS**           | Distance   | 0–∞   | Secondary         | \|\|T\|−t*\|                             | SE-unit distance to p=0.05 (continuous)   |
-| **RRI**           | Distance   | 0–∞   | Secondary         | (1/k)Σ\|O−E\|                            | Raw distance from independence            |
+| **PFI**           | Fragility  | 0–1   | PRIMARY           | 4⋅ \|x\|/N (x = McNemar path shift)        | Fixed-margin fragility (matched designs)  |
+| **FI**            | Count      | 0–∞   | Secondary         | Toggle count (classic)                    | Raw fragility count (binary)              |
+| **SFI**           | Count      | 0–∞   | Secondary         | Toggle count (standardized)               | Label-invariant count                     |
+| **GFI**           | Count      | 0–∞   | Secondary         | Move count (global)                       | Path-independent count                    |
+| **DFI**           | Count      | 0–∞   | Secondary         | Toggle count vs benchmark                 | Diagnostic count                          |
+| **CFS**           | Distance   | 0–∞   | Secondary         | \|\|T\|−t*\|                              | SE-unit distance to p=0.05 (continuous)   |
+| **RRI**           | Distance   | 0–∞   | Secondary         | (1/k)Σ\|O−E\|                             | Raw distance from independence            |
 | **RI**            | Scaling    | >1    | Secondary         | Factor k to flip                          | Sample size multiplier                    |
-| **UFI**           | Unit       | >0    | Secondary         | N/(n₁n₂) or 1/max(n₁,n₂) or 1/N            | Step-size definitions                     |
+| **UFI**           | Unit       | >0    | LEGACY            | N/(n₁n₂) or 1/max(n₁,n₂) or 1/N           | Step-size definitions                     |
 
 ---
 
@@ -212,6 +212,9 @@ Where n_relevant depends on metric:
 
 **Base metric**: x (minimal fixed-margin perturbation along the McNemar path)  
 **Note**: Use exclusively for matched-pair, crossover, or any 2×2 table in which both row and column margins are fixed by design (McNemar test is the appropriate significance test). For independent-sample 2×2 designs, use **GFQ** (gold standard, path-independent) or **MFQ** (fast approximation when N ≳ 5000). **PFI values are not numerically comparable to GFQ or MFQ** because they assess fragility under different null hypotheses (marginal homogeneity vs. independence) and different data-generating processes.  
+
+When no feasible shift can flip significance, PFI reports the maximum feasible proportion with a max_robust = True flag — indicating maximum possible stability under design constraints.  
+
 
 ### 3.6 CFQ — Continuous Fragility Quotient ⭐
 
@@ -426,7 +429,7 @@ Given unit size f, Walter defines UFI as the minimum number k of these fixed-mar
 - Feinstein UFI: the unit size f.  
 - Walter UFI: the toggle count k, giving total shift k·f.  
 
-**Note**: Both strictly fixed-margin constructs. Conceptual precursors to PFI. Modern analyses use PFI for fixed margins and MFQ/GFQ otherwise.  
+**Note**: Both strictly fixed-margin constructs. Conceptual precursors to PFI. **UFI suffers from the same limitation as early PFI versions: when no feasible number of unit shifts can reverse significance (common in strongly significant matched-pair studies), UFI becomes undefined or infinite, losing valuable information about maximum robustness.** Modern analyses should use **PFI (v9.4+)**, which correctly reports the maximum feasible shift when flipping is impossible, for all fixed-margin or matched designs. MFQ/GFQ remain preferred for independent-sample designs.
 
 ### **MFI — Modified Fragility Index**  
 
@@ -598,4 +601,5 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**  
+
 
