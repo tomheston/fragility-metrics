@@ -1,4 +1,4 @@
-# FRAGILITY METRICS v9.3
+# FRAGILITY METRICS v9.4
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
@@ -6,17 +6,18 @@
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 9.3  
+**Version:** 9.4  
 **Date:** November 19, 2025  
 
---- 
+---
+
 ## Abstract
 
 Statistical evidence quality assessment requires metrics beyond p-values. This reference establishes a complete, model-free framework with two orthogonal dimensions scaled identically 0–1:  
 
 **Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), CFQ (continuous outcomes via Welch t-geometry), and PFI (fixed-margin designs).  
 
-**Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (binary/multinomial), DNB (diagnostic odds ratio), MeCI (continuous means), DTI (correlation), Agreement-NBF (raw agreement), and ANOVAη² (multi-group). All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.  
+**Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), MeCI (continuous means), DTI (correlation), Agreement-NBF (raw agreement), and ANOVAη² (multi-group). All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.  
 
 This document finalizes the integration of continuous-outcome measures (CFQ + MeCI) and the unified fr/nb notation, providing a complete evidence-quality system applicable to every standard study design with minimal assumptions.
 
@@ -44,7 +45,7 @@ Modern evidence assessment rests on three orthogonal statistical dimensions plus
 
 #### Robustness (nb ∈ [0,1])
 - Question: How far is the result from the neutrality boundary?
-- Unified metric: **nb** (all NBF metrics output nb directly)
+- Unified metric: **nb** (all NBF metrics output nb directly; RQ for independent-sample binary/multinomial, MHQ for matched-pair/fixed-margin designs)
 
 ### Key Insight: Interpretation Depends on Your Claim
 
@@ -78,7 +79,7 @@ The measurements are universal; the interpretation is claim-dependent.
 * **Unified notation**: **nb ∈ [0,1]**
 * **Measures**: Geometric distance from the neutrality boundary (no effect).
 * **Scale**: 0 to 1 (NBF normalized)
-* **Primary metrics**: RQ, DNB, MeCI, DTI, Agreement-NBF, ANOVAη² → all compute **nb**
+* **Primary metrics**: RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB, MeCI, DTI, Agreement-NBF, ANOVAη² → all compute **nb**
 * **Interpretation**: Lower nb = near neutrality; higher nb = far from neutrality.
 
 ---
@@ -106,27 +107,28 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 ## Part II: Quick Reference Table
 
 | Metric             | Type        | Scale      | Primary/Secondary  | Formula (core)                                                                                | Purpose                                                                                               |
-| ------------------------- | --------------- | --------- | ------------------------ | ---------------------------------------------------------- | ---------------------------------------------------------- |
-| **FQ**            | Fragility  | 0–1   | LEGACY            | FI/N                                      | Proportion to flip (classic, total N)     |
-| **MFQ**           | Fragility  | 0–1   | PRIMARY           | FI/n_mod                                  | Proportion to flip (arm-specific)         |
-| **GFQ**           | Fragility  | 0–1   | PRIMARY           | GFI/N                                     | Proportion to flip (global, r×c)          |
-| **DFQ**           | Fragility  | 0–1   | PRIMARY           | DFI/n_relevant                            | Proportion to flip (diagnostic)           |
-| **CFQ**           | Fragility  | 0–1   | PRIMARY           | \|\|T\| − t*\| / (1 + \|\|T\| − t*\|)    | SE-scaled distance to p=0.05 (continuous)  |
-| **RQ**            | Robustness | 0–1   | PRIMARY           | RRI/(N/k); 2×2 balanced: \|ad−bc\|/(N²/4) | Distance from independence                |
-| **DNB**           | Robustness | 0–1   | PRIMARY           | \|ln(DOR)\|/(\|ln(DOR)\|+SE)              | Diagnostic distance from neutrality       |
-| **MeCI**          | Robustness | 0–1   | PRIMARY           | D/(1+D)                                   | Continuous distance from neutrality       |
-| **DTI**           | Robustness | 0–1   | PRIMARY           | \|atanh(r)\|/(1+\|atanh(r)\|)             | Correlation distance from independence    |
-| **Agreement-NBF** | Robustness | 0–1   | PRIMARY           | \|p̂−0.5\|/(\|p̂−0.5\|+0.5/√n)              | Agreement distance from chance            |
-| **ANOVAη²**       | Robustness | 0–1   | PRIMARY           | df_b·F/(df_b·F+df_w)                      | Multi-group distance from equality        |
-| **PFI**           | Fragility  | 0–1   | PRIMARY           | 4⋅ \|x\|/N (x = McNemar path shift)        | Fixed-margin fragility (matched designs)  |
-| **FI**            | Count      | 0–∞   | Secondary         | Toggle count (classic)                    | Raw fragility count (binary)              |
-| **SFI**           | Count      | 0–∞   | Secondary         | Toggle count (standardized)               | Label-invariant count                     |
-| **GFI**           | Count      | 0–∞   | Secondary         | Move count (global)                       | Path-independent count                    |
-| **DFI**           | Count      | 0–∞   | Secondary         | Toggle count vs benchmark                 | Diagnostic count                          |
-| **CFS**           | Distance   | 0–∞   | Secondary         | \|\|T\|−t*\|                              | SE-unit distance to p=0.05 (continuous)   |
-| **RRI**           | Distance   | 0–∞   | Secondary         | (1/k)Σ\|O−E\|                             | Raw distance from independence            |
-| **RI**            | Scaling    | >1    | Secondary         | Factor k to flip                          | Sample size multiplier                    |
-| **UFI**           | Unit       | >0    | LEGACY            | N/(n₁n₂) or 1/max(n₁,n₂) or 1/N           | Step-size definitions                     |
+| ------------------------- | --------------- | ------------ | ------------------------ | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| **FQ**            | Fragility  | 0–1   | LEGACY                | FI/N                                      | Proportion to flip (classic, total N)     |
+| **MFQ**           | Fragility  | 0–1   | PRIMARY               | FI/n_mod                                  | Proportion to flip (arm-specific)         |
+| **GFQ**           | Fragility  | 0–1   | PRIMARY               | GFI/N                                     | Proportion to flip (global, r×c)          |
+| **DFQ**           | Fragility  | 0–1   | PRIMARY               | DFI/n_relevant                            | Proportion to flip (diagnostic)           |
+| **CFQ**           | Fragility  | 0–1   | PRIMARY               | \|\|T\| − t*\| / (1 + \|\|T\| − t*\|)    | SE-scaled distance to p=0.05 (continuous) |
+| **RQ**            | Robustness | 0–1   | PRIMARY               | RRI/(N/k); 2×2 balanced: \|ad−bc\|/(N²/4) | Distance from independence                |
+| **MHQ**           | Robustness | 0-1   | PRIMARY (matched only)| (\|b-c\|)/(b+c) or 0 if b+c=0             | Distance from marginal homogeneity (McNemar null) |
+| **DNB**           | Robustness | 0–1   | PRIMARY               | \|ln(DOR)\|/(\|ln(DOR)\|+SE)              | Diagnostic distance from neutrality       |
+| **MeCI**          | Robustness | 0–1   | PRIMARY               | D/(1+D)                                   | Continuous distance from neutrality       |
+| **DTI**           | Robustness | 0–1   | PRIMARY               | \|atanh(r)\|/(1+\|atanh(r)\|)             | Correlation distance from independence    |
+| **Agreement-NBF** | Robustness | 0–1   | PRIMARY               | \|p̂−0.5\|/(\|p̂−0.5\|+0.5/√n)             | Agreement distance from chance            |
+| **ANOVAη²**       | Robustness | 0–1   | PRIMARY               | df_b·F/(df_b·F+df_w)                      | Multi-group distance from equality        |
+| **PFI**           | Fragility  | 0–1   | PRIMARY               | 4⋅ \|x\|/N (x = McNemar path shift)       | Fixed-margin fragility (matched designs)     |
+| **FI**            | Count      | 0–∞   | Secondary            | Toggle count (classic)                   | Raw fragility count (binary)              |
+| **SFI**           | Count      | 0–∞   | Secondary            | Toggle count (standardized)              | Label-invariant count                     |
+| **GFI**           | Count      | 0–∞   | Secondary            | Move count (global)                      | Path-independent count                    |
+| **DFI**           | Count      | 0–∞   | Secondary            | Toggle count vs benchmark                | Diagnostic count                          |
+| **CFS**           | Distance   | 0–∞   | Secondary            | \|\|T\|−t*\|                             | SE-unit distance to p=0.05 (continuous)   |
+| **RRI**           | Distance   | 0–∞   | Secondary            | (1/k)Σ\|O−E\|                            | Raw distance from independence            |
+| **RI**            | Scaling    | >1    | Secondary            | Factor k to flip                          | Sample size multiplier                    |
+| **UFI**           | Unit       | >0    | Secondary            | N/(n₁n₂) or 1/max(n₁,n₂) or 1/N            | Step-size definitions                     |
 
 ---
 
@@ -207,14 +209,12 @@ Where n_relevant depends on metric:
 **Advantages**:  
 - Directly measures stability of the correct null hypothesis for matched designs (marginal homogeneity)  
 - Uses the same significance test (McNemar χ²) for both baseline p-value and fragility path → eliminates test mismatch  
-- Remains perfectly scaled and orthogonal to RQ (both use the N²/4 association geometry)  
-- Provides intuitive interpretation in terms of discordant pair changes
-
+- Remains perfectly scaled and orthogonal to MHQ
+- Provides intuitive interpretation in terms of discordant pair changes  
 **Base metric**: x (minimal fixed-margin perturbation along the McNemar path)  
-**Note**: Use exclusively for matched-pair, crossover, or any 2×2 table in which both row and column margins are fixed by design (McNemar test is the appropriate significance test). For independent-sample 2×2 designs, use **GFQ** (gold standard, path-independent) or **MFQ** (fast approximation when N ≳ 5000). **PFI values are not numerically comparable to GFQ or MFQ** because they assess fragility under different null hypotheses (marginal homogeneity vs. independence) and different data-generating processes.  
-
-When no feasible shift can flip significance, PFI reports the maximum feasible proportion with a max_robust = True flag — indicating maximum possible stability under design constraints.  
-
+**Note**: Use exclusively for matched-pair, crossover, or any 2×2 table in which both row and column margins are fixed by design (McNemar test is the appropriate significance test).    
+For independent-sample 2×2 designs, use **GFQ** (gold standard, path-independent) or **MFQ** (fast approximation when N ≳ 5000).    
+**PFI values are not numerically comparable to GFQ or MFQ** because they assess fragility under different null hypotheses (marginal homogeneity vs. independence) and different data-generating processes.  
 
 ### 3.6 CFQ — Continuous Fragility Quotient ⭐
 
@@ -333,6 +333,14 @@ where p̂ = observed agreement proportion
 **Neutrality**: p̂ = p0.  
 **Note**: This metric is the geometric robustness partner to DFI/DFQ for single-proportion benchmark tests and generalizes the Agreement-NBF structure to arbitrary p0. Used for single-arm response rate compared with a benchmark p0. Inputs: k (successes), n_relevant (denominator), p0 (benchmark).   
 
+### 4.8 MHQ — Marginal Homogeneity Quotient ⭐
+**Definition**: Proportion of discordants that would need to switch direction to reach marginal homogeneity (b = c).
+**Formula**: MHQ = |b − c| / (b + c) if b + c > 0 else 0
+**Range**: 0 to 1
+**Interpretation**: nb = MHQ. Example: nb = 0.20 means 20 % of discordant pairs must switch to reach b = c (neutrality).
+**Advantages**: Perfectly orthogonal to PFI, matches McNemar null exactly, intuitive for matched/paired designs.
+**Note**: Used as the nb metric, with the fr metric PFI, in fixed-margin/matched-pair modules to maintain internal consistency (p, fr, and nb all reference marginal homogeneity). For independent-sample designs RQ (distance from independence) remains the default nb metric.
+
 ## Part V: Secondary Metrics (Raw Counts & Units)  
 
 ### Raw Fragility Counts (Input to Quotients)  
@@ -429,7 +437,7 @@ Given unit size f, Walter defines UFI as the minimum number k of these fixed-mar
 - Feinstein UFI: the unit size f.  
 - Walter UFI: the toggle count k, giving total shift k·f.  
 
-**Note**: Both strictly fixed-margin constructs. Conceptual precursors to PFI. **UFI suffers from the same limitation as early PFI versions: when no feasible number of unit shifts can reverse significance (common in strongly significant matched-pair studies), UFI becomes undefined or infinite, losing valuable information about maximum robustness.** Modern analyses should use **PFI (v9.4+)**, which correctly reports the maximum feasible shift when flipping is impossible, for all fixed-margin or matched designs. MFQ/GFQ remain preferred for independent-sample designs.
+**Note**: Both strictly fixed-margin constructs. Conceptual precursors to PFI. Modern analyses use PFI for fixed margins and MFQ/GFQ otherwise.  
 
 ### **MFI — Modified Fragility Index**  
 
@@ -542,8 +550,13 @@ The modern statistical evidence framework consists of two orthogonal dimensions,
    * Continuous: CFQ (with CFS as the underlying SE-scale distance)  
 
 2. **ROBUSTNESS** (NBF-based): How far from neutrality?  
-
-   * Binary/diagnostic/continuous/correlation/multi-group: RQ, DNB, MeCI, DTI, Agreement-NBF, ANOVAη²  
+   * Independent-sample binary/multinomial: RQ
+   * Matched-pair/fixed-margin: MHQ
+   * Diagnostic: DNB
+   * Continuous: MeCI
+   * Correlation: DTI
+   * Agreement: Agreement-NBF
+   * Multi-group: ANOVAη²
 
 Interpretation depends on the claim:  
 
@@ -592,8 +605,9 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog   
-**Version:** 9.3 (November 19, 2025)    
+**Version:** 9.4 (November 19, 2025)    
 **Changes:**    
+- Added MHQ, the Marginal Homogeneity Quotient, for the nb summary statistic for binary 2x2 tables with fixed margins
 - Updated PFI to use McNemar χ² path (now matches the correct null hypothesis for matched/fixed-margin designs)    
 - Clarified GFQ as the gold standard for independent-sample designs    
 - Minor formatting fixes and date/version update  
@@ -601,5 +615,3 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**  
-
-
