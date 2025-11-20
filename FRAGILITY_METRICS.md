@@ -5,12 +5,12 @@
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 
-**ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 9.4
-**Date:** November 19, 2025
-  
+**ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
+**Version:** 9.4  
+**Date:** November 19, 2025    
+
 ---  
-  
+
 ## Abstract
 
 Statistical evidence quality assessment requires metrics beyond p-values. This reference establishes a complete, model-free framework with two orthogonal dimensions scaled identically 0–1:  
@@ -21,7 +21,7 @@ Statistical evidence quality assessment requires metrics beyond p-values. This r
 
 This document finalizes the integration of continuous-outcome measures (CFQ + MeCI) and the unified fr/nb notation, providing a complete evidence-quality system applicable to every standard study design with minimal assumptions.
 
-**Keywords**: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics
+**Keywords**: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics  
 
 ---
 
@@ -211,10 +211,8 @@ Where n_relevant depends on metric:
 - Uses the same significance test (McNemar χ²) for both baseline p-value and fragility path → eliminates test mismatch  
 - Remains perfectly scaled and orthogonal to MHQ
 - Provides intuitive interpretation in terms of discordant pair changes  
-
-**Boundary-limited cases**:
-When the feasible shift range along the fixed-margin path is exhausted before the McNemar p-value can cross α = 0.05 (e.g., the table is already at maximal directional imbalance or perfect concordance), no admissible perturbation flips significance. In these cases PFI returns the theoretical maximum feasible proportion (typically near or exactly 1.0) and is flagged "boundary-limited". This indicates maximal stability of the current significance classification under the fixed-margin constraint – the result is unflippable. High PFI + boundary-limited flag is therefore the strongest possible evidence that the observed p-value classification is stable.  
-
+**Boundary-limited cases**
+When the feasible shift range along the fixed-margin path is exhausted before the McNemar p-value can cross α = 0.05 (e.g., the table is already at maximal directional imbalance or perfect concordance), no admissible perturbation flips significance. In these cases PFI returns the theoretical maximum feasible proportion along the fixed-margin path (which may be near 1.0 in many designs) and is flagged "boundary-limited". This indicates maximal stability of the current significance classification under the fixed-margin constraint – the result is unflippable. High PFI + boundary-limited flag is therefore the strongest possible evidence that the observed p-value classification is stable.  
 **Base metric**: x (minimal fixed-margin perturbation along the McNemar path)  
 **Note**: Use exclusively for matched-pair, crossover, or any 2×2 table in which both row and column margins are fixed by design (McNemar test is the appropriate significance test).    
 For independent-sample 2×2 designs, use **GFQ** (gold standard, path-independent) or **MFQ** (fast approximation when N ≳ 5000).    
@@ -500,7 +498,7 @@ Thresholds are recommendations and still require empirical validation and should
 | 0.10–0.25 | Moderately stable |  
 | >0.25     | Very stable       |  
 
-#### Robustness Metrics (RQ, DNB, MeCI, DTI, Agreement-NBF, ANOVAη²)  
+#### Robustness Metrics (RQ, MHQ, DNB, MeCI, DTI, Agreement-NBF, ANOVAη²)  
 
 | Range     | Distance from Neutrality |  
 | --------- | ------------------------ |  
