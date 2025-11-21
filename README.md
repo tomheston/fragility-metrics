@@ -27,7 +27,7 @@ Output: p (McNemar χ² baseline p-value), fr (PFI) and nb (RQ).
 Input: TP, FN, FP, TN  
 Output: p (Fisher's exact baseline p-value), fr (DFI/DFQ), and nb (DNB)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/Diagnostic_Metrics_Calculator.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/diagnostic_2x2.ipynb)
 
 ### 4. Benchmark Proportion / Agreement vs Benchmark Analysis
 Input: n, k, benchmark p  
