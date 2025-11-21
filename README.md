@@ -45,7 +45,7 @@ Output: nb (DTI)
 Input: m1, m2, sd1, sd2, n1, n2  
 Output: p (baseline Welch t-test p-value), fr (CFS/CFQ), nb (MeCI)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/Continuous_Outcomes_Calculator.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/continuous_outcomes.ipynb)
 
 ---
 
