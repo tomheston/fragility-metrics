@@ -33,7 +33,7 @@ Output: p (Fisher's exact baseline p-value), fr (DFI/DFQ), and nb (DNB)
 Input: n, k, benchmark p  
 Output: p (baseline exact binomial p-value vs benchmark p0), fr (DFI/DFQ), nb (Proportion-NBF)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/Agreement_Metrics_Calculator.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/proportion_vs_benchmark.ipynb)
 
 ### 5. Correlation Analysis
 Input: r, n  
