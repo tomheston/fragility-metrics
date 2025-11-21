@@ -39,7 +39,7 @@ Output: p (baseline exact binomial p-value vs benchmark p0), fr (DFI/DFQ), nb (P
 Input: r, n  
 Output: nb (DTI)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/Correlation_Metrics_Calculator.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tomheston/fragility-metrics/blob/main/notebooks/correlation_analysis.ipynb)
 
 ### 6. Continuous Outcomes
 Input: m1, m2, sd1, sd2, n1, n2  
