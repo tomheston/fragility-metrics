@@ -4,34 +4,40 @@
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
-
-**ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 9.6
-**Date:** November 22, 2025
+**ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
+**Version:** 9.6  
+**Date:** November 22, 2025  
 
 ---
 
 ## Abstract
+Statistical evidence quality assessment requires metrics beyond p-values. This reference establishes a complete, model-free framework with two orthogonal dimensions scaled identically 0–1:
 
-Statistical evidence quality assessment requires metrics beyond p-values. This reference establishes a complete, model-free framework with two orthogonal dimensions scaled identically 0–1:  
+**Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), and PFI (fixed-margin designs).
 
-**Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), and PFI (fixed-margin designs).  
+**Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks), MeCI (continuous means), DTI (correlation), Agreement-NBF (raw agreement), and ANOVAη² (multi-group). 
 
-**Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks), MeCI (continuous means), DTI (correlation), Agreement-NBF (raw agreement), and ANOVAη² (multi-group). All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.  
+All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.
 
-This document finalizes the integration of continuous-outcome measures (CFQ + MeCI), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to every standard study design with minimal assumptions. This triplet framework is the tool that finally replaces “statistically significant” with “convincingly effective”.
+This document finalizes the integration of continuous-outcome measures (CFQ + MeCI), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to every standard study design with minimal assumptions. **The p–fr–nb triplet has the potential to replace “statistically significant” with “convincingly effective.”**
 
 **Keywords**: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics
 
 ---
-
 ## Executive Summary
+
+> **Whereas p < 0.05 establishes statistical significance, a concordant p–fr–nb triplet (low p + high fr + high nb) establishes convincing, replication-ready evidence of a genuine treatment effect. The p–fr–nb framework has the potential to become the new gold standard for declaring a finding believable.**
+
 ### The Statistical Evidence Framework
 Modern evidence assessment rests on three orthogonal statistical dimensions plus clinical effect size:
-- **p-value**: Is the result statistically significant?
-- **fr (fragility)**: Is that significance classification stable?
-- **nb (robustness)**: How far from the neutrality boundary?
-- **Effect size**: Is the separation clinically meaningful?
+
+| Secret question from every skeptical reader                                   | p alone answers | p–fr–nb triplet answers                                      |
+|-------------------------------------------------------------------------------|-----------------|--------------------------------------------------------------|
+| Significant?                                                                  | Yes             | **Yes** (p)                                                  |
+| Flippable by a few outcome changes or dropouts?                               | ?               | **Yes** — fr quantifies the fragility of the p-value  |
+| Real separation from zero, or just lucky sampling noise that barely hit p<0.05? | ?               | **Yes** — nb quantifies distance from the neutrality boundary |
+
+Only when **all three dimensions align strongly** (low p + high fr + high nb) do we have truly compelling, replication-ready evidence that an intervention works.
 
 ### The Three Statistical Dimensions
 #### Statistical Significance (p)
@@ -40,19 +46,18 @@ Modern evidence assessment rests on three orthogonal statistical dimensions plus
 - **Interpretation**: Lower p = stronger evidence against the null
 
 #### Fragility (fr ∈ [0,1])
-- Question: What proportion of the relevant data must change to flip the significance classification?
-- Unified metric: **fr** (all primary fragility quotients output fr directly)
+- **Question**: What proportion of the relevant data must change to flip the significance classification?
+- **Unified metric**: **fr** (all primary fragility quotients output fr directly)
 
 #### Robustness (nb ∈ [0,1])
-- Question: How far is the result from the neutrality boundary?
-- Unified metric: **nb** (all NBF metrics output nb directly; RQ for independent-sample binary/multinomial, MHQ for matched-pair/fixed-margin designs, DNB for diagnostics, Proportion-NBF for single-arm benchmarks, MeCI for continuous outcomes)
+- **Question**: How far is the result from the neutrality boundary?
+- **Unified metric**: **nb** (all NBF metrics output nb directly)
 
 ### Key Insight: Interpretation Depends on Your Claim
+**Claiming an effect exists (p ≤ 0.05):**  
+Prefer **low p**, **high fr**, **high nb**. Only when all three align strongly do we have truly compelling evidence.
 
-**Claiming an effect exists (p ≤ 0.05):**
-Prefer **low p**, **high fr**, **high nb**. Only when all three dimensions align strongly (low p + high fr + high nb) do we have truly compelling, replication-ready evidence that an intervention works.
-
-**Claiming no effect (p > 0.05):**
+**Claiming no effect (p > 0.05):**  
 Prefer **high p**, **high fr**, **low nb**.
 
 The measurements are universal; the interpretation is claim-dependent.
@@ -548,8 +553,10 @@ Thresholds are recommendations and still require empirical validation and should
 | <0.01     | Extremely fragile |  
 | 0.01–0.05 | Very fragile      |  
 | 0.05–0.10 | Fragile           |  
-| 0.10–0.25 | Moderately stable |  
-| >0.25     | Very stable       |  
+| 0.10–0.25 | Mildly stable     |  
+| 0.25-0.40 | Moderate stability |  
+| >0.40     | Very stable       |  
+
 
 #### Robustness Metrics (RQ, MHQ, DNB, Proportion-NBF, MeCI, DTI, Agreement-NBF, ANOVAη²)  
 
@@ -558,8 +565,8 @@ Thresholds are recommendations and still require empirical validation and should
 | 0–0.05    | At neutrality boundary   |  
 | 0.05–0.10 | Near neutrality          |  
 | 0.10–0.25 | Moderate distance        |  
-| 0.25–0.50 | Clear separation         |  
-| >0.50     | Far from neutrality      |  
+| 0.25–0.49 | Clear separation         |  
+| ≥ 0.50    | Far from neutrality      |  
 
 
 ### Table: Strength-of-Evidence Tiers under the p–fr–nb Framework  
@@ -567,11 +574,11 @@ Thresholds are recommendations and still require empirical validation and should
 
 | Tier                  | p-value   | fr (CFQ etc.)             | nb (MeCI/RQ etc.)         | What’s wrong (if anything)                                          | Example phrasing for papers                                           |
 |-----------------------|-----------|---------------------------|---------------------------|---------------------------------------------------------------------|------------------------------------------------------------------------|
-| ★★★★★ Gold-standard   | p ≪ 0.01  | **≥ 0.40** (very stable)  | **≥ 0.70** (far from neutrality) | Nothing — textbook convincing result                                 | “Highly convincing, replicable superiority”                           |
-| ★★★★ Strong           | p < 0.01  | 0.25 – 0.39               | 0.50 – 0.69               | Minor fragility or moderate separation — still very credible        | “Strong, robust evidence of benefit”                                  |
-| ★★★ Moderate          | p < 0.05  | 0.10 – 0.24               | 0.40 – 0.59               | Both dimensions acceptable but not impressive — typical good trial | “Moderate evidence of benefit; replication desirable”                 |
-| ★★ Weak / Discordant  | p < 0.05  | **< 0.10** (very/extremely fragile) **OR** nb **< 0.40** | **< 0.40** (near/at neutrality) **OR** fr **< 0.10** | **At least one** dimension is **seriously deficient** (very fragile **or** too close to null) | “Statistically significant but highly fragile and/or near neutrality — interpret with great caution” |
-| ★ Null / Credible negative | p > 0.05 | **≥ 0.25** (stable null) | **≤ 0.30** (near neutrality) | High fr + low nb → convincing absence of effect                     | “Convincing evidence of no meaningful difference”                    |
+| ★★★★★ Gold-standard   | p ≪ 0.01  | **≥ 0.40** (very stable)  | **≥ 0.50** (far from neutrality) | Nothing — textbook convincing result                                 | “Highly convincing, replicable superiority”                           |
+| ★★★★ Strong           | p < 0.01  | 0.25 – 0.39               | 0.25 – 0.49               | Minor fragility or moderate separation — still very credible        | “Strong, robust evidence of benefit”                                  |
+| ★★★ Moderate          | p < 0.05  | 0.10 – 0.24               | 0.10 – 0.24               | Both dimensions acceptable but not impressive — typical good trial | “Moderate evidence of benefit; replication desirable”                 |
+| ★★ Weak / Discordant  | p < 0.05  | **< 0.10** (very/extremely fragile) **OR** nb **< 0.10** | **< 0.10** (near/at neutrality) **OR** fr **< 0.10** | **At least one** dimension is **seriously deficient** (very fragile **or** too close to null) | “Statistically significant but highly fragile and/or near neutrality — interpret with great caution” |
+| ★ Null / Credible negative | p > 0.05 | **≥ 0.25** (stable null) | **≤ 0.10** (near neutrality) | High fr + low nb → convincing absence of effect                     | “Convincing evidence of no meaningful difference”                    |
 
 
 ## Part IX: Key Relationships & Validation  
@@ -691,5 +698,6 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**
+
 
 
