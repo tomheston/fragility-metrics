@@ -19,7 +19,7 @@ Statistical evidence quality assessment requires metrics beyond p-values. This r
 
 **Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks), MeCI (continuous means), DTI (correlation), Agreement-NBF (raw agreement), and ANOVAη² (multi-group). All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.  
 
-This document finalizes the integration of continuous-outcome measures (CFQ + MeCI), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to every standard study design with minimal assumptions.
+This document finalizes the integration of continuous-outcome measures (CFQ + MeCI), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to every standard study design with minimal assumptions. This triplet framework is the tool that finally replaces “statistically significant” with “convincingly effective”.
 
 **Keywords**: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics
 
@@ -50,7 +50,7 @@ Modern evidence assessment rests on three orthogonal statistical dimensions plus
 ### Key Insight: Interpretation Depends on Your Claim
 
 **Claiming an effect exists (p ≤ 0.05):**
-Prefer **low p**, **high fr**, **high nb**.
+Prefer **low p**, **high fr**, **high nb**. Only when all three dimensions align strongly (low p + high fr + high nb) do we have truly compelling, replication-ready evidence that an intervention works.
 
 **Claiming no effect (p > 0.05):**
 Prefer **high p**, **high fr**, **low nb**.
@@ -561,6 +561,19 @@ Thresholds are recommendations and still require empirical validation and should
 | 0.25–0.50 | Clear separation         |  
 | >0.50     | Far from neutrality      |  
 
+
+### Table: Strength-of-Evidence Tiers under the p–fr–nb Framework  
+*(for claims of “effect exists” — p < 0.05 expected)*
+
+| Tier                  | p-value   | fr (CFQ etc.)             | nb (MeCI/RQ etc.)         | What’s wrong (if anything)                                          | Example phrasing for papers                                           |
+|-----------------------|-----------|---------------------------|---------------------------|---------------------------------------------------------------------|------------------------------------------------------------------------|
+| ★★★★★ Gold-standard   | p ≪ 0.01  | **≥ 0.40** (very stable)  | **≥ 0.70** (far from neutrality) | Nothing — textbook convincing result                                 | “Highly convincing, replicable superiority”                           |
+| ★★★★ Strong           | p < 0.01  | 0.25 – 0.39               | 0.50 – 0.69               | Minor fragility or moderate separation — still very credible        | “Strong, robust evidence of benefit”                                  |
+| ★★★ Moderate          | p < 0.05  | 0.10 – 0.24               | 0.40 – 0.59               | Both dimensions acceptable but not impressive — typical good trial | “Moderate evidence of benefit; replication desirable”                 |
+| ★★ Weak / Discordant  | p < 0.05  | **< 0.10** (very/extremely fragile) **OR** nb **< 0.40** | **< 0.40** (near/at neutrality) **OR** fr **< 0.10** | **At least one** dimension is **seriously deficient** (very fragile **or** too close to null) | “Statistically significant but highly fragile and/or near neutrality — interpret with great caution” |
+| ★ Null / Credible negative | p > 0.05 | **≥ 0.25** (stable null) | **≤ 0.30** (near neutrality) | High fr + low nb → convincing absence of effect                     | “Convincing evidence of no meaningful difference”                    |
+
+
 ## Part IX: Key Relationships & Validation  
 
 ### Mathematical Relationships  
@@ -678,4 +691,5 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**
+
 
