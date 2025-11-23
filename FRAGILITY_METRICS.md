@@ -117,7 +117,7 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **GFQ**           | Fragility  | 0–1   | PRIMARY               | GFI / N                                                         | Proportion to flip (global, r×c)                  |
 | **DFQ**           | Fragility  | 0–1   | PRIMARY               | DFI / n_relevant                                                | Proportion to flip (diagnostic)                   |
 | **BFQ**           | Fragility  | 0–1   | PRIMARY               | BFI / n_relevant (n_relevant = n)                               | Proportion to flip (single-arm vs benchmark)      |
-| **CFQ**           | Fragility  | 0–1   | PRIMARY               | (\|T\| − t\*) / (1 + \|T\| − t\*)                               | SE-scaled distance to p = 0.05 (continuous)       |
+| **CFQ**           | Fragility  | 0–1   | PRIMARY               | \|\|T\| − t\*\| / (1 + \|\|T\| − t\*\|)                         | SE-scaled distance to p = 0.05 (continuous)       |
 | **PFI**           | Fragility  | 0–1   | PRIMARY               | 4 × \|x\| / N (x = McNemar path shift)                          | Fixed-margin fragility (matched designs)          |
 | **RQ**            | Robustness | 0–1   | PRIMARY               | RRI / (N/k); 2×2 balanced: \|ad − bc\| / (N²/4)                 | Distance from independence                        |
 | **MHQ**           | Robustness | 0–1   | PRIMARY (matched)     | \|b − c\| / (b + c) or 0 if b + c = 0                           | Distance from marginal homogeneity                |
@@ -131,10 +131,12 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **SFI**           | Count      | 0–∞   | Secondary             | Toggle count (standardized)                                     | Label-invariant count                             |
 | **GFI**           | Count      | 0–∞   | Secondary             | Move count (global)                                             | Path-independent count                            |
 | **DFI**           | Count      | 0–∞   | Secondary             | Toggle count vs benchmark                                       | Diagnostic count                                  |
-| **CFS**           | Distance   | 0–∞   | Secondary             | \|T\| − t\*                                                     | SE-unit distance to p = 0.05 (continuous)         |
+| **CFS**           | Distance   | 0–∞   | Secondary             | \|\|T\| − t\*\|                                                 | SE-unit distance to p = 0.05 (continuous)         |
 | **RRI**           | Distance   | 0–∞   | Secondary             | (1/k) Σ\|O − E\|                                                | Raw distance from independence                    |
 | **RI**            | Scaling    | >1    | Secondary             | Factor k to flip                                                | Sample size multiplier                            |
 | **UFI**           | Unit       | >0    | LEGACY                | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                                | Step-size definitions (fixed-margin unit size)    |
+
+t* is the critical value from the t-distribution.  
 
 ## Part III: PRIMARY FRAGILITY METRICS 
 
@@ -676,3 +678,4 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**
+
