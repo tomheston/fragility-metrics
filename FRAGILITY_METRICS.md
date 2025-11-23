@@ -19,7 +19,7 @@ Statistical evidence quality assessment requires metrics beyond p-values. This r
 
 All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.
 
-This document finalizes the integration of continuous-outcome measures (CFQ + MeCI), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to every standard study design with minimal assumptions. **The p–fr–nb triplet has the potential to replace “statistically significant” with “convincingly effective.”**
+This document finalizes the integration of continuous-outcome measures (CFQ + MeCI), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to nearly every standard study design with minimal assumptions. **The p–fr–nb triplet has the potential to replace “statistically significant” with “convincingly effective.”**
 
 **Keywords**: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics
 
@@ -698,6 +698,7 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**
+
 
 
 
