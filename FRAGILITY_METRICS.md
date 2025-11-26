@@ -1,11 +1,11 @@
-# FRAGILITY METRICS v10.0
+# FRAGILITY METRICS v10.2
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.0
+**Version:** 10.2
 **Date:** November 25, 2025  
 
 ---
@@ -13,10 +13,9 @@
 ## Abstract
 Instead of reporting p-values alone (“partial evidence”), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
 
-**Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), and ZFQ (the Fisher-z (Zerko) Fragility Quotient; correlations).
+**Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z (Zerko) Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), and SFQ (survival outcomes via Cox regression z-statistic).
 
-
-**Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks and agreement vs chance), MeCI (continuous means), DTI (correlation), and ANOVAη² (multi-group). 
+**Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks and agreement vs chance), MeCI (continuous means), DTI (correlation), ANOVAη² (multi-group), ORQ (ordinal outcomes), and SRQ (survival outcomes). 
 
 All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.
 
@@ -135,6 +134,8 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **MeCI**          | Robustness | 0–1   | PRIMARY               | \|T\| / (1 + \|T\|) where T is Welch t-statistic                | Continuous distance from neutrality               |
 | **DTI**           | Robustness | 0–1   | PRIMARY               | \|atanh(r)\| / (1 + \|atanh(r)\|)                               | Correlation distance from independence            |
 | **ZFQ – Fisher-z (Zerko) Fragility Quotient** | Fragility | 0–1 | PRIMARY | \|Z − 1.96\| / (1 + \|Z − 1.96\|) where Z = \|atanh(r)\|√(n−3) | Correlation classification stability |
+| **OFQ**           | Fragility  | 0–1   | PRIMARY               | |z_WMW - 1.96| / (1 + |z_WMW - 1.96|)        | SE-scaled distance to p = 0.05 (ordinal)      |
+| **ORQ**           | Robustness | 0–1   | PRIMARY               | |ln(gOR)| / (1 + |ln(gOR)|)                  | Distance from neutrality (ordinal)            |
 | **ANOVA-FQ**       | Fragility  | 0–1   | PRIMARY (k≥2)         | \|√F − √F*\| / (1 + \|√F − √F*\|)             | Stability of F-classification                |
 | **ANOVAη²**        | Robustness | 0–1   | PRIMARY               | df_b·F / (df_b·F + df_w)                      | Distance from equality of means              |
 | **FI**            | Count      | 0–∞   | Secondary             | Toggle count (classic)                                          | Raw fragility count (binary)                      |
@@ -145,6 +146,8 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **RRI**           | Distance   | 0–∞   | Secondary             | (1/k) Σ\|O − E\|                                                | Raw distance from independence                    |
 | **RI**            | Scaling    | >1    | Secondary             | Factor k to flip                                                | Sample size multiplier                            |
 | **UFI**           | Unit       | >0    | LEGACY                | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                                | Step-size definitions (fixed-margin unit size)    |
+| **SFQ**           | Fragility  | 0–1   | PRIMARY               | |z_HR - 1.96| / (1 + |z_HR - 1.96|)           | SE-scaled distance to p = 0.05 (survival)    |
+| **SRQ**           | Robustness | 0–1   | PRIMARY               | |ln(HR)| / (1 + |ln(HR)|)                     | Distance from neutrality (survival)          |
 
 t* is the critical value from the t-distribution. 
 F* is the critical F value at α = 0.05 for the reported df.
@@ -321,7 +324,42 @@ ANOVA-FQ = ANOVA-FS / (1 + ANOVA-FS)
 **NBF pair**: DTI
 **Note**: Completes the final p-fr-nb triplet. ZFQ measures classification stability; DTI measures effect magnitude. Both required for complete correlation evidence assessment. Colloquially known as the Zerko Fragility Quotient.
 
+### 3.10 OFQ — Ordinal Fragility Quotient ⭐
 
+**Application**: Ordinal outcomes analyzed via Wilcoxon-Mann-Whitney test, proportional odds models, or ordinal logistic regression (e.g., modified Rankin Scale, NIHSS, pain scales, functional status scores).
+**Definition**: Proportion of SE-scaled shift in the Wilcoxon-Mann-Whitney z-statistic required to flip statistical significance for ordinal outcomes.
+**Formula**: Let gOR = generalized odds ratio (common odds ratio from proportional odds model), with 95% CI [CI_lower, CI_upper], and N = total sample size.
+Calculate:
+- ln(gOR) = natural log of the generalized odds ratio
+- SE_log_gOR ≈ [ln(CI_upper) - ln(CI_lower)] / (2 × 1.96) (standard error from confidence interval)
+- z_WMW ≈ ln(gOR) / SE_log_gOR (Wilcoxon-Mann-Whitney z-statistic)
+Then:
+**OFQ = |z_WMW - 1.96| / (1 + |z_WMW - 1.96|)**
+**Range**: 0 to 1
+**Interpretation**: fr = OFQ. Example: fr = 0.33 means the z-statistic is moderately far from the p = 0.05 boundary on the OFQ scale; higher values indicate more stable significance classification.
+**Advantages**: Works directly from reported gOR and 95% CI (standard reporting for ordinal outcomes). No raw data, ranks, or distributional assumptions required. Extends the fragility framework to ordinal shift analysis.
+**Base metric**: |z_WMW - 1.96| (raw distance in z-statistic units to significance boundary)
+**NBF pair**: ORQ
+**Note**: OFQ assesses fragility (stability of significance classification) for ordinal outcomes. It complements ORQ, which measures robustness (distance from neutrality). Both should be reported together for ordinal outcome studies. Structurally identical to CFQ (continuous), ANOVA-FQ (multi-group), and ZFQ (correlation).
+
+### 3.11 SFQ — Survival Fragility Quotient ⭐
+
+**Application**: Time-to-event outcomes analyzed via Cox regression (e.g., overall survival, progression-free survival, time to heart failure hospitalization).
+**Definition**: Proportion of SE-scaled shift in the Cox regression z-statistic required to flip statistical significance for survival outcomes.
+**Formula**: Let HR = hazard ratio from Cox regression, with 95% CI [CI_lower, CI_upper].
+Calculate:
+- ln(HR) = natural log of the hazard ratio
+- SE_ln_HR ≈ [ln(CI_upper) - ln(CI_lower)] / (2 × 1.96) (standard error from confidence interval)
+- z_HR = ln(HR) / SE_ln_HR (Cox z-statistic)
+Then:
+**SFQ = |z_HR - 1.96| / (1 + |z_HR - 1.96|)**
+
+**Range**: 0 to 1
+**Interpretation**: fr = SFQ. Example: fr = 0.15 means the z-statistic is relatively close to the p = 0.05 boundary on the SFQ scale; higher values indicate more stable significance classification.
+**Advantages**: Works directly from reported HR and 95% CI (standard reporting for survival outcomes). No raw survival data, Kaplan-Meier curves, or censoring information required. Extends the fragility framework to time-to-event analysis.
+**Base metric**: |z_HR - 1.96| (raw distance in z-statistic units to significance boundary)
+**NBF pair**: SRQ
+**Note**: SFQ assesses fragility (stability of significance classification) for survival outcomes. It complements SRQ, which measures robustness (distance from neutrality). Both should be reported together for time-to-event studies. Structurally identical to CFQ (continuous), ANOVA-FQ (multi-group), ZFQ (correlation), and OFQ (ordinal).
 
 ## Part IV: Primary Robustness Metrics
 
@@ -430,6 +468,32 @@ Then:
 **Neutrality**: b = c (marginal homogeneity)  
 **Pairs with**: PFI  
 **Note**: Used as the nb metric, with the fr metric PFI, in fixed-margin/matched-pair modules to maintain internal consistency (p, fr, and nb all reference marginal homogeneity). For independent-sample designs RQ (distance from independence) remains the default nb metric.
+
+### 4.8 ORQ — Ordinal Robustness Quotient ⭐
+
+**Application**: Ordinal outcomes analyzed via Wilcoxon-Mann-Whitney test, proportional odds models, or ordinal logistic regression (e.g., modified Rankin Scale, NIHSS, pain scales).
+**Definition**: NBF-based robustness metric measuring geometric distance from neutrality (gOR = 1) for ordinal outcomes.
+**Formula**: Let gOR = generalized odds ratio (common odds ratio from proportional odds model).
+Then:
+**ORQ = |ln(gOR)| / (1 + |ln(gOR)|)**
+**Range**: 0 to 1
+**Interpretation**: nb = ORQ. Example: nb = 0.23 means the ordinal outcome shows moderate separation from neutrality; nb = 0.50+ indicates strong shift toward better outcomes.
+**Neutrality**: gOR = 1 (no ordinal shift between groups)
+**Pairs with**: OFQ
+**Note**: Primary robustness metric for ordinal outcomes. Uses natural log transformation (consistent with DNB for diagnostic odds ratios). Works from published gOR alone—no confidence interval needed for ORQ calculation (though CI is needed for OFQ).
+
+### 4.9 SRQ — Survival Robustness Quotient ⭐
+
+**Application**: Time-to-event outcomes analyzed via Cox regression (e.g., overall survival, disease-free survival, cardiovascular mortality).
+**Definition**: NBF-based robustness metric measuring geometric distance from neutrality (HR = 1) for survival outcomes.
+**Formula**: Let HR = hazard ratio from Cox regression.
+Then:
+**SRQ = |ln(HR)| / (1 + |ln(HR)|)**
+**Range**: 0 to 1
+**Interpretation**: nb = SRQ. Example: nb = 0.18 means the hazard ratio shows moderate separation from neutrality; nb = 0.50+ indicates strong reduction (or increase) in hazard.
+**Neutrality**: HR = 1 (equal hazard rates between groups; no treatment effect)
+**Pairs with**: SFQ
+**Note**: Primary robustness metric for survival outcomes. Uses natural log transformation (consistent with DNB for diagnostic odds ratios and ORQ for ordinal outcomes). Works from published HR alone—no confidence interval needed for SRQ calculation (though CI is needed for SFQ).
 
 ## Part V: Secondary Metrics (Raw Counts & Units)  
 
@@ -584,7 +648,7 @@ Interpretation depends on the claim being made:
 
 Thresholds are recommendations and still require empirical validation and should be treated as provisional.  
 
-#### Fragility Quotients (FQ, MFQ, GFQ, DFQ, BFQ, CFQ, PFI, ANOVA-FQ, ZFQ)  
+#### Fragility Quotients (FQ, MFQ, GFQ, DFQ, BFQ, CFQ, PFI, ANOVA-FQ, ZFQ, OFQ, SFQ)  
 
 | Range     | Interpretation    |  
 | --------- | ----------------- |  
@@ -596,7 +660,7 @@ Thresholds are recommendations and still require empirical validation and should
 | >0.40     | Very stable       |  
 
 
-#### Robustness Metrics (RQ, MHQ, DNB, Proportion-NBF, MeCI, DTI, ANOVAη²)  
+#### Robustness Metrics (RQ, MHQ, DNB, Proportion-NBF, MeCI, DTI, ANOVAη², ORQ, SRQ)  
 
 | Range     | Distance from Neutrality |  
 | --------- | ------------------------ |  
@@ -632,11 +696,13 @@ CFQ  = CFS / (1 + CFS)
 PFI  = 4·|x| / N  
 ANOVA-FQ = ANOVA-FS / (1 + ANOVA-FS)  
 ZFQ      = D / (1 + D)
+OFQ      = |z_WMW - 1.96| / (1 + |z_WMW - 1.96|)
+SFQ      = |z_HR - 1.96| / (1 + |z_HR - 1.96|)
 
 GFI ≤ FI ≤ SFI (always)  
 
 All quotients: in [0,1]  
-All NBF metrics: in [0,1]  
+All NBF metrics: in [0,1]
 
 ### Validation Checks  
 
@@ -650,7 +716,7 @@ All NBF metrics: in [0,1]
   
 ### Reporting Checklist  
 
-□ Both dimensions reported (fragility + robustness)  
+□ All three dimensions reported (significance, fragility + robustness)  
 □ Primary metrics used (quotients, not just counts)  
 □ Effect size with 95% CI included  
 □ Exact p-value reported  
@@ -667,16 +733,21 @@ The modern statistical evidence framework consists of two orthogonal dimensions,
    * Binary/diagnostic/benchmark: FQ, MFQ, GFQ, DFQ, BFQ, PFI  
    * Continuous (two-group): CFQ (with CFS as the underlying SE-scale distance)  
    * Continuous (multi-group): ANOVA-FQ  
+   * Ordinal: OFQ (Wilcoxon-Mann-Whitney / proportional odds)
+   * Survival: SFQ (Cox regression hazard ratios)
    * Correlation: ZFQ (Fisher-z distance from the α=0.05 boundary; aka Zerko Fragility Quotient)
 
 2. **ROBUSTNESS** (NBF-based): How far from neutrality?  
+
    * Independent-sample binary/multinomial: RQ  
    * Matched-pair/fixed-margin: MHQ  
    * Diagnostic: DNB  
    * Single-arm benchmark: Proportion-NBF  
    * Continuous: MeCI
+   * Ordinal: ORQ (distance from gOR = 1)
+   * Survival: SRQ (distance from HR = 1)
    * Correlation: DTI (Fisher-z distance from independence, ρ = 0) 
-   * Multi-group: ANOVAη²  
+   * Multi-group: ANOVAη²
 
 Interpretation depends on the claim:  
 
@@ -725,8 +796,17 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog   
-**Version:** 10.0 (November 25, 2025)
+**Version:** 10.2 (November 25, 2025)
 **Changes:**
+- Added SFQ (Survival Fragility Quotient) and SRQ (Survival Robustness Quotient) for time-to-event outcomes
+- Completed p-fr-nb triplet for Cox regression survival analysis (HR-based outcomes)
+- Framework now provides complete evidence assessment for 100% of standard parametric, ordinal, AND survival superiority designs
+- Updated Quick Reference Table with SFQ and SRQ entries
+- Updated Abstract to include survival metrics- Added OFQ (Ordinal Fragility Quotient) and ORQ (Ordinal Robustness Quotient) for ordinal outcomes
+- Completed p-fr-nb triplet for ordinal shift analysis (Wilcoxon-Mann-Whitney, proportional odds, mRS, NIHSS, etc.)
+- Framework now provides complete evidence assessment for 100% of standard parametric AND ordinal superiority designs
+- Updated Quick Reference Table with OFQ and ORQ entries
+- Updated Abstract to include ordinal metrics
 - Added ZFQ – Fisher-z (Zerko) Fragility Quotient with symmetric formula for correlation studies, completing the p–fr–nb triplet together with DTI.
 - Completed final p-fr-nb triplet: correlation now has both fr (ZFQ) and nb (DTI)
 - Framework now provides complete evidence assessment for 100% of standard parametric designs
