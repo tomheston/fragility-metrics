@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v10.2
+# FRAGILITY METRICS v10.2.2
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.2
-**Date:** November 25, 2025  
+**Version:** 10.2.2
+**Date:** November 27, 2025  
 
 ---
 
@@ -42,7 +42,16 @@ Modern evidence assessment rests on three orthogonal statistical dimensions plus
 | Flippable by a few outcome changes or dropouts?                               | ?               | **Yes** — fr quantifies the fragility of the p-value  |
 | Real separation from zero, or just lucky sampling noise that barely hit p<0.05? | ?               | **Yes** — nb quantifies distance from the neutrality boundary |
 
-Only when **all three dimensions align strongly** (low p + high fr + high nb) do we have truly compelling, replication-ready evidence that an intervention works.
+Only when **all three dimensions align strongly** (low p + high fr + high nb) do we have truly compelling, replication-ready evidence that an intervention works.  
+
+### Definitions
+**Significance (p-value)**: the p-value quantifies compatibility of the observed data with the null hypothesis (no effect). Lower p-values indicate stronger evidence against the null hypothesis. Conventional threshold: p < 0.05 for "statistically significant."  
+
+**Fragility (fr)**: the fragility summary statistic, fr, measures the stability of the significance classification. fr ∈ [0,1]. **A high fr indicates stability**, i.e., it takes a significant shift in outcomes to flip significance. **A low fr indicates fragility**, i.e., it takes only a slight change in outcomes to flip significance. Fragility quantifies the minimal perturbation to the data required to reverse the p-value decision.  
+
+**Robustness (nb)**: The robustness summary statistic, nb, measures how far from neutral the experimental result is, accounting for uncertainty. nb ∈ [0,1] where high nb = far from neutrality and low nb = near neutrality. Robustness (nb) translates to *"strength of evidence for non-zero effect"* but not effect size. **A high nb** indicates strong evidence that an effect exists, while **a low nb** suggests that little or no effect exists.  
+
+**Effect size**: the magnitude of the observed effect in original units (e.g., mean difference in mmHg, risk ratio) or standardized units (e.g., Cohen's d, odds ratio). Effect size quantifies "how large is the difference?" independent of statistical significance or sampling uncertainty. The p-fr-nb triplet determines whether benefits or harms are real, stable, and replicable. Effect size quantifies *"how much better,"* while p-fr-nb determines *"should I believe it."* Clinical decisions require both.  
 
 ### The Three Statistical Dimensions
 #### Statistical Significance (p)
@@ -289,7 +298,7 @@ Continuous Fragility Quotient: CFQ = CFS / (1 + CFS).
 **Advantages**: Works directly from reported summary statistics (m₁, m₂, s₁, s₂, n₁, n₂). No raw data required. No simulated data or distributional reconstruction. Correctly respects Welch's variance structure and degrees of freedom. Provides a continuous-outcome analogue of MFQ/GFQ.  
 **Base metric**: CFS = continuous fragility score = (SE-unit distance between |T| and t*).  
 **NBF pair**: MeCI  
-**Note**: CFQ assesses fragility (stability of significance). It complements MeCI, which assesses robustness (distance from neutrality). Both should be reported for continuous outcomes.  
+**Note**: CFQ assesses fragility (stability of significance). It complements MeCI, which assesses robustness (distance from neutrality). Both should be reported for continuous outcomes. CI-only implementation note: When only a 95% CI for the mean difference is available, T and SE are reconstructed using a large-sample z-based approximation (t* ≈ 1.96). All resulting p, CFS/CFQ, and MeCI values are therefore approximate.  
 
 ### 3.8 ANOVA-FQ — ANOVA Fragility Quotient  ⭐
 
@@ -416,7 +425,7 @@ Then:
 **Interpretation**: For MeCI, nb = MeCI. For example, nb = 0.15 indicates the group means are modestly separated relative to the pooled variability; nb = 0.80 indicates the means are far from equality.  
 **Neutrality**: μ₁ = μ₂ (T = 0, no difference between groups)  
 **Pairs with**: CFQ  
-**Note**: Primary robustness metric for continuous outcomes; uses only published summary statistics and complements CFQ, which measures fragility of the corresponding significance classification. The t-statistic is already standardized (incorporates both mean difference and sampling variability), so the NBF scale parameter S = 1, making MeCI directly parallel to DTI for correlations.
+**Note**: Primary robustness metric for continuous outcomes; uses only published summary statistics and complements CFQ, which measures fragility of the corresponding significance classification. The t-statistic is already standardized (incorporates both mean difference and sampling variability), so the NBF scale parameter S = 1, making MeCI directly parallel to DTI for correlations. In CI-only implementations based on a published 95% CI for the mean difference, MeCI is computed from a reconstructed t-statistic using the z-based approximation described in §3.7; such values are asymptotic/approximate.
 
 ### 4.4 DTI — Distance to Independence ⭐
 
@@ -796,8 +805,10 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog   
-**Version:** 10.2 (November 25, 2025)
+**Version:** 10.2.2 (November 27, 2025)
 **Changes:**
+- added definitions
+- added CI-only implementation note: When only a 95% CI for the mean difference is available, T and SE are reconstructed using a large-sample z-based approximation (t* ≈ 1.96). All resulting p, CFS/CFQ, and MeCI values are therefore approximate.
 - Added SFQ (Survival Fragility Quotient) and SRQ (Survival Robustness Quotient) for time-to-event outcomes
 - Completed p-fr-nb triplet for Cox regression survival analysis (HR-based outcomes)
 - Framework now provides complete evidence assessment for 100% of standard parametric, ordinal, AND survival superiority designs
