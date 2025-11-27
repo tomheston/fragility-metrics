@@ -53,6 +53,10 @@ Only when **all three dimensions align strongly** (low p + high fr + high nb) do
 
 **Effect size**: the magnitude of the observed effect in original units (e.g., mean difference in mmHg, risk ratio) or standardized units (e.g., Cohen's d, odds ratio). Effect size quantifies "how large is the difference?" independent of statistical significance or sampling uncertainty. The p-fr-nb triplet determines whether benefits or harms are real, stable, and replicable. Effect size quantifies *"how much better,"* while p-fr-nb determines *"should I believe it."* Clinical decisions require both.  
 
+**Complete Statistical Evidence**: a result is considered to have complete statistical evidence only when all three dimensions of the p–fr–nb triplet are reported together: significance (p-value), fragility (fr), and robustness (nb). Traditional reporting of the duplet p-values with 95% confidence intervals (CI) constitutes "partial evidence." The p-value addresses only compatibility with the null hypothesis, while the 95% CI quantifies precision and effect size, but does not directly measure classification stability or normalized strength of evidence for a non-zero effect. The CI tells you the range of plausible effect sizes but not how many outcome changes would flip statistical significance (fragility); nor does it provide a standardized measure of how strong the evidence is that a real, non-zero effect exists (this is what robustness quantifies on a 0–1 scale). Complete evidence requires assessing all three dimensions to determine whether a finding is decision-ready and replication-ready. Recommended reporting thus includes complete statistical evidence (p–fr–nb) plus the non-statistical (but critical) quantity, effect size. Complete statistical evidence is the p–fr–nb triplet (significance, fragility, robustness) reported together, addressing the inferential dimensions of statistical evidence.
+
+**Complete Evidence**: The p–fr–nb triplet plus effect size (the quartet). Complete evidence requires both the inferential assessment (is the finding real, stable, and separated from null?) and the magnitude assessment (how large is the effect?). Traditional reporting of p-values alone or p-values with 95% CIs constitutes "partial evidence."
+
 ### The Three Statistical Dimensions
 #### Statistical Significance (p)
 - **Question**: How compatible are the data with the null?
@@ -841,6 +845,7 @@ A: It’s the sound the p-value makes when a correlation that looked impressive 
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**
+
 
 
 
