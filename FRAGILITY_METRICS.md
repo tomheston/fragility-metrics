@@ -1,6 +1,6 @@
 # FRAGILITY METRICS v10.2.2
 
-## The Significance-Fragility-Robustness Framework: Providing Complete Statistical Evidence Across Discrete and Continuous Outcome Types  
+## The Significance-Fragility-Robustness Framework: Complete Statistical Evidence Across Outcome Types 
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
@@ -845,6 +845,7 @@ A: It’s the sound the p-value makes when a correlation that looked impressive 
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**
+
 
 
 
