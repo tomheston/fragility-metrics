@@ -1,11 +1,11 @@
-# FRAGILITY METRICS v10.3.0
+# FRAGILITY METRICS v10.3.1
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.3.0
+**Version:** 10.3.1
 **Date:** November 28, 2025  
 
 ---
@@ -829,9 +829,9 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog   
-**Version:** 10.3.0 (November 28, 2025)
+**Version:** 10.3.1 (November 28, 2025)
 **Changes:**
-- updated interpretations based on empirical results
+- updated interpretations based on empirical & simulated
 - added definitions
 - added CI-only implementation note: When only a 95% CI for the mean difference is available, T and SE are reconstructed using a large-sample z-based approximation (t* ≈ 1.96). All resulting p, CFS/CFQ, and MeCI values are therefore approximate.
 - Added SFQ (Survival Fragility Quotient) and SRQ (Survival Robustness Quotient) for time-to-event outcomes
