@@ -1,11 +1,11 @@
-# FRAGILITY METRICS v10.3.1
+# FRAGILITY METRICS v10.3.2
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.3.1
+**Version:** 10.3.2
 **Date:** November 28, 2025  
 
 ---
@@ -305,6 +305,15 @@ Continuous Fragility Quotient: CFQ = CFS / (1 + CFS).
 **Base metric**: CFS = continuous fragility score = (SE-unit distance between |T| and t*).  
 **NBF pair**: MeCI  
 **Note**: CFQ assesses fragility (stability of significance). It complements MeCI, which assesses robustness (distance from neutrality). Both should be reported for continuous outcomes. CI-only implementation note: When only a 95% CI for the mean difference is available, T and SE are reconstructed using a large-sample z-based approximation (t* ≈ 1.96). All resulting p, CFS/CFQ, and MeCI values are therefore approximate.  
+**Note on Paired/Matched Data:**
+For crossover trials, pre-post measurements, or matched pairs, the same CFQ/MeCI formulas apply using the paired t-statistic:  
+- T = d̄ / SE_diff, where d̄ = mean of paired differences  
+- SE_diff = SD_diff / √n, where SD_diff = standard deviation of differences  
+- SD_diff = SE_diff * √n (if needed to convert from SE to SD; continuous_outcomes.py takes SD_diff as an input).   
+- df = n - 1 (number of pairs minus 1)  
+- CFS, CFQ, and MeCI formulas remain unchanged.  
+
+The fragility and robustness metrics are test-agnostic; only the t-statistic calculation differs between independent and paired designs.  
 
 ### 3.8 ANOVA-FQ — ANOVA Fragility Quotient  ⭐
 
@@ -831,8 +840,9 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog   
-**Version:** 10.3.1 (November 28, 2025)
+**Version:** 10.3.2 (November 28, 2025)
 **Changes:**
+- added matched pairs for continuous data
 - updated interpretations based on empirical & simulated
 - added definitions
 - added CI-only implementation note: When only a 95% CI for the mean difference is available, T and SE are reconstructed using a large-sample z-based approximation (t* ≈ 1.96). All resulting p, CFS/CFQ, and MeCI values are therefore approximate.
