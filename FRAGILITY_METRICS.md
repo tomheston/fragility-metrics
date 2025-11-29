@@ -142,7 +142,7 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **BFQ**           | Fragility  | 0–1   | PRIMARY               | BFI / n_relevant (n_relevant = n)                               | Proportion to flip (single-arm vs benchmark)      |
 | **CFQ**           | Fragility  | 0–1   | PRIMARY               | \|\|T\| − t\*\| / (1 + \|\|T\| − t\*\|)                         | SE-scaled distance to p = 0.05 (continuous)       |
 | **PFI**           | Fragility  | 0–1   | PRIMARY               | 4 × \|x\| / N (x = McNemar path shift)                          | Fixed-margin fragility (matched designs)          |
-| **RQ** | Robustness | 0–1 | PRIMARY | Σ\|O − E\| / N; 2×2 balanced: \|ad − bc\| / (N²/4) | Distance from independence |
+| **RQ** | Robustness | 0–1 | PRIMARY | Σ\|O − E\| / N; for any 2×2: \|ad − bc\| / (N²/4) | Distance from independence |
 | **MHQ**           | Robustness | 0–1   | PRIMARY (matched)     | \|b − c\| / (b + c) or 0 if b + c = 0                           | Distance from marginal homogeneity                |
 | **DNB**           | Robustness | 0–1   | PRIMARY               | \|ln(DOR)\| / (\|ln(DOR)\| + SE)                                | Diagnostic distance from neutrality               |
 | **Proportion-NBF**| Robustness | 0–1   | PRIMARY               | \|p̂ − p₀\| / (\|p̂ − p₀\| + √[p₀(1 − p₀)/n_relevant])          | Single-arm distance from benchmark / chance agreement |
@@ -158,7 +158,6 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **GFI**           | Count      | 0–∞   | Secondary             | Move count (global)                                             | Path-independent count                            |
 | **DFI**           | Count      | 0–∞   | Secondary             | Toggle count vs benchmark                                       | Diagnostic count                                  |
 | **CFS**           | Distance   | 0–∞   | Secondary             | \|\|T\| − t\*\|                                                 | SE-unit distance to p = 0.05 (continuous)         |
-| **RRI**           | Distance   | 0–∞   | Secondary             | (1/k) Σ\|O − E\|                                                | Raw distance from independence                    |
 | **RI**            | Scaling    | >1    | Secondary             | Factor k to flip                                                | Sample size multiplier                            |
 | **UFI**           | Unit       | >0    | LEGACY                | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                                | Step-size definitions (fixed-margin unit size)    |
 | **SFQ**           | Fragility  | 0–1   | PRIMARY               | |z_HR - 1.96| / (1 + |z_HR - 1.96|)           | SE-scaled distance to p = 0.05 (survival)    |
@@ -398,11 +397,8 @@ Then:
 
 **Application**: Independent-sample binary or multinomial outcome tables (2×2 or r×c) assessing separation from independence (treatment vs control or multi-arm studies).
 **Definition**: NBF-based robustness metric measuring geometric distance from independence in binary or multinomial outcome tables.  
-**Formula (general)**:   
-RRI = (1/k) Σ|O − E|,  
-RQ = RRI / (N/k),  
-Where k is the number of independent cells in the table, O are observed counts, and E are expected counts under independence.  
-**Special-case shortcut (2×2 with balanced column margins)**: RQ = |ad − bc| / (N²/4). (Does not hold with unequal margins).  
+**Formula (general)**: RQ = Σ|O − E| / N for any r×c table, where O are observed counts, and E are expected counts under independence.  
+**Special-case shortcut (for any 2×2)**: RQ = |ad − bc| / (N²/4).
 **Range**: 0 to 1.  
 **Interpretation**: nb = RQ. For example, nb = 0.20 means the data are moderately separated from independence.  
 **Neutrality**: Independence of variables (e.g. ad = bc for 2×2)  
@@ -568,13 +564,6 @@ Then:
 **Output**: Raw distance → CFQ = CFS / (1 + CFS).  
 **Note**: Continuous analogue of FI/SFI/GFI.  
 
-### **RRI — Relative Risk Index**
-
-**Definition**: Raw geometric distance from independence in a multinomial table.  
-**Formula**: RRI = (1/k) Σ|O − E|.  
-**Output**: Distance value → RQ = RRI / (N/k).  
-**Note**: Parent metric for RQ.  
-
 ## Part VI: Continuous Fragility Units
 
 ### **CFU — Continuous Fragility Unit**
@@ -592,6 +581,12 @@ Defines the number of CFUs needed to reach the p = 0.05 boundary (see §3.7).
 Base metric for CFQ.
 
 ## Part VII: Rarely Used and Outdated Secondary Metrics
+
+### **RRI — Relative Risk Index**
+**Definition**: Raw geometric distance from independence in a multinomial table, defined as the average absolute difference between observed and expected cell counts.  
+**Formula**: RRI = (1/k) Σ|O − E|, where k is the number of independent cells, O are observed counts, and E are expected counts under independence.  
+**Output**: Distance value → RQ = RRI / (N/k).  
+**Note**: Parent metric for RQ.  
 
 ### **RI — Robustness Index**
 
