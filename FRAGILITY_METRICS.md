@@ -584,7 +584,7 @@ Base metric for CFQ.
 
 ### **RRI — Relative Risk Index**
 **Definition**: Raw geometric distance from independence in a multinomial table, defined as the average absolute difference between observed and expected cell counts.  
-**Formula**: RRI = (1/k) Σ|O − E|, where k is the number of independent cells, O are observed counts, and E are expected counts under independence.  
+**Formula**: RRI = (1/k) Σ|O − E|, where k is the number of cells (k = r×c), O are observed counts, and E are expected counts under independence.  
 **Output**: Distance value → RQ = RRI / (N/k).  
 **Note**: Parent metric for RQ.  
 
@@ -845,7 +845,7 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 - Completed p-fr-nb triplet for Cox regression survival analysis (HR-based outcomes)
 - Framework now provides complete evidence assessment for 100% of standard parametric, ordinal, AND survival superiority designs
 - Updated Quick Reference Table with SFQ and SRQ entries
-- Updated Abstract to include survival metrics- Added OFQ (Ordinal Fragility Quotient) and ORQ (Ordinal Robustness Quotient) for ordinal outcomes
+- Updated Abstract to include survival metrics. Added OFQ (Ordinal Fragility Quotient) and ORQ (Ordinal Robustness Quotient) for ordinal outcomes.  
 - Completed p-fr-nb triplet for ordinal shift analysis (Wilcoxon-Mann-Whitney, proportional odds, mRS, NIHSS, etc.)
 - Framework now provides complete evidence assessment for 100% of standard parametric AND ordinal superiority designs
 - Updated Quick Reference Table with OFQ and ORQ entries
@@ -873,6 +873,7 @@ A: It’s the sound the p-value makes when a correlation that looked impressive 
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**
+
 
 
 
