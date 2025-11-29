@@ -142,7 +142,7 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **BFQ**           | Fragility  | 0–1   | PRIMARY               | BFI / n_relevant (n_relevant = n)                               | Proportion to flip (single-arm vs benchmark)      |
 | **CFQ**           | Fragility  | 0–1   | PRIMARY               | \|\|T\| − t\*\| / (1 + \|\|T\| − t\*\|)                         | SE-scaled distance to p = 0.05 (continuous)       |
 | **PFI**           | Fragility  | 0–1   | PRIMARY               | 4 × \|x\| / N (x = McNemar path shift)                          | Fixed-margin fragility (matched designs)          |
-| **RQ**            | Robustness | 0–1   | PRIMARY               | RQ = RRI / N = (sum over all cells of absolute(O − E)) divided by N; 2×2 balanced: \|ad − bc\| / (N²/4)                 | Distance from independence                        |
+| **RQ** | Robustness | 0–1 | PRIMARY | Σ\|O − E\| / N; 2×2 balanced: \|ad − bc\| / (N²/4) | Distance from independence |
 | **MHQ**           | Robustness | 0–1   | PRIMARY (matched)     | \|b − c\| / (b + c) or 0 if b + c = 0                           | Distance from marginal homogeneity                |
 | **DNB**           | Robustness | 0–1   | PRIMARY               | \|ln(DOR)\| / (\|ln(DOR)\| + SE)                                | Diagnostic distance from neutrality               |
 | **Proportion-NBF**| Robustness | 0–1   | PRIMARY               | \|p̂ − p₀\| / (\|p̂ − p₀\| + √[p₀(1 − p₀)/n_relevant])          | Single-arm distance from benchmark / chance agreement |
