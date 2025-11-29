@@ -674,12 +674,22 @@ Stable:  flipping statistical significance requires changing more than 5% of out
 
 #### Robustness: rounded tertiles (n=118 real trials + 1 M simulated trials)
 
+**RQ Percentiles (1M Simulated Trials)**
+
+|    1% | 5% | 10% |   25% |   33% |   50% |   67% |   75% |   90% |   95% |   99% |  
+|----|---|---|----|-----|-----|-----|----|----|-----|-----|  
+| 0.0018 | 0.0092 | 0.0188| 0.0525| **0.0746**| 0.1358| **0.2274**| 0.2875| 0.4322| 0.4942| 0.5825 |  
+
+Proposed Empirical Cutoffs:  
+Weak robustness (near neutrality):  RQ <  0.075   
+Moderate robustness:                 RQ  0.075  -  0.227   
+Strong robustness (far from null):   RQ >  0.227   
 
 | Range     | Distance from Neutrality |  
 | --------- | ------------------------ |  
-| 0–0.05    | Close to neutrality / Weak Robustness   |  
-| 0.06–0.19 | Moderate separation / Moderate Robustness   |  
-| ≥ 0.20    | Far from neutrality / Strong Robustness      |  
+| < 0.075    | Close to neutrality / Weak Robustness   |  
+| 0.075-0.227 | Moderate separation / Moderate Robustness   |  
+| ≥ 0.227    | Far from neutrality / Strong Robustness      |  
 
 
 ### Strength-of-Evidence under the p–fr–nb framework  
@@ -688,23 +698,23 @@ Stable:  flipping statistical significance requires changing more than 5% of out
 
 | Fragility (fr) | Robustness (nb) | Interpretation |
 | ---------------|-----------------|----------------|
-| stable (fr > 0.05) | far / strong | **Strong evidence of a true effect** – stable significance + convincingly separated from null |
+| stable (fr > 0.05) | strong | **Strong evidence of a true effect** – stable significance + convincingly separated from null |
 | stable | moderate | Stable significance but only moderate separation from neutrality |
-| stable | close / weak | Stable significance but evidence cloud lies on/near neutrality → concern for false positive |
-| fragile (fr ≤ 0.05) | far/strong | Fragile significance yet convincingly far from neutrality |
+| stable | weak | Stable significance but evidence cloud lies on/near neutrality → concern for false positive |
+| fragile (fr ≤ 0.05) | strong | Fragile significance yet convincingly far from neutrality |
 | fragile  | moderate | Classic fragile significant result |
-| fragile  | close/weak | **High concern for false positive** – fragile AND evidence cloud straddles neutrality |
+| fragile  | weak | **High concern for false positive** – fragile AND evidence cloud straddles neutrality |
 
 **When p > 0.05 (statistically nonsignificant)**
 
 | Fragility (fr) | Robustness (nb) | Interpretation |
 | ---------------|-----------------|----------------|
-| stable | close/weak | **Strong evidence of no meaningful effect** – stable nonsignificance + cloud on neutrality |
+| stable | weak | **Strong evidence of no meaningful effect** – stable nonsignificance + cloud on neutrality |
 | stable | moderate | Stable nonsignificance but moderate separation → possible small missed effect |
-| stable | far/strong | Stable nonsignificance yet far from neutrality → concern for false negative / underpowered |
-| fragile | close/weak | Fragile nonsignificance + cloud on neutrality (common in small negative trials) |
+| stable | strong | Stable nonsignificance yet far from neutrality → concern for false negative / underpowered |
+| fragile | weak | Fragile nonsignificance + cloud on neutrality (common in small negative trials) |
 | fragile | moderate | Fragile nonsignificance with moderate separation |
-| fragile | far/strong | Fragile nonsignificance yet convincingly far from neutrality → **high concern for false negative** |
+| fragile | strong | Fragile nonsignificance yet convincingly far from neutrality → **high concern for false negative** |
 
 ## Part IX: Key Relationships & Validation  
 
