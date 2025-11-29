@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v10.2.2
+# FRAGILITY METRICS v10.3.0
 
-## The Significance-Fragility-Robustness Framework: Complete Statistical Evidence Across Outcome Types 
+## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.2.2
-**Date:** November 27, 2025  
+**Version:** 10.3.0
+**Date:** November 28, 2025  
 
 ---
 
@@ -661,40 +661,50 @@ Interpretation depends on the claim being made:
 
 Thresholds are recommendations and still require empirical validation and should be treated as provisional.  
 
-#### Fragility Quotients (FQ, MFQ, GFQ, DFQ, BFQ, CFQ, PFI, ANOVA-FQ, ZFQ, OFQ, SFQ)  
+#### Fragility Quotients (dichotomous)
 
 | Range     | Interpretation    |  
 | --------- | ----------------- |  
-| <0.01     | Extremely fragile |  
-| 0.01–0.05 | Very fragile      |  
-| 0.05–0.10 | Fragile           |  
-| 0.10–0.25 | Mildly stable     |  
-| 0.25-0.40 | Moderate stability |  
-| >0.40     | Very stable       |  
+| ≤0.05     | Fragile – significance is lost by changing outcomes in ≤5 %  |  
+| >0.05 | Stable – requires outcome changes of >5 % to lose significance|  
 
+Fragile: changing 5% or less of outcomes flips statistical significance.  
 
-#### Robustness Metrics (RQ, MHQ, DNB, Proportion-NBF, MeCI, DTI, ANOVAη², ORQ, SRQ)  
+Stable:  flipping statistical significance requires changing more than 5% of outcomes.  
+
+#### Robustness: rounded tertiles (n=118 real trials + 1 M simulated trials)
+
 
 | Range     | Distance from Neutrality |  
 | --------- | ------------------------ |  
-| 0–0.05    | At neutrality boundary   |  
-| 0.05–0.10 | Near neutrality          |  
-| 0.10–0.25 | Moderate distance        |  
-| 0.25–0.49 | Clear separation         |  
-| ≥ 0.50    | Far from neutrality      |  
+| 0–0.05    | Close to neutrality / Weak Robustness   |  
+| 0.06–0.19 | Moderate separation / Moderate Robustness   |  
+| ≥ 0.20    | Far from neutrality / Strong Robustness      |  
 
 
-### Table: Strength-of-Evidence Tiers under the p–fr–nb Framework  
-*(for claims of “effect exists” — p < 0.05 expected)*
+### Strength-of-Evidence under the p–fr–nb framework  
 
-| Tier                  | p-value   | fr (CFQ etc.)             | nb (MeCI/RQ etc.)         | What’s wrong (if anything)                                          | Example phrasing for papers                                           |
-|-----------------------|-----------|---------------------------|---------------------------|---------------------------------------------------------------------|------------------------------------------------------------------------|
-| ★★★★★ Gold-standard   | p ≪ 0.01  | **≥ 0.40** (very stable)  | **≥ 0.50** (far from neutrality) | Nothing — textbook convincing result                                 | “Highly convincing, replicable superiority”                           |
-| ★★★★ Strong           | p < 0.01  | 0.25 – 0.39               | 0.25 – 0.49               | Minor fragility or moderate separation — still very credible        | “Strong, robust evidence of benefit”                                  |
-| ★★★ Moderate          | p < 0.05  | 0.10 – 0.24               | 0.10 – 0.24               | Both dimensions acceptable but not impressive — typical good trial | “Moderate evidence of benefit; replication desirable”                 |
-| ★★ Weak / Discordant  | p < 0.05  | **< 0.10** (very/extremely fragile) **OR** nb **< 0.10** | **< 0.10** (near/at neutrality) **OR** fr **< 0.10** | **At least one** dimension is **seriously deficient** (very fragile **or** too close to null) | “Statistically significant but highly fragile and/or near neutrality — interpret with great caution” |
-| ★ Null / Credible negative | p > 0.05 | **≥ 0.25** (stable null) | **≤ 0.10** (near neutrality) | High fr + low nb → convincing absence of effect                     | “Convincing evidence of no meaningful difference”                    |
+**When p ≤ 0.05 (statistically significant)**
 
+| Fragility (fr) | Robustness (nb) | Interpretation |
+| ---------------|-----------------|----------------|
+| stable (fr > 0.05) | far / strong | **Strong evidence of a true effect** – stable significance + convincingly separated from null |
+| stable | moderate | Stable significance but only moderate separation from neutrality |
+| stable | close / weak | Stable significance but evidence cloud lies on/near neutrality → concern for false positive |
+| fragile (fr ≤ 0.05) | far/strong | Fragile significance yet convincingly far from neutrality |
+| fragile  | moderate | Classic fragile significant result |
+| fragile  | close/weak | **High concern for false positive** – fragile AND evidence cloud straddles neutrality |
+
+**When p > 0.05 (statistically nonsignificant)**
+
+| Fragility (fr) | Robustness (nb) | Interpretation |
+| ---------------|-----------------|----------------|
+| stable | close/weak | **Strong evidence of no meaningful effect** – stable nonsignificance + cloud on neutrality |
+| stable | moderate | Stable nonsignificance but moderate separation → possible small missed effect |
+| stable | far/strong | Stable nonsignificance yet far from neutrality → concern for false negative / underpowered |
+| fragile | close/weak | Fragile nonsignificance + cloud on neutrality (common in small negative trials) |
+| fragile | moderate | Fragile nonsignificance with moderate separation |
+| fragile | far/strong | Fragile nonsignificance yet convincingly far from neutrality → **high concern for false negative** |
 
 ## Part IX: Key Relationships & Validation  
 
@@ -809,8 +819,9 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog   
-**Version:** 10.2.2 (November 27, 2025)
+**Version:** 10.3.0 (November 28, 2025)
 **Changes:**
+- updated interpretations based on empirical results
 - added definitions
 - added CI-only implementation note: When only a 95% CI for the mean difference is available, T and SE are reconstructed using a large-sample z-based approximation (t* ≈ 1.96). All resulting p, CFS/CFQ, and MeCI values are therefore approximate.
 - Added SFQ (Survival Fragility Quotient) and SRQ (Survival Robustness Quotient) for time-to-event outcomes
@@ -845,10 +856,6 @@ A: It’s the sound the p-value makes when a correlation that looked impressive 
 ## License  
 **License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
 **© 2025 Thomas F. Heston**
-
-
-
-
 
 
 
