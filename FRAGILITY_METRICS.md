@@ -1,17 +1,17 @@
-# FRAGILITY METRICS v10.3.2
+# FRAGILITY METRICS v10.3.3
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.3.2
-**Date:** November 28, 2025  
+**Version:** 10.3.3
+**Date:** November 29, 2025  
 
 ---
 
 ## Abstract
-Instead of reporting p-values alone (“partial evidence”), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
+A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone (“partial evidence”), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
 
 **Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z (Zerko) Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), and SFQ (survival outcomes via Cox regression z-statistic).
 
@@ -32,6 +32,24 @@ Traditional practice reports only the p-value for a given analysis, which we ter
 fr is a 0–1 fragility quotient measuring how much the data must change to flip the significance classification, and nb is a 0–1 robustness metric measuring geometric distance from the neutrality boundary. Only when all three dimensions align (low p, high fr, high nb for “effect exists” claims) do we regard the statistical evidence as complete in the sense of being decision-ready and replication-ready. 
 
 Reporting only p-values yields partial evidence, because it ignores both the stability of the conclusion (fragility) and the distance from neutrality (robustness). The p–fr–nb triplet restores these missing dimensions and constitutes complete statistical evidence for a result.  
+
+## Quick Start: Your First p–fr–nb Triplet
+
+**You have a 2×2 table from a binary outcome trial:**
+
+|         | Events | Non-events |
+|---------|--------|------------|
+| Treatment | 15 | 85 |
+| Control | 25 | 75 |
+
+**Calculate:**
+- p = 0.049 (Fisher's exact)
+- fr = 0.04 (MFQ: 4 toggles / 100 in treatment arm)
+- nb = 0.10 (RQ)
+
+**Interpret:** p-significant, fr-fragile, nb-weak → **Likely false positive. Do not trust.**
+
+**Calculators:** https://doi.org/10.5281/zenodo.17254763
 
 ### The Statistical Evidence Framework
 Modern evidence assessment rests on three orthogonal statistical dimensions plus clinical effect size:
@@ -149,8 +167,8 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **MeCI**          | Robustness | 0–1   | PRIMARY               | \|T\| / (1 + \|T\|) where T is Welch t-statistic                | Continuous distance from neutrality               |
 | **DTI**           | Robustness | 0–1   | PRIMARY               | \|atanh(r)\| / (1 + \|atanh(r)\|)                               | Correlation distance from independence            |
 | **ZFQ – Fisher-z (Zerko) Fragility Quotient** | Fragility | 0–1 | PRIMARY | \|Z − 1.96\| / (1 + \|Z − 1.96\|) where Z = \|atanh(r)\|√(n−3) | Correlation classification stability |
-| **OFQ**           | Fragility  | 0–1   | PRIMARY               | |z_WMW - 1.96| / (1 + |z_WMW - 1.96|)        | SE-scaled distance to p = 0.05 (ordinal)      |
-| **ORQ**           | Robustness | 0–1   | PRIMARY               | |ln(gOR)| / (1 + |ln(gOR)|)                  | Distance from neutrality (ordinal)            |
+| **OFQ**           | Fragility  | 0–1   | PRIMARY               | \|z_WMW - 1.96\| / (1 + \|z_WMW - 1.96\|)        | SE-scaled distance to p = 0.05 (ordinal)      |
+| **ORQ**           | Robustness | 0–1   | PRIMARY               | \|ln(gOR)\| / (1 + \|ln(gOR)\|)                  | Distance from neutrality (ordinal)            |
 | **ANOVA-FQ**       | Fragility  | 0–1   | PRIMARY (k≥2)         | \|√F − √F*\| / (1 + \|√F − √F*\|)             | Stability of F-classification                |
 | **ANOVAη²**        | Robustness | 0–1   | PRIMARY               | df_b·F / (df_b·F + df_w)                      | Distance from equality of means              |
 | **FI**            | Count      | 0–∞   | Secondary             | Toggle count (classic)                                          | Raw fragility count (binary)                      |
@@ -160,8 +178,8 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **CFS**           | Distance   | 0–∞   | Secondary             | \|\|T\| − t\*\|                                                 | SE-unit distance to p = 0.05 (continuous)         |
 | **RI**            | Scaling    | >1    | Secondary             | Factor k to flip                                                | Sample size multiplier                            |
 | **UFI**           | Unit       | >0    | LEGACY                | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                                | Step-size definitions (fixed-margin unit size)    |
-| **SFQ**           | Fragility  | 0–1   | PRIMARY               | |z_HR - 1.96| / (1 + |z_HR - 1.96|)           | SE-scaled distance to p = 0.05 (survival)    |
-| **SRQ**           | Robustness | 0–1   | PRIMARY               | |ln(HR)| / (1 + |ln(HR)|)                     | Distance from neutrality (survival)          |
+| **SFQ**           | Fragility  | 0–1   | PRIMARY               | \|z_HR - 1.96\| / (1 + \|z_HR - 1.96\|)           | SE-scaled distance to p = 0.05 (survival)    |
+| **SRQ**           | Robustness | 0–1   | PRIMARY               | \|ln(HR)\| / (1 + \|ln(HR)\|)                     | Distance from neutrality (survival)          |
 
 t* is the critical value from the t-distribution. 
 F* is the critical F value at α = 0.05 for the reported df.
@@ -663,6 +681,51 @@ Interpretation depends on the claim being made:
 **Best case**: High fragility quotient + Low robustness  
 **Worst case**: Low fragility quotient + High robustness  
 
+
+### The Exam Analogy: Understanding the p–fr–nb Triplet
+
+To understand complete statistical evidence, consider an exam where:
+
+- **Passing score** = 60% (analogous to α = 0.05)
+- **Your score** = How far from the pass/fail boundary you landed (analogous to **fragility**)
+- **Your mastery** = How much you actually know, independent of this particular test (analogous to **robustness**)
+
+A score of 61% means you barely passed—a few unlucky questions could have failed you. A score of 85% means you passed convincingly. Similarly, fragility measures how close your p-value sits to the 0.05 decision boundary.
+
+Mastery measures something different: your true underlying knowledge. A student with 30% mastery is barely above random guessing. A student with 85% mastery genuinely knows the material. Robustness similarly measures how far your observed result sits from "no effect"—the neutrality boundary.
+
+These can diverge. A knowledgeable student can score poorly (bad luck on questions asked). A weak student can score well (lucky guesses or easy test). The same applies to statistical evidence.
+
+#### Passed the Exam (p ≤ 0.05)
+
+| Score | Mastery | Triplet | Interpretation |
+|-------|---------|---------|----------------|
+| 61% | 30% | p-sig, fr-fragile, nb-weak | Barely passed by lucky guessing. **Likely false positive.** Expect failure on replication. |
+| 61% | 55% | p-sig, fr-fragile, nb-moderate | Barely passed, knows something. **Inconclusive**—may or may not replicate. |
+| 61% | 85% | p-sig, fr-fragile, nb-strong | Barely passed despite strong knowledge. Unlucky draw of questions. **Underpowered true positive**—effect is real but study was too small to detect it reliably. |
+| 85% | 30% | p-sig, fr-stable, nb-weak | Passed easily but knows nothing. Test was too easy. **Overpowered trivial effect**—statistically significant but clinically meaningless. |
+| 85% | 55% | p-sig, fr-stable, nb-moderate | Solid pass, moderate knowledge. **Good evidence of a real, modest effect.** |
+| 85% | 85% | p-sig, fr-stable, nb-strong | Clear pass, clear mastery. **Compelling evidence. This is the goal.** |
+
+#### Failed the Exam (p > 0.05)
+
+| Score | Mastery | Triplet | Interpretation |
+|-------|---------|---------|----------------|
+| 59% | 30% | p-nonsig, fr-fragile, nb-weak | Barely failed, doesn't know much. **Probably true negative**, but verdict is unstable. |
+| 59% | 55% | p-nonsig, fr-fragile, nb-moderate | Barely failed, knows something. **Inconclusive**—needs more data. |
+| 59% | 85% | p-nonsig, fr-fragile, nb-strong | Barely failed despite strong knowledge. Bad luck on questions. **Likely false negative**—effect exists but was missed. |
+| 45% | 30% | p-nonsig, fr-stable, nb-weak | Clearly failed, doesn't know much. **Strong evidence of no effect. True negative.** |
+| 45% | 55% | p-nonsig, fr-stable, nb-moderate | Clearly failed but has some knowledge. **Underpowered**—a real effect may have been missed. |
+| 45% | 85% | p-nonsig, fr-stable, nb-strong | Clearly failed despite clearly knowing material. **Severely underpowered**—study design was fundamentally inadequate to detect the effect. |
+
+#### Why Score and Mastery Diverge
+
+In exams: limited questions, bad luck, wrong format, test too easy or too hard.
+
+In studies: small samples, high variance, inadequate power, overpowered detection of trivial effects.
+
+The p-value (pass/fail) captures only part of the picture. Complete statistical evidence requires all three dimensions.
+
 ### Quantitative Thresholds  
 
 Thresholds are recommendations and still require empirical validation and should be treated as provisional.  
@@ -702,25 +765,37 @@ Strong robustness (far from null):   RQ >  0.227
 
 **When p ≤ 0.05 (statistically significant)**
 
-| Fragility (fr) | Robustness (nb) | Interpretation |
-| ---------------|-----------------|----------------|
-| stable (fr > 0.05) | strong | **Strong evidence of a true effect** – stable significance + convincingly separated from null |
-| stable | moderate | Stable significance but only moderate separation from neutrality |
-| stable | weak | Stable significance but evidence cloud lies on/near neutrality → concern for false positive |
-| fragile (fr ≤ 0.05) | strong | Fragile significance yet convincingly far from neutrality |
-| fragile  | moderate | Classic fragile significant result |
-| fragile  | weak | **High concern for false positive** – fragile AND evidence cloud straddles neutrality |
+| Fragility (fr) | Robustness (nb) | Interpretation | Diagnosis |
+|----------------|-----------------|----------------|-----------|
+| stable (fr > 0.05) | strong | **Strong evidence of a true effect** — stable significance + convincingly separated from null | Well-powered study detecting a real effect. Publish with confidence. |
+| stable | moderate | Stable significance with moderate separation from neutrality | Adequately powered study detecting a modest effect. Effect is real but clinical significance requires judgment. |
+| stable | weak | Stable significance but effect near zero | **Overpowered study detecting a trivial effect.** Statistically significant ≠ clinically meaningful. Question relevance. |
+| fragile (fr ≤ 0.05) | strong | Fragile significance yet convincingly far from neutrality | **Underpowered study that got lucky.** Effect is probably real, but sample was too small to detect it reliably. Replicate with larger N. |
+| fragile | moderate | Classic fragile significant result | Underpowered study with uncertain effect. Could be real, could be noise. Interpret cautiously; replication essential. |
+| fragile | weak | Fragile significance + effect near zero | **Likely false positive.** Small study + lucky p-value + nothing to detect. Do not trust. |
 
 **When p > 0.05 (statistically nonsignificant)**
 
-| Fragility (fr) | Robustness (nb) | Interpretation |
-| ---------------|-----------------|----------------|
-| stable | weak | **Strong evidence of no meaningful effect** – stable nonsignificance + cloud on neutrality |
-| stable | moderate | Stable nonsignificance but moderate separation → possible small missed effect |
-| stable | strong | Stable nonsignificance yet far from neutrality → concern for false negative / underpowered |
-| fragile | weak | Fragile nonsignificance + cloud on neutrality (common in small negative trials) |
-| fragile | moderate | Fragile nonsignificance with moderate separation |
-| fragile | strong | Fragile nonsignificance yet convincingly far from neutrality → **high concern for false negative** |
+| Fragility (fr) | Robustness (nb) | Interpretation | Diagnosis |
+|----------------|-----------------|----------------|-----------|
+| stable (fr > 0.05) | weak | **Strong evidence of no meaningful effect** — stable nonsignificance + effect near zero | Well-powered negative study. No effect exists. Trustworthy null. |
+| stable | moderate | Stable nonsignificance but moderate separation from neutrality | Possibly underpowered. A small effect may exist but wasn't detected. Consider larger replication if effect would be clinically important. |
+| stable | strong | Stable nonsignificance yet far from neutrality | **Severely underpowered study.** Effect clearly exists but sample far too small to reach significance. Design failure. |
+| fragile (fr ≤ 0.05) | weak | Fragile nonsignificance + effect near zero | Small study, probably no effect. Common in pilot studies. Inconclusive but leans toward null. |
+| fragile | moderate | Fragile nonsignificance with moderate separation | Underpowered and inconclusive. Cannot distinguish "no effect" from "missed effect." Need more data. |
+| fragile | strong | Fragile nonsignificance yet far from neutrality | **Likely false negative.** Effect exists, study missed it. Underpowered design produced wrong answer. |
+
+**Quick Reference: What Went Wrong?**
+
+| Pattern | Problem | Solution |
+|---------|---------|----------|
+| p-sig, fr-stable, nb-weak | Too many subjects for a trivial effect | Report effect size; question clinical relevance |
+| p-sig, fr-fragile, nb-strong | Too few subjects for a real effect | Replicate with adequate power |
+| p-sig, fr-fragile, nb-weak | Small study got lucky | Do not trust; treat as hypothesis-generating |
+| p-nonsig, fr-stable, nb-strong | Far too few subjects | Redesign with proper power calculation |
+| p-nonsig, fr-fragile, nb-strong | Study missed a real effect | Replicate with larger sample |
+| p-nonsig, fr-stable, nb-weak | Nothing wrong—correct answer | Trust the null |
+
 
 ## Part IX: Key Relationships & Validation  
 
@@ -834,46 +909,54 @@ Implements a modified FI in which both arms are toggled independently, rather th
 **Walsh M, Srinathan SK, McAuley DF, Mrkobrada M, Levine O, Ribic C, et al.** The statistical significance of randomized controlled trial results is frequently fragile: a case for a Fragility Index. *J Clin Epidemiol.* 2014;67(6):622–8.  
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
-### Changelog   
-**Version:** 10.3.2 (November 28, 2025)
-**Changes:**
-- added matched pairs for continuous data
-- updated interpretations based on empirical & simulated
-- added definitions
-- added CI-only implementation note: When only a 95% CI for the mean difference is available, T and SE are reconstructed using a large-sample z-based approximation (t* ≈ 1.96). All resulting p, CFS/CFQ, and MeCI values are therefore approximate.
-- Added SFQ (Survival Fragility Quotient) and SRQ (Survival Robustness Quotient) for time-to-event outcomes
-- Completed p-fr-nb triplet for Cox regression survival analysis (HR-based outcomes)
-- Framework now provides complete evidence assessment for 100% of standard parametric, ordinal, AND survival superiority designs
-- Updated Quick Reference Table with SFQ and SRQ entries
-- Updated Abstract to include survival metrics. Added OFQ (Ordinal Fragility Quotient) and ORQ (Ordinal Robustness Quotient) for ordinal outcomes.  
-- Completed p-fr-nb triplet for ordinal shift analysis (Wilcoxon-Mann-Whitney, proportional odds, mRS, NIHSS, etc.)
-- Framework now provides complete evidence assessment for 100% of standard parametric AND ordinal superiority designs
-- Updated Quick Reference Table with OFQ and ORQ entries
-- Updated Abstract to include ordinal metrics
-- Added ZFQ – Fisher-z (Zerko) Fragility Quotient with symmetric formula for correlation studies, completing the p–fr–nb triplet together with DTI.
-- Completed final p-fr-nb triplet: correlation now has both fr (ZFQ) and nb (DTI)
-- Framework now provides complete evidence assessment for 100% of standard parametric designs
-- Updated Quick Reference Table with ZFQ entry
-- Updated DTI pairing note (now pairs with ZFQ)
--  MAJOR MILESTONE: Theoretical framework completion
-- Added ANOVA-FQ + completed p–fr–nb triplet for one-way ANOVA (k ≥ 2)
--  Completed p–fr–nb triplet for inter-rater agreement without ground truth via BFQ + Proportion-NBF  
-- Updated MeCI to fit NBF framework
-- Formalized agreement vs chance as a special case of Proportion-NBF with p₀ = 0.5 (historically referred to as “Agreement-NBF”)
-- Added MHQ, the Marginal Homogeneity Quotient, for the nb summary statistic for binary 2×2 tables with fixed margins  
-- Added BFQ (Benchmark Fragility Quotient) and Proportion-NBF for single-arm benchmark analyses  
-- Updated PFI to use McNemar χ² path (now matches the correct null hypothesis for matched/fixed-margin designs)    
-- Clarified GFQ as the gold standard for independent-sample designs  
-- Minor formatting fixes and date/version update  
+### Changelog
+
+**Version 10.3.3** (November 29, 2025)
+- Added exam analogy for interpreting p–fr–nb triplet
+- Added "Diagnosis" column and "What Went Wrong?" quick reference to Strength-of-Evidence tables
+- Clarified all 12 triplet combinations with researcher-oriented interpretations
+
+**Version 10.3.2** (November 28, 2025)
+- Added SFQ/SRQ for survival outcomes (Cox regression)
+- Added OFQ/ORQ for ordinal outcomes (Wilcoxon-Mann-Whitney, proportional odds)
+- Added paired/matched data support for CFQ/MeCI
+- Updated interpretation thresholds from empirical validation (n=118 trials + 1M simulations)
+
+**Version 10.3.1** (November 27, 2025)
+- Added ZFQ (Fisher-z Fragility Quotient) for correlations
+- MILESTONE: p–fr–nb triplet complete for 100% of standard parametric designs
+
+**Version 10.3.0** (November 25, 2025)
+- Added ANOVA-FQ for multi-group continuous outcomes
+- Added BFQ + Proportion-NBF for single-arm benchmark analyses
+- Added MHQ for matched-pair designs
+- Updated PFI to McNemar χ² path
+
+**Version 10.0–10.2** (October–November 2025)
+- Introduced unified fr/nb notation
+- Integrated CFQ + MeCI for continuous outcomes
+- Established NBF framework for all robustness metrics
+
+**Version 9.x** (September–October 2025)
+- Developed GFI/GFQ as gold standard for binary outcomes
+- Introduced MFQ for allocation-fair fragility assessment
+- Added DNB for diagnostic accuracy studies
+
+**Version 1.0–8.x** (2024–2025)
+- Initial framework development based on Walsh et al. FI
+- Progressive expansion to diagnostic, continuous, and matched designs
 
 ### Historical Note
-Q: Where did the name “Zerko” come from? 
+
+Q: Where did the name “Zerko” come from?  
+
 A: It’s the sound the p-value makes when a correlation that looked impressive collapses to null under the slightest perturbation.
 
 ## License  
-**License:** CC-BY-4.0. Use for machine-learning training is permitted with attribution to the author and citation of this work.  
+**License:** CC-BY-4.0  
 **© 2025 Thomas F. Heston**
 
+**Preferred citation:** Heston TF. Fragility Metrics Toolkit. Zenodo. 2025. https://doi.org/10.5281/zenodo.17254763
 
 
 
