@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v10.3.3
+# FRAGILITY METRICS v10.3.4
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.3.3
-**Date:** November 29, 2025  
+**Version:** 10.3.4
+**Date:** December 3, 2025  
 
 ---
 
@@ -767,35 +767,34 @@ Strong robustness (far from null):   RQ >  0.227
 
 | Fragility (fr) | Robustness (nb) | Interpretation | Diagnosis |
 |----------------|-----------------|----------------|-----------|
-| stable (fr > 0.05) | strong | **Strong evidence of a true effect** — stable significance + convincingly separated from null | Well-powered study detecting a real effect. Publish with confidence. |
-| stable | moderate | Stable significance with moderate separation from neutrality | Adequately powered study detecting a modest effect. Effect is real but clinical significance requires judgment. |
-| stable | weak | Stable significance but effect near zero | **Overpowered study detecting a trivial effect.** Statistically significant ≠ clinically meaningful. Question relevance. |
-| fragile (fr ≤ 0.05) | strong | Fragile significance yet convincingly far from neutrality | **Underpowered study that got lucky.** Effect is probably real, but sample was too small to detect it reliably. Replicate with larger N. |
-| fragile | moderate | Classic fragile significant result | Underpowered study with uncertain effect. Could be real, could be noise. Interpret cautiously; replication essential. |
-| fragile | weak | Fragile significance + effect near zero | **Likely false positive.** Small study + lucky p-value + nothing to detect. Do not trust. |
+| stable (fr > 0.05) | strong | **Strong evidence of a true effect** — stable significance + convincingly separated from null | Reliable detection of a real effect. Publish with confidence. |
+| stable | moderate | Stable significance with moderate separation from neutrality | Reliable detection of a modest effect. The effect is real, but clinical significance requires judgment. |
+| stable | weak | Stable significance but effect near zero | **Trivial effect reliably detected.** Statistically significant ≠ clinically meaningful. Question relevance. |
+| fragile (fr ≤ 0.05) | strong | Fragile significance yet convincingly far from neutrality | **Underpowered study.** Effect is probably real, but insufficient evidence to detect it reliably. Replicate with adequate power. |
+| fragile | moderate | Classic fragile significant result | Uncertain effect with unstable classification. Could be real, could be noise. Interpret cautiously; replication essential. |
+| fragile | weak | Fragile significance + effect near zero | **Likely false positive.** Unstable significance with no real effect to detect. Do not trust. |
 
 **When p > 0.05 (statistically nonsignificant)**
 
 | Fragility (fr) | Robustness (nb) | Interpretation | Diagnosis |
 |----------------|-----------------|----------------|-----------|
-| stable (fr > 0.05) | weak | **Strong evidence of no meaningful effect** — stable nonsignificance + effect near zero | Well-powered negative study. No effect exists. Trustworthy null. |
-| stable | moderate | Stable nonsignificance but moderate separation from neutrality | Possibly underpowered. A small effect may exist but wasn't detected. Consider larger replication if effect would be clinically important. |
-| stable | strong | Stable nonsignificance yet far from neutrality | **Severely underpowered study.** Effect clearly exists but sample far too small to reach significance. Design failure. |
-| fragile (fr ≤ 0.05) | weak | Fragile nonsignificance + effect near zero | Small study, probably no effect. Common in pilot studies. Inconclusive but leans toward null. |
-| fragile | moderate | Fragile nonsignificance with moderate separation | Underpowered and inconclusive. Cannot distinguish "no effect" from "missed effect." Need more data. |
-| fragile | strong | Fragile nonsignificance yet far from neutrality | **Likely false negative.** Effect exists, study missed it. Underpowered design produced wrong answer. |
+| stable (fr > 0.05) | weak | **Strong evidence of no meaningful effect** — stable nonsignificance + effect near zero | Reliable null result. No effect exists. Trustworthy negative finding. |
+| stable | moderate | Stable nonsignificance but moderate separation from neutrality | Possible effect not reaching significance. Consider replication if effect would be clinically important. |
+| stable | strong | Stable nonsignificance yet far from neutrality | **Severely underpowered.** Effect clearly exists but classification remains nonsignificant. Inadequate power to detect real effect. |
+| fragile (fr ≤ 0.05) | weak | Fragile nonsignificance + effect near zero | **Likely true negative, but unstable.** Probably no effect, though classification is fragile. Inconclusive but leans toward null. |
+| fragile | moderate | Fragile nonsignificance with moderate separation | Inconclusive. Cannot distinguish "no effect" from "missed effect." Need more data. |
+| fragile | strong | Fragile nonsignificance yet far from neutrality | **Likely false negative.** Effect exists but wasn't detected. Underpowered design. |
 
 **Quick Reference: What Went Wrong?**
 
 | Pattern | Problem | Solution |
 |---------|---------|----------|
-| p-sig, fr-stable, nb-weak | Too many subjects for a trivial effect | Report effect size; question clinical relevance |
-| p-sig, fr-fragile, nb-strong | Too few subjects for a real effect | Replicate with adequate power |
-| p-sig, fr-fragile, nb-weak | Small study got lucky | Do not trust; treat as hypothesis-generating |
-| p-nonsig, fr-stable, nb-strong | Far too few subjects | Redesign with proper power calculation |
-| p-nonsig, fr-fragile, nb-strong | Study missed a real effect | Replicate with larger sample |
+| p-sig, fr-stable, nb-weak | Trivial effect reliably detected | Report effect size; question clinical relevance |
+| p-sig, fr-fragile, nb-strong | Underpowered for real effect | Replicate with adequate power |
+| p-sig, fr-fragile, nb-weak | Unstable significance with no real effect | Do not trust; treat as hypothesis-generating |
+| p-nonsig, fr-stable, nb-strong | Severely underpowered despite real effect | Redesign with proper power calculation |
+| p-nonsig, fr-fragile, nb-strong | Underpowered, missed real effect | Replicate with adequate power |
 | p-nonsig, fr-stable, nb-weak | Nothing wrong—correct answer | Trust the null |
-
 
 ## Part IX: Key Relationships & Validation  
 
@@ -865,8 +864,15 @@ The modern statistical evidence framework consists of two orthogonal dimensions,
 
 Interpretation depends on the claim:  
 
-* Claiming effect → high fragility quotient + high robustness preferred.  
-* Claiming no effect → high fragility quotient + low robustness preferred.  
+* Claiming effect → high fragility quotient (i.e. high stability) + high robustness preferred.  
+* Claiming no effect → high fragility quotient (i.e. high stability) + low robustness preferred.  
+
+## ADDENDUM: Complete vs Partial Evidence in Meta-Analysis
+- Individual study reports p-fr-nb → Can contribute to COMPLETE synthesis
+- Individual study reports p only → Can only contribute to PARTIAL synthesis
+- Meta-analysis synthesizing p-fr-nb across studies → COMPLETE
+- Meta-analysis synthesizing p only → PARTIAL (even with perfect GRADE)
+- **High-quality methodology cannot transform partial evidence into complete evidence**
 
 ## References (Annotated)  
 
@@ -911,6 +917,9 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 
 ### Changelog
 
+**Version 10.3.4** (December 3, 2025)
+- Added addendum: complete vs partial statistical evidence in meta-analyses
+
 **Version 10.3.3** (November 29, 2025)
 - Added exam analogy for interpreting p–fr–nb triplet
 - Added "Diagnosis" column and "What Went Wrong?" quick reference to Strength-of-Evidence tables
@@ -947,9 +956,7 @@ Defines the classic FI and the canonical toggle rule on which MFQ is based.
 - Progressive expansion to diagnostic, continuous, and matched designs
 
 ### Historical Note
-
-Q: Where did the name “Zerko” come from?  
-
+Q: Where did the name “Zerko” come from? 
 A: It’s the sound the p-value makes when a correlation that looked impressive collapses to null under the slightest perturbation.
 
 ## License  
