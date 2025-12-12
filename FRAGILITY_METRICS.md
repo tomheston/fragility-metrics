@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v10.3.4
+# FRAGILITY METRICS v10.3.6
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.3.4
-**Date:** December 3, 2025  
+**Version:** 10.3.6  
+**Date:** December 15, 2025  
 
 ---
 
@@ -47,7 +47,7 @@ Reporting only p-values yields partial evidence, because it ignores both the sta
 - fr = 0.04 (MFQ: 4 toggles / 100 in treatment arm)
 - nb = 0.10 (RQ)
 
-**Interpret:** p-significant, fr-fragile, nb-weak → **Likely false positive. Do not trust.**
+**Interpret:** p-significant, fr-fragile, nb-weak → **Boundary-zone / SFW pattern. Treat as low-quality evidence; replication or more data strongly recommended.**
 
 **Calculators:** https://doi.org/10.5281/zenodo.17254763
 
@@ -202,7 +202,7 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **NBF pair**: RQ
 **Note**: FQ is a legacy metric and is not recommended as the primary fr metric for 2-arm binary outcome studies; the MFQ is preferred because it enables cross-study comparisons through label-invariance and proper handling of allocation imbalance.  
 
-### 3.2 MFQ — Modified Fragility Quotient ⭐
+### 3.2 MFQ — Modified-arm Fragility Quotient ⭐
 
 **Application**: Recommended default for independent-sample 2×2 binary outcome trials utilizing the FI for fragility counts (any allocation ratio)
 **Definition**: Proportion of the arm that was actually modified in the classic fragility index procedure required to flip statistical significance.  
@@ -685,7 +685,6 @@ Interpretation depends on the claim being made:
 ### The Exam Analogy: Understanding the p–fr–nb Triplet
 
 To understand complete statistical evidence, consider an exam where:
-
 - **Passing score** = 60% (analogous to α = 0.05)
 - **Your score** = How far from the pass/fail boundary you landed (analogous to **fragility**)
 - **Your mastery** = How much you actually know, independent of this particular test (analogous to **robustness**)
@@ -700,11 +699,11 @@ These can diverge. A knowledgeable student can score poorly (bad luck on questio
 
 | Score | Mastery | Triplet | Interpretation |
 |-------|---------|---------|----------------|
-| 61% | 30% | p-sig, fr-fragile, nb-weak | Barely passed by lucky guessing. **Likely false positive.** Expect failure on replication. |
+| 61% | 30% | p-sig, fr-fragile, nb-weak **(Pattern 1,1,0)** | **Barely passed with minimal knowledge.** The pass is legitimate but mastery is negligible. **Clinically meaningless**—real but trivial competence. Do not certify for practice. |
 | 61% | 55% | p-sig, fr-fragile, nb-moderate | Barely passed, knows something. **Inconclusive**—may or may not replicate. |
 | 61% | 85% | p-sig, fr-fragile, nb-strong | Barely passed despite strong knowledge. Unlucky draw of questions. **Underpowered true positive**—effect is real but study was too small to detect it reliably. |
-| 85% | 30% | p-sig, fr-stable, nb-weak | Passed easily but knows nothing. Test was too easy. **Overpowered trivial effect**—statistically significant but clinically meaningless. |
-| 85% | 55% | p-sig, fr-stable, nb-moderate | Solid pass, moderate knowledge. **Good evidence of a real, modest effect.** |
+| 85% | 30% | p-sig, fr-stable, nb-weak | Passed easily but knows little. Test was too easy. **Statistically robust but trivial mastery**—overpowered detection of negligible competence. |
+| 85% | 55% | p-sig, fr-stable, nb-moderate | Solid pass, moderate knowledge. **Good evidence of real, modest mastery.** |
 | 85% | 85% | p-sig, fr-stable, nb-strong | Clear pass, clear mastery. **Compelling evidence. This is the goal.** |
 
 #### Failed the Exam (p > 0.05)
@@ -714,17 +713,17 @@ These can diverge. A knowledgeable student can score poorly (bad luck on questio
 | 59% | 30% | p-nonsig, fr-fragile, nb-weak | Barely failed, doesn't know much. **Probably true negative**, but verdict is unstable. |
 | 59% | 55% | p-nonsig, fr-fragile, nb-moderate | Barely failed, knows something. **Inconclusive**—needs more data. |
 | 59% | 85% | p-nonsig, fr-fragile, nb-strong | Barely failed despite strong knowledge. Bad luck on questions. **Likely false negative**—effect exists but was missed. |
-| 45% | 30% | p-nonsig, fr-stable, nb-weak | Clearly failed, doesn't know much. **Strong evidence of no effect. True negative.** |
+| 45% | 30% | p-nonsig, fr-stable, nb-weak | Clearly failed, doesn't know much. **Strong evidence of no meaningful competence. True negative.** |
 | 45% | 55% | p-nonsig, fr-stable, nb-moderate | Clearly failed but has some knowledge. **Underpowered**—a real effect may have been missed. |
-| 45% | 85% | p-nonsig, fr-stable, nb-strong | Clearly failed despite clearly knowing material. **Severely underpowered**—study design was fundamentally inadequate to detect the effect. |
+| 45% | 85% | p-nonsig, fr-stable, nb-strong | Clearly failed despite clearly knowing material. **Severely underpowered**—test design was fundamentally inadequate to assess this student. |
 
-#### Why Score and Mastery Diverge
+#### Why Score and Mastery Diverge  
 
-In exams: limited questions, bad luck, wrong format, test too easy or too hard.
+In exams: limited questions, bad luck, wrong format, test too easy or too hard.  
 
-In studies: small samples, high variance, inadequate power, overpowered detection of trivial effects.
+In studies: small samples, high variance, inadequate power, overpowered detection of trivial effects.  
 
-The p-value (pass/fail) captures only part of the picture. Complete statistical evidence requires all three dimensions.
+The p-value (pass/fail) captures only part of the picture. Complete statistical evidence requires all three dimensions.  
 
 ### Quantitative Thresholds  
 
@@ -732,18 +731,18 @@ Thresholds are recommendations and still require empirical validation and should
 
 #### Fragility Quotients (dichotomous)
 
-| Range     | Interpretation    |  
+| Range (fr) | Interpretation    |  
 | --------- | ----------------- |  
-| ≤0.05     | Fragile – significance is lost by changing outcomes in ≤5 %  |  
-| >0.05 | Stable – requires outcome changes of >5 % to lose significance|  
+| ≤0.10     | Fragile – significance is lost by changing outcomes in ≤10 %  |  
+| >0.10 | Stable – requires outcome changes of >10 % to lose significance|  
 
-Fragile: changing 5% or less of outcomes flips statistical significance.  
+Fragile: changing 10% or less of outcomes flips statistical significance.  
 
-Stable:  flipping statistical significance requires changing more than 5% of outcomes.  
+Stable:  flipping statistical significance requires changing more than 10% of outcomes.  
 
 #### Robustness: rounded tertiles (n=118 real trials + 1 M simulated trials)
 
-**RQ Percentiles (1M Simulated Trials)**
+**RQ Percentiles (1M mixed simulated trials)**
 
 |    1% | 5% | 10% |   25% |   33% |   50% |   67% |   75% |   90% |   95% |   99% |  
 |----|---|---|----|-----|-----|-----|----|----|-----|-----|  
@@ -765,36 +764,48 @@ Strong robustness (far from null):   RQ >  0.227
 
 **When p ≤ 0.05 (statistically significant)**
 
-| Fragility (fr) | Robustness (nb) | Interpretation | Diagnosis |
-|----------------|-----------------|----------------|-----------|
-| stable (fr > 0.05) | strong | **Strong evidence of a true effect** — stable significance + convincingly separated from null | Reliable detection of a real effect. Publish with confidence. |
-| stable | moderate | Stable significance with moderate separation from neutrality | Reliable detection of a modest effect. The effect is real, but clinical significance requires judgment. |
-| stable | weak | Stable significance but effect near zero | **Trivial effect reliably detected.** Statistically significant ≠ clinically meaningful. Question relevance. |
-| fragile (fr ≤ 0.05) | strong | Fragile significance yet convincingly far from neutrality | **Underpowered study.** Effect is probably real, but insufficient evidence to detect it reliably. Replicate with adequate power. |
-| fragile | moderate | Classic fragile significant result | Uncertain effect with unstable classification. Could be real, could be noise. Interpret cautiously; replication essential. |
-| fragile | weak | Fragile significance + effect near zero | **Likely false positive.** Unstable significance with no real effect to detect. Do not trust. |
+| Fragility | Robustness | Interpretation | Diagnosis | Action |
+|-----------|------------|----------------|-----------|--------|
+| **Stable** (MFQ > 0.10) | **Strong** (RQ high) | Significant, robust, large effect | Reliable detection of substantial effect. | ✅ **Trust** for clinical use* |
+| Stable | Moderate | Stable significance with moderate effect | Reliable detection of modest effect. Clinical significance depends on absolute benefit and baseline risk. | ✅ **Consider** if effect size clears clinical threshold |
+| Stable | **Weak** (RQ low) | Stable significance but near neutrality | Trivial effect reliably detected. Statistically significant ≠ clinically meaningful. | ⚠️ **Caution** - effect too small |
+| **Fragile** (MFQ ≤ 0.10) | **Strong** | Fragile yet far from neutrality | Significant but unstable. Effect appears real but easily overturned. | ⚠️ **Caution** - verify in larger sample |
+| Fragile | Moderate | Classic fragile result | Unstable effect of uncertain magnitude. Could be real, could be noise. | ⚠️ **Replicate** before use |
+| Fragile | **Weak** | Pattern (1,1,0) | **Clinically meaningless.** Real but negligible effect. May be positive or negative. Significant p-value provides false confidence. | ⛔ **Reject** for clinical use |
 
 **When p > 0.05 (statistically nonsignificant)**
 
-| Fragility (fr) | Robustness (nb) | Interpretation | Diagnosis |
-|----------------|-----------------|----------------|-----------|
-| stable (fr > 0.05) | weak | **Strong evidence of no meaningful effect** — stable nonsignificance + effect near zero | Reliable null result. No effect exists. Trustworthy negative finding. |
-| stable | moderate | Stable nonsignificance but moderate separation from neutrality | Possible effect not reaching significance. Consider replication if effect would be clinically important. |
-| stable | strong | Stable nonsignificance yet far from neutrality | **Severely underpowered.** Effect clearly exists but classification remains nonsignificant. Inadequate power to detect real effect. |
-| fragile (fr ≤ 0.05) | weak | Fragile nonsignificance + effect near zero | **Likely true negative, but unstable.** Probably no effect, though classification is fragile. Inconclusive but leans toward null. |
-| fragile | moderate | Fragile nonsignificance with moderate separation | Inconclusive. Cannot distinguish "no effect" from "missed effect." Need more data. |
-| fragile | strong | Fragile nonsignificance yet far from neutrality | **Likely false negative.** Effect exists but wasn't detected. Underpowered design. |
+| Fragility | Robustness | Interpretation | Diagnosis | Action |
+|-----------|------------|----------------|-----------|--------|
+| **Stable** (MFQ > 0.10) | **Weak** (RQ low) | Stable nonsignificance near neutrality | **Strong evidence of no effect.** Reliable null result. Effect truly absent or negligible. | ✅ **Trust** the null |
+| Stable | Moderate | Stable nonsignificance with moderate effect | Possible effect not reaching significance. Directionally consistent but underpowered. | ⚠️ **Consider** replication if clinically important |
+| Stable | **Strong** (RQ high) | Stable nonsignificance yet far from neutrality | **Severely underpowered.** Effect clearly exists but remains nonsignificant. Design inadequate to detect real effect. | ⛔ **Underpowered** - need larger trial |
+| **Fragile** (MFQ ≤ 0.10) | **Weak** | Fragile nonsignificance near neutrality | Likely true negative but unstable. Probably no effect, though classification fragile. Leans toward null. | ✅ **Likely null** (low confidence) |
+| Fragile | Moderate | Fragile nonsignificance with moderate effect | Inconclusive. Cannot distinguish "no effect" from "missed effect." Borderline case. | ⚠️ **Inconclusive** - need more data |
+| Fragile | **Strong** | Fragile nonsignificance yet far from neutrality | **Likely false negative.** Effect exists but wasn't detected. Just missed significance threshold. | ⛔ **False negative** - increase power |
+
+---
+
+**Key:**
+- **Fragility:** MFQ ≤ 0.10 = fragile (small outcome changes flip significance); MFQ > 0.10 = stable (robust to outcome changes) based on 129 empirical trials and 720,000 simulation study.
+- **Robustness:** RQ terciles based on null hypothesis distribution (RR=1.0): weak (bottom tercile, indistinguishable from neutrality), moderate (middle tercile), strong (top tercile, clearly separated from neutrality)
+
+**Critical Note:** *These classifications assess statistical robustness and proximity to neutrality. Always evaluate absolute effect sizes (NNT, risk difference, absolute risk reduction) and baseline risk before clinical application. A statistically robust finding with clinically negligible absolute magnitude still warrants caution.*  
 
 **Quick Reference: What Went Wrong?**
 
 | Pattern | Problem | Solution |
 |---------|---------|----------|
-| p-sig, fr-stable, nb-weak | Trivial effect reliably detected | Report effect size; question clinical relevance |
+| p-sig, fr-stable, nb-weak | Trivial effect reliably detected | Question clinical relevance; report absolute effect size |
 | p-sig, fr-fragile, nb-strong | Underpowered for real effect | Replicate with adequate power |
-| p-sig, fr-fragile, nb-weak | Unstable significance with no real effect | Do not trust; treat as hypothesis-generating |
+| p-sig, fr-fragile, nb-weak **(Pattern 1,1,0)** | **Evidence consistent with a trivial effect** | **Treat as clinically negligible unless replicated with stronger nb.** |
 | p-nonsig, fr-stable, nb-strong | Severely underpowered despite real effect | Redesign with proper power calculation |
 | p-nonsig, fr-fragile, nb-strong | Underpowered, missed real effect | Replicate with adequate power |
-| p-nonsig, fr-stable, nb-weak | Nothing wrong—correct answer | Trust the null |
+| p-nonsig, fr-stable, nb-weak | Nothing wrong—correct null finding | Trust the null |
+| p-sig, fr-fragile, nb-moderate | Classic borderline result—uncertain magnitude | Replicate before clinical implementation |
+| p-nonsig, fr-fragile, nb-moderate | Inconclusive—cannot distinguish null from missed effect | Need more data to resolve |
+
+*Note: This table highlights problematic patterns requiring action. Omitted patterns (p-sig with stable+strong, stable+moderate, or fragile+moderate) represent acceptable findings when absolute effects are clinically meaningful.*
 
 ## Part IX: Key Relationships & Validation  
 
@@ -916,6 +927,12 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 10.3.6** (December 15, 2025)
+- Updated fr interpretation tables based on simulation results
+
+**Version 10.3.5** (December 4, 2025)
+- Updated interpretation tables based on simulation results
 
 **Version 10.3.4** (December 3, 2025)
 - Added addendum: complete vs partial statistical evidence in meta-analyses
