@@ -11,6 +11,8 @@ Every statistical result needs three measurements:
 
 ## Calculators
 
+**Calculators can be found in the \notebooks folder. A partial list of notable calculators is listed here:**    
+
 ### 1. Binary Outcomes (2×2 Tables)
 Input: a, b, c, d  
 Output: p (Fisher's exact baseline p-value), fr (FI/MFQ and GFI/GFQ) and nb (RQ).
