@@ -1,19 +1,19 @@
-# FRAGILITY METRICS v10.3.6
+# FRAGILITY METRICS v11.0.0
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 10.3.6  
-**Date:** December 15, 2025  
+**Version:** 11.0.0
+**Date:** December 17, 2025  
 
 ---
 
 ## Abstract
-A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone (“partial evidence”), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
+A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone (“partial evidence”), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a percentile-normalized fragility index fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
 
-**Fragility (fr)** measures the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ (recommended default for 2×2 binary outcomes), GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z (Zerko) Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), and SFQ (survival outcomes via Cox regression z-statistic).
+**Fragility (fr)** Fragility (fr) Fragility is first quantified by native fragility quotients that measure the proportion of relevant data (or SE-scale shift) required to flip significance classification, with primary metrics MFQ, GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z (Zerko) Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), and SFQ (survival outcomes via Cox regression z-statistic). Fragility is first quantified by native fragility quotients (MFQ, GFQ, CFQ, SFQ, etc.), each measuring the proportion of relevant data (or SE-scale shift) required to flip significance within a given design. These native metrics are then mapped to a universal 0–1 scale, fr, via percentile normalization of their reference distributions. High fr indicates a stable classification relative to comparable trials; low fr indicates fragility. 
 
 **Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks and agreement vs chance), MeCI (continuous means), DTI (correlation), ANOVAη² (multi-group), ORQ (ordinal outcomes), and SRQ (survival outcomes). 
 
@@ -29,7 +29,7 @@ This document finalizes the integration of continuous-outcome measures (CFQ, MeC
 > **Whereas p < 0.05 establishes statistical significance, a concordant p–fr–nb triplet (low p + high fr + high nb) establishes convincing, complete statistical evidence.**
 
 Traditional practice reports only the p-value for a given analysis, which we term partial evidence: it addresses compatibility with the null but not the stability of that decision or the distance from therapeutic neutrality. We define complete statistical evidence as the triplet (p, fr, nb), where p quantifies statistical significance,
-fr is a 0–1 fragility quotient measuring how much the data must change to flip the significance classification, and nb is a 0–1 robustness metric measuring geometric distance from the neutrality boundary. Only when all three dimensions align (low p, high fr, high nb for “effect exists” claims) do we regard the statistical evidence as complete in the sense of being decision-ready and replication-ready. 
+fr is a 0–1 fragility index giving the percentile rank of a native fragility quotient (MFQ, GFQ, CFQ, etc.) within its reference distribution. High fr means the classification is stable relative to comparable trials; low fr means fragile. The native quotients themselves still measure the proportion of data or SE-shift needed to flip significance. nb is a 0–1 robustness metric measuring geometric distance from the neutrality boundary. Only when all three dimensions align (low p, high fr, high nb for “effect exists” claims) do we regard the statistical evidence as complete in the sense of being decision-ready and replication-ready. 
 
 Reporting only p-values yields partial evidence, because it ignores both the stability of the conclusion (fragility) and the distance from neutrality (robustness). The p–fr–nb triplet restores these missing dimensions and constitutes complete statistical evidence for a result.  
 
@@ -44,7 +44,7 @@ Reporting only p-values yields partial evidence, because it ignores both the sta
 
 **Calculate:**
 - p = 0.049 (Fisher's exact)
-- fr = 0.04 (MFQ: 4 toggles / 100 in treatment arm)
+- fr = [percentile] (MFQ = 0.04 = 4 toggles / 100 in treatment arm)
 - nb = 0.10 (RQ)
 
 **Interpret:** p-significant, fr-fragile, nb-weak → **Boundary-zone / SFW pattern. Treat as low-quality evidence; replication or more data strongly recommended.**
@@ -65,7 +65,7 @@ Only when **all three dimensions align strongly** (low p + high fr + high nb) do
 ### Definitions
 **Significance (p-value)**: the p-value quantifies compatibility of the observed data with the null hypothesis (no effect). Lower p-values indicate stronger evidence against the null hypothesis. Conventional threshold: p < 0.05 for "statistically significant."  
 
-**Fragility (fr)**: the fragility summary statistic, fr, measures the stability of the significance classification. fr ∈ [0,1]. **A high fr indicates stability**, i.e., it takes a significant shift in outcomes to flip significance. **A low fr indicates fragility**, i.e., it takes only a slight change in outcomes to flip significance. Fragility quantifies the minimal perturbation to the data required to reverse the p-value decision.  
+**Fragility (fr)**: the fragility summary statistic, fr, measures the stability of the significance classification. **A high fr indicates stability**, i.e., it takes a significant shift in outcomes to flip significance. **A low fr indicates fragility**, i.e., it takes only a slight change in outcomes to flip significance. Fragility quantifies the minimal perturbation to the data required to reverse the p-value decision. Native fragility quotients measure the proportion, and fr ∈ [0,1] is their percentile-normalized index.
 
 **Robustness (nb)**: The robustness summary statistic, nb, measures how far from neutral the experimental result is, accounting for uncertainty. nb ∈ [0,1] where high nb = far from neutrality and low nb = near neutrality. Robustness (nb) translates to *"strength of evidence for non-zero effect"* but not effect size. **A high nb** indicates strong evidence that an effect exists, while **a low nb** suggests that little or no effect exists.  
 
@@ -83,9 +83,13 @@ Only when **all three dimensions align strongly** (low p + high fr + high nb) do
 - **Scale**: 0 to 1
 - **Interpretation**: Lower p = stronger evidence against the null
 
-#### Fragility (fr ∈ [0,1])
-- **Question**: What proportion of the relevant data must change to flip the significance classification?
-- **Unified metric**: **fr** (all primary fragility quotients output fr directly)
+#### Fragility (native quotients q_m ∈ [0,1])
+- **Question**: what proportion of data / SE-shift must change to flip classification?
+- **Native metrics**: MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BFQ.
+
+#### Universal fragility index (fr ∈ [0,1])
+- **Question**: how fragile is this result relative to comparable trials in the same metric family?
+- **Unified metric**: fr = percentile(q_m | reference distribution)
 
 #### Robustness (nb ∈ [0,1])
 - **Question**: How far is the result from the neutrality boundary?
@@ -110,13 +114,39 @@ In most common trial designs, the framework provides **paired metrics** (both fr
 
 #### Fragility (Proportion-based or Scale-based Stability)
 
-* **Concept**: Quantifies the stability of a significance classification on a scale of 0 (fragile) to 1 (stable).
-* **Unified notation**: **fr ∈ [0,1]**
-* **Measures**: Proportion of the sample (binary/diagnostic) or proportion of an SE-scale shift (continuous) required to flip the p-value classification.
-* **Scale**: 0 to 1 (quotients)
-* **Primary metrics**: FQ, MFQ, GFQ, DFQ, BFQ, PFI, CFQ, ANOVA-FQ, ZFQ → all compute **fr**
-* **Secondary metrics**: FI, SFI, GFI, DFI, **CFS** (raw counts/units)
-* **Interpretation**: Lower fr = more fragile; higher fr = more stable.
+* Concept: Quantifies the stability of a significance classification on a scale of 0 (fragile) to 1 (stable).
+* Native notation: q_m ∈ [0,1] for each metric m.
+* Measures: Proportion of the sample (binary/diagnostic) or proportion of an SE-scale shift (continuous) required to flip the p-value classification.
+* Scale: 0 to 1 (native fragility quotients).
+* Primary native metrics: FQ, MFQ, GFQ, DFQ, BFQ, PFI, CFQ, ANOVA-FQ, ZFQ, OFQ, SFQ.
+* Secondary metrics: FI, SFI, GFI, DFI, CFS (raw counts/units).
+* Interpretation (native): Lower q_m = more fragile; higher q_m = more stable.
+
+#### Percentile Normalization: Universal fr Scale
+
+While native fragility metrics (MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BFQ) provide direct physical interpretation within each study design, their raw values are not directly comparable across designs. Binary metrics typically yield lower values (median ~0.03–0.06) than continuous metrics (median ~0.12–0.18) despite equivalent underlying instability.
+
+To enable universal fragility assessment, **fr is defined as the percentile rank** of the native metric value within its reference distribution:
+
+**fr = percentile(native_metric | reference_distribution) ∈ [0,1]**
+
+where:
+- **0** = most fragile (smallest native metric value observed in reference)
+- **1** = most stable (largest native metric value observed in reference)
+
+**Reference distributions** are generated via large-scale simulations (100,000+ trials per metric) under borderline-significant conditions (p ≈ 0.04–0.06) matching typical clinical trial designs.
+
+**Reporting format:**
+- Native metric preserves physical interpretation: "GFQ = 0.03" (3% of sample must move)
+- Universal fr enables categorical assessment: "fr = 0.15" (15th percentile = fragile)
+- Example: "GFQ = 0.03, fr = 0.15 (fragile)"
+
+**Provisional categorical thresholds:**
+- **fr ≤ 0.33**: Fragile (bottom tertile of stability)
+- **0.33 < fr ≤ 0.67**: Moderate fragility
+- **fr > 0.67**: Stable (top tertile of stability)
+
+This percentile normalization preserves the model-free principle (simulations use only exact test geometry) while achieving practical universality: "fr ≤ 0.33 = fragile" applies consistently across all study designs. The p–fr–nb triplet maintains universal interpretability with fr as the percentile-normalized fragility measure.
 
 #### Robustness (Geometric Distance)
 
@@ -188,7 +218,7 @@ F* is the critical F value at α = 0.05 for the reported df.
 
 ### Core Concept
 
-Fragility quotients measure the proportion of the sample (binary/diagnostic) or the proportion of SE-scale movement (continuous) required to flip statistical significance. All primary fragility metrics range from 0 to 1.
+Fragility quotients measure the proportion of the sample (binary/diagnostic) or the proportion of SE-scale movement (continuous) required to flip statistical significance. All primary native fragility quotients range 0–1 (MFQ, GFQ, CFQ, SFQ, etc.). The universal index fr also ranges 0–1 as a percentile rank. For each primary fragility metric, we report both the native quotient (e.g., GFQ, CFQ) and its percentile-normalized value fr.
 
 ### 3.1 FQ — Fragility Quotient
 
@@ -196,7 +226,7 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Definition**: Proportion of the total sample that must toggle to flip significance  
 **Formula**: FQ = FI/N  
 **Range**: 0 to 1  
-**Interpretation**: For FQ, fr = FQ. For example, fr = 0.02 means 2% of sample outcomes must change to flip statistical significance.  
+**Interpretation**: For FQ, fr = percentile FQ. For example, FQ = 0.02 means 2% of sample outcomes must change to flip statistical significance.  
 **Advantages**: use for historical comparison with studies that used FQ
 **Base metric**: FI (classic fragility index)  
 **NBF pair**: RQ
@@ -208,7 +238,7 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Definition**: Proportion of the arm that was actually modified in the classic fragility index procedure required to flip statistical significance.  
 **Formula**: MFQ = FI / n_mod, where n_mod = sample size of the arm subjected to toggling in the standard FI calculation (i.e., the arm with fewer events; if tied, the smaller arm).  
 **Range**: 0 to 1  
-**Interpretation**: fr = MFQ. Example: fr = 0.05 means 5% of patients in the arm that was toggled would need to switch outcome to flip significance.  
+**Interpretation**: fr = percentile MFQ. Example: MFQ = 0.05 means 5% of patients in the arm that was toggled would need to switch outcome to flip significance.  
 **Advantages**: Label-invariant, allocation-fair  
 **Base metric**: Classic FI (Walsh et al. 2014 procedure)  
 **NBF pair**: RQ
@@ -220,7 +250,7 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Definition**: Proportion of sample involved in minimal cell moves  
 **Formula**: GFQ = GFI/N  
 **Range**: 0 to 1  
-**Interpretation**: For GFQ, fr = GFQ (e.g., fr = 0.03 means 3% of the sample must be reallocated to flip statistical significance).  
+**Interpretation**: For GFQ, fr = percentile GFQ (e.g., GFQ = 0.03 means 3% of the sample must be reallocated to flip statistical significance).  
 **Advantages**: Path-independent, applies to any r×c table  
 **Base metric**: GFI (global fragility index)  
 **NBF pair**: RQ
@@ -237,7 +267,7 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 - NPV: n_relevant = TN + FN (test−)  
 - ACCURACY (agreement with truth): n_relevant = TP + FN + FP + TN = N  
 **Range**: 0 to 1  
-**Interpretation**: For DFQ, **fr = DFQ** (e.g., fr = 0.06 means 6% of the relevant cases must change to flip the benchmark classification).  
+**Interpretation**: For DFQ, **fr = percentile DFQ** (e.g., DFQ = 0.06 means 6% of the relevant cases must change to flip the benchmark classification).  
 **Advantages**: Correctly targets the subset of observations that determine each diagnostic metric, and uses a one-sided exact test appropriate for benchmark comparisons.  
 **Base metric**: DFI (diagnostic fragility index)  
 **NBF pair**: DNB  
@@ -270,7 +300,7 @@ b) Single-rater agreement vs chance (p₀ = 0.5) or another target benchmark whe
 - H₀: p = p₀  
 - H₁: p > p₀ (for “above benchmark” claims; direction may be reversed if the benchmark is framed as a maximum allowable rate).  
 **Range**: 0 to 1  
-**Interpretation**: fr = BFQ (e.g., fr = 0.08 means 8% of the observations in the single-arm proportion must change to flip the benchmark decision).  
+**Interpretation**: fr = percentile BFQ (e.g., BFQ = 0.08 means 8% of the observations in the single-arm proportion must change to flip the benchmark decision).  
 **Advantages**:  
 - Establishes the fragility of a single-arm test, giving a success rate vs the benchmark.  
 - Applies when only (k, n, p₀) are available (no full diagnostic 2×2 table).  
@@ -290,7 +320,7 @@ b) Single-rater agreement vs chance (p₀ = 0.5) or another target benchmark whe
 **Definition**: Proportion of the maximal admissible fixed-margin shift required to flip the McNemar significance classification in a matched-pair or fixed-margin 2×2 design.  
 **Formula**: PFI = 4 × |x| / N, where x is the smallest continuous shift along the fixed-margin path (a+x, b−x, c−x, d+x) that changes the two-sided McNemar χ² p-value across the α = 0.05 boundary.  
 **Range**: 0 to 1  
-**Interpretation**: For PFI, fr = PFI (e.g., fr = 0.10 means that 10% of the theoretical maximum fixed-margin cell movement is sufficient to reverse the McNemar significance decision).  
+**Interpretation**: For PFI, fr = percentile PFI (e.g., PFI = 0.10 means that 10% of the theoretical maximum fixed-margin cell movement is sufficient to reverse the McNemar significance decision).  
 **Advantages**: a) directly measures stability of the correct null hypothesis for matched designs (marginal homogeneity); b) uses the same significance test (McNemar χ²) for both baseline p-value and fragility path → eliminates test mismatch; c) remains perfectly scaled and orthogonal to MHQ; d) provides intuitive interpretation in terms of discordant pair changes.  
 **Base metric**: x (minimal fixed-margin perturbation along the McNemar path)  
 **NBF pair**: MHQ  
@@ -317,7 +347,7 @@ Then:
 Continuous Fragility Score (distance in SE units to the p = 0.05 boundary): CFS = | |T| − t* |.
 Continuous Fragility Quotient: CFQ = CFS / (1 + CFS).
 **Range**: 0 to 1.  
-**Interpretation**: fr = CFQ. For example, fr = 0.12 means the observed t-statistic lies relatively close to the p = 0.05 boundary on the CFQ scale; smaller values indicate a more fragile significance classification, larger values a more stable one.  
+**Interpretation**: fr = percentile CFQ. For example, CFQ = 0.12 means the observed t-statistic lies relatively close to the p = 0.05 boundary on the CFQ scale; smaller values indicate a more fragile significance classification, larger values a more stable one.  
 **Advantages**: Works directly from reported summary statistics (m₁, m₂, s₁, s₂, n₁, n₂). No raw data required. No simulated data or distributional reconstruction. Correctly respects Welch's variance structure and degrees of freedom. Provides a continuous-outcome analogue of MFQ/GFQ.  
 **Base metric**: CFS = continuous fragility score = (SE-unit distance between |T| and t*).  
 **NBF pair**: MeCI  
@@ -340,7 +370,7 @@ The fragility and robustness metrics are test-agnostic; only the t-statistic cal
 ANOVA-FS = |√F − √F*|
 ANOVA-FQ = ANOVA-FS / (1 + ANOVA-FS)
 **Range**: 0 to 1  
-**Interpretation**: fr = ANOVA-FQ (higher = more stable classification)
+**Interpretation**: fr = percentile ANOVA-FQ (higher = more stable classification)
 **Advantages**:  
 - Model-free (uses only reported F and df)  
 - Path-independent (√F geometry is unique)  
@@ -359,7 +389,7 @@ ANOVA-FQ = ANOVA-FS / (1 + ANOVA-FS)
   D = |Z - Z_crit|
   ZFQ = D / (1 + D)
 **Range**: 0 to 1
-**Interpretation**: fr = ZFQ. Higher values indicate more stable classification (significant or non-significant).
+**Interpretation**: fr = percentile ZFQ. Higher values indicate more stable classification (significant or non-significant).
 **Advantages**: Sample-size dependent, symmetric around decision boundary, structurally identical to CFQ/ANOVA-FQ
 **Base metric**: D (distance in Fisher-z test statistic units)
 **NBF pair**: DTI
@@ -377,7 +407,7 @@ Calculate:
 Then:
 **OFQ = |z_WMW - 1.96| / (1 + |z_WMW - 1.96|)**
 **Range**: 0 to 1
-**Interpretation**: fr = OFQ. Example: fr = 0.33 means the z-statistic is moderately far from the p = 0.05 boundary on the OFQ scale; higher values indicate more stable significance classification.
+**Interpretation**: fr = percentile OFQ. Example: OFQ = 0.33 means the z-statistic is moderately far from the p = 0.05 boundary on the OFQ scale; higher values indicate more stable significance classification.
 **Advantages**: Works directly from reported gOR and 95% CI (standard reporting for ordinal outcomes). No raw data, ranks, or distributional assumptions required. Extends the fragility framework to ordinal shift analysis.
 **Base metric**: |z_WMW - 1.96| (raw distance in z-statistic units to significance boundary)
 **NBF pair**: ORQ
@@ -396,7 +426,7 @@ Then:
 **SFQ = |z_HR - 1.96| / (1 + |z_HR - 1.96|)**
 
 **Range**: 0 to 1
-**Interpretation**: fr = SFQ. Example: fr = 0.15 means the z-statistic is relatively close to the p = 0.05 boundary on the SFQ scale; higher values indicate more stable significance classification.
+**Interpretation**: fr = percentile SFQ. Example: SFQ = 0.15 means the z-statistic is relatively close to the p = 0.05 boundary on the SFQ scale; higher values indicate more stable significance classification.
 **Advantages**: Works directly from reported HR and 95% CI (standard reporting for survival outcomes). No raw survival data, Kaplan-Meier curves, or censoring information required. Extends the fragility framework to time-to-event analysis.
 **Base metric**: |z_HR - 1.96| (raw distance in z-statistic units to significance boundary)
 **NBF pair**: SRQ
@@ -647,8 +677,9 @@ Given unit size f, Walter defines UFI as the minimum number k of these fixed-mar
 
 ### Understanding the Measurements  
 
-**Fragility Quotients (0–1)**  
+**Fragility Metrics (0–1)**
 
+* For native fragility quotients qₘ (MFQ, GFQ, CFQ, etc.) and for the universal index fr, values near 0 indicate high fragility (small change flips classification), and values near 1 indicate high stability.
 * Near 0 = highly fragile; a small proportion or small SE shift reverses the significance classification.  
 * Near 1 = highly stable; a large proportion or large SE shift is required to reverse significance.  
 
@@ -730,15 +761,19 @@ The p-value (pass/fail) captures only part of the picture. Complete statistical 
 Thresholds are recommendations and still require empirical validation and should be treated as provisional.  
 
 #### Fragility Quotients (dichotomous)
+To be determined: cutoffs to define "fragile" vs "stable"
 
-| Range (fr) | Interpretation    |  
+For MFQ, initial empiric validation and 1M simulation: 
+
+| Range MFQ | Interpretation    |  
 | --------- | ----------------- |  
 | ≤0.10     | Fragile – significance is lost by changing outcomes in ≤10 %  |  
 | >0.10 | Stable – requires outcome changes of >10 % to lose significance|  
 
-Fragile: changing 10% or less of outcomes flips statistical significance.  
-
-Stable:  flipping statistical significance requires changing more than 10% of outcomes.  
+Provisional categorical thresholds:
+– fr ≤ 0.33: Fragile
+– 0.33 < fr ≤ 0.67: Moderate
+– fr > 0.67: Stable
 
 #### Robustness: rounded tertiles (n=118 real trials + 1 M simulated trials)
 
@@ -761,6 +796,8 @@ Strong robustness (far from null):   RQ >  0.227
 
 
 ### Strength-of-Evidence under the p–fr–nb framework  
+
+The following strength-of-evidence tables are calibrated for 2×2 binary trials using MFQ. For other designs, analogous tables will use the universal fr percentile thresholds (≤0.33, etc.).
 
 **When p ≤ 0.05 (statistically significant)**
 
@@ -860,6 +897,7 @@ The modern statistical evidence framework consists of two orthogonal dimensions,
    * Ordinal: OFQ (Wilcoxon-Mann-Whitney / proportional odds)
    * Survival: SFQ (Cox regression hazard ratios)
    * Correlation: ZFQ (Fisher-z distance from the α=0.05 boundary; aka Zerko Fragility Quotient)
+   * For each design, a native fragility quotient q_m (e.g., MFQ, GFQ, CFQ) is computed, then mapped to the universal fragility index fr via percentile normalization of its reference distribution. The p–fr–nb triplet always uses fr as the fragility coordinate.
 
 2. **ROBUSTNESS** (NBF-based): How far from neutrality?  
 
@@ -927,6 +965,13 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 11.0.0** (December 17, 2025)
+- Added percentile normalization framework: fr redefined as universal percentile rank of native metrics
+- Native fragility metrics (GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BFQ) preserve physical interpretation
+- Established provisional categorical thresholds: fr ≤ 0.33 (fragile), 0.33-0.67 (moderate), > 0.67 (stable)
+- Enables cross-design comparability while maintaining model-free principle
+- Reference distributions to be generated via large-scale simulation (100K+ trials per metric)
 
 **Version 10.3.6** (December 15, 2025)
 - Updated fr interpretation tables based on simulation results
