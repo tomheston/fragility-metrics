@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v11.0.0
+# FRAGILITY METRICS v11.1.0
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types  
 **Thomas F. Heston**  
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*  
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*  
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)  
-**Version:** 11.0.0
-**Date:** December 17, 2025  
+**Version:** 11.1.0
+**Date:** January 1, 2026  
 
 ---
 
@@ -206,7 +206,7 @@ Stability always matters; whether it helps or hurts depends entirely on the clai
 | **GFI**           | Count      | 0–∞   | Secondary             | Move count (global)                                             | Path-independent count                            |
 | **DFI**           | Count      | 0–∞   | Secondary             | Toggle count vs benchmark                                       | Diagnostic count                                  |
 | **CFS**           | Distance   | 0–∞   | Secondary             | \|\|T\| − t\*\|                                                 | SE-unit distance to p = 0.05 (continuous)         |
-| **RI**            | Scaling    | >1    | Secondary             | Factor k to flip                                                | Sample size multiplier                            |
+| **SSM**            | Scaling    | >1    | Secondary             | Factor k to flip                                                | Sample size multiplier                            |
 | **UFI**           | Unit       | >0    | LEGACY                | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                                | Step-size definitions (fixed-margin unit size)    |
 | **SFQ**           | Fragility  | 0–1   | PRIMARY               | \|z_HR - 1.96\| / (1 + \|z_HR - 1.96\|)           | SE-scaled distance to p = 0.05 (survival)    |
 | **SRQ**           | Robustness | 0–1   | PRIMARY               | \|ln(HR)\| / (1 + \|ln(HR)\|)                     | Distance from neutrality (survival)          |
@@ -636,7 +636,7 @@ Base metric for CFQ.
 **Output**: Distance value → RQ = RRI / (N/k).  
 **Note**: Parent metric for RQ.  
 
-### **RI — Robustness Index**
+### **SSM — Sample Size Multiplier (formerly RI — Robustness Index)**
 
 **Definition**: Scaling factor k such that k·N flips a nonsignificant result to significant, or N/k flips a significant result to nonsignificant.  
 **Purpose**: Sample-size sensitivity.  
