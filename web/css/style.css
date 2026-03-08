@@ -1,0 +1,291 @@
+/* style.css - Matches documentation.php exact styling */
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+
+/* Navigation - gray bar across top */
+nav {
+    background: #e8e8e8;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+.nav-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    padding: 0;
+    margin: 0;
+}
+
+nav a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover,
+nav a.active {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+/* Main content container - white card */
+.container {
+    max-width: 900px;
+    margin: 0 auto 2rem auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+/* Typography */
+h1, h2, h3 {
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+hgroup {
+    margin-bottom: 2rem;
+}
+
+hgroup h1 {
+    margin-bottom: 0.5rem;
+}
+
+hgroup p {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Code */
+code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    background: #f0f0f0;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+}
+
+code.inline {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    background: #f7f7f7;
+    padding: 0.1rem 0.25rem;
+    border-radius: 4px;
+}
+
+pre {
+    background: #f0f0f0;
+    padding: 1rem;
+    overflow: auto;
+    border-radius: 6px;
+}
+
+/* Lists */
+ul, ol {
+    padding-left: 1.5rem;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Forms */
+input[type="number"],
+input[type="text"],
+input[type="email"],
+textarea {
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+button,
+a[role="button"] {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+button:hover,
+a[role="button"]:hover {
+    background: #0056b3;
+    text-decoration: none;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+}
+
+th {
+    background: #f7f7f7;
+    font-weight: 600;
+}
+
+/* Articles */
+article {
+    background: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Details/Summary */
+details {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #fafafa;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+}
+
+details[open] summary {
+    margin-bottom: 0.75rem;
+}
+
+/* Horizontal Rule */
+hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 2rem 0;
+}
+
+/* Meta information styling (like documentation.php) */
+.meta {
+    font-size: 0.875rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.meta strong {
+    font-weight: 600;
+}
+
+/* Error messages */
+.error {
+    padding: 1rem;
+    border-radius: 8px;
+    background: #ffecec;
+    color: #b00000;
+    margin-bottom: 1rem;
+}
+
+/* Markdown content styling */
+.markdown h1, .markdown h2, .markdown h3 {
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.markdown p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.markdown code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    background: #f0f0f0;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+}
+
+.markdown pre {
+    background: #f0f0f0;
+    padding: 1rem;
+    overflow: auto;
+    border-radius: 6px;
+}
+
+.markdown ul, .markdown ol {
+    padding-left: 1.5rem;
+}
+
+.markdown a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.markdown a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+    color: #666;
+    font-size: 0.875rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 0 1rem;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .container {
+        margin: 0 1rem 2rem 1rem;
+        padding: 1.5rem;
+    }
+    
+    table input[type="number"] {
+        width: 80px;
+    }
+}
