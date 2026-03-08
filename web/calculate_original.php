@@ -1,7 +1,11 @@
 <?php
 /**
- * calculate.php
- * p-fr-nb plus effect size Calculator
+ * calculate_original.php
+ * p-fr-nb plus effect size Calculator — Original Walsh FI
+ *
+ * Identical output to calculate.php except the Fragility Index (FI) uses
+ * the strict original Walsh (2014) definition via FragilityIndexWalsh.
+ * GFI/GFQ are not calculated. All other metrics (p, RQ, RR) are unchanged.
  *
  * Citation: Heston, T. F. (2025). Fragility Metrics Toolkit [Software].
  * Zenodo. https://doi.org/10.5281/zenodo.17254763
@@ -10,12 +14,14 @@
  * https://creativecommons.org/licenses/by/4.0/
  */
 
-require_once 'FragilityCalculator.php';
-require_once 'DatabaseManager.php';
+require_once 'FisherExactTest.php';
+require_once 'FragilityIndexWalsh.php';
+require_once 'RiskQuotient.php';
+require_once 'RelativeRisk.php';
 
 $result = null;
-$error = null;
-$saved_id = null;
+$error  = null;
+$alpha  = 0.05;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $a = filter_input(INPUT_POST, 'a', FILTER_VALIDATE_INT);
@@ -23,12 +29,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $c = filter_input(INPUT_POST, 'c', FILTER_VALIDATE_INT);
     $d = filter_input(INPUT_POST, 'd', FILTER_VALIDATE_INT);
 
-    if ($a === false || $b === false || $c === false || $d === false || $a < 0 || $b < 0 || $c < 0 || $d < 0) {
+    if ($a === false || $b === false || $c === false || $d === false
+            || $a < 0 || $b < 0 || $c < 0 || $d < 0) {
         $error = "All values must be non-negative integers.";
     } else {
         try {
-            $result = FragilityCalculator::calculate($a, $b, $c, $d);
-            $saved_id = DatabaseManager::saveCalculation($result);
+            $N = $a + $b + $c + $d;
+
+            // p-value
+            $p_val = FisherExactTest::calculate($a, $b, $c, $d);
+
+            // Strict Walsh FI
+            $fi = FragilityIndexWalsh::calculate($a, $b, $c, $d, $alpha);
+
+            // Robustness (RQ)
+            $rq_result = RiskQuotient::calculate($a, $b, $c, $d);
+
+            // Effect size (always 95% CI)
+            $rr_result = RelativeRisk::calculate($a, $b, $c, $d);
+
+            // Assemble result
+            $result = [
+                'input' => ['a' => $a, 'b' => $b, 'c' => $c, 'd' => $d, 'N' => $N],
+                'p' => [
+                    'value'       => round($p_val, 6),
+                    'significant' => ($p_val <= $alpha),
+                    'alpha'       => $alpha,
+                ],
+                'fi'  => $fi,
+                'nb'  => ['RQ' => $rq_result['RQ']],
+                'effect' => [
+                    'RR'         => $rr_result['RR'],
+                    'CI_lower'   => $rr_result['CI_lower'],
+                    'CI_upper'   => $rr_result['CI_upper'],
+                    'CI_level'   => $rr_result['CI_level'],
+                    'correction' => $rr_result['correction'],
+                    'note'       => $rr_result['note'],
+                ],
+            ];
+
         } catch (Exception $e) {
             $error = "Calculation error: " . $e->getMessage();
         }
@@ -55,8 +94,8 @@ include 'includes/header.php';
   .pfr-citation { font-size: 14px; color: #666; }
 </style>
 <div class="pfr-page">
-  <h2>p-fr-nb plus effect size Calculator</h2>
-  <p class="pfr-lead">Calculate complete statistical evidence (p-fr-nb triplet plus effect size) for 2×2 independent binary outcome tables.</p>
+  <h2>p-fr-nb plus effect size Calculator (Original Walsh FI)</h2>
+  <p class="pfr-lead">Calculate complete statistical evidence (p-fr-nb triplet plus effect size) for 2×2 independent binary outcome tables. Fragility Index uses the strict original Walsh (2014) definition.</p>
   <?php if ($error): ?>
     <div id="pfr-error">
       <strong>Error:</strong> <?= htmlspecialchars($error) ?>
@@ -91,30 +130,21 @@ include 'includes/header.php';
     </div>
   </form>
   <?php if ($result): ?>
+    <?php $fi = $result['fi']; ?>
     <div id="pfr-result">
       <h3>Significance (p)</h3>
       <p>baseline p-value = <?= number_format($result['p']['value'] ?? 0, 6) ?><br>
       [two-sided Fisher's exact test, alpha = <?= number_format($result['p']['alpha'] ?? 0.05, 2) ?>]
       </p>
       <h3>Fragility (fr)</h3>
-      <p>FI (Fragility Index) = <?= $result['fr']['FI'] ?? 'NULL' ?><br>
-      FQ (Fragility Quotient) = <?= $result['fr']['FQ'] !== null ? number_format($result['fr']['FQ'], 4) : 'NULL' ?><br>
-      MFQ (Modified-Arm Fragility Quotient) = <?= $result['fr']['MFQ'] !== null ? number_format($result['fr']['MFQ'], 4) : 'NULL' ?><br>
-      <?php if (!empty($result['fr']['post_FI'])): ?>
-      Post-FI table: {<?= (int)($result['fr']['post_FI']['a'] ?? 0) ?>, <?= (int)($result['fr']['post_FI']['b'] ?? 0) ?>, <?= (int)($result['fr']['post_FI']['c'] ?? 0) ?>, <?= (int)($result['fr']['post_FI']['d'] ?? 0) ?>}<br>
-      Post-FI p-value = <?= number_format((float)($result['fr']['post_FI_p'] ?? 0), 6) ?><br>
+      <p>FI (Fragility Index) = <?= htmlspecialchars($fi['FI_text'] ?? 'NULL') ?><br>
+      <?php if ($fi['FI'] !== null): ?>
+      FQ (Fragility Quotient) = <?= number_format($fi['FQ'], 4) ?><br>
+      MFQ (Modified-Arm Fragility Quotient) = <?= number_format($fi['MFQ'], 4) ?><br>
+      <?php if (!empty($fi['post_FI'])): ?>
+      Post-FI table: {<?= (int)$fi['post_FI']['a'] ?>, <?= (int)$fi['post_FI']['b'] ?>, <?= (int)$fi['post_FI']['c'] ?>, <?= (int)$fi['post_FI']['d'] ?>}<br>
+      Post-FI p-value = <?= number_format((float)($fi['post_FI_p'] ?? 0), 6) ?><br>
       <?php endif; ?>
-      <br>
-      <?php if (isset($result['gfi']) && $result['gfi']['GFI'] !== null): ?>
-        GFI (Global Fragility Index) = <?= $result['gfi']['GFI'] ?? 'NULL' ?><br>
-        GFQ (Global Fragility Quotient) = <?= number_format($result['gfi']['GFQ'] ?? 0, 4) ?> (<?= $result['gfi']['verified'] ? 'Exact' : 'Estimated' ?>)<br>
-        <?php if (!empty($result['gfi']['post_GFI'])): ?>
-        Post-GFI table: {<?= (int)($result['gfi']['post_GFI']['a'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['b'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['c'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['d'] ?? 0) ?>}<br>
-        Post-GFI p-value = <?= number_format((float)($result['gfi']['post_GFI_p'] ?? 0), 6) ?><br>
-        <?php endif; ?>
-      <?php else: ?>
-      GFI (Global Fragility Index) = NULL (<?= is_array($result['gfi'] ?? []) ? ($result['gfi']['note'] ?? 'Not computed') : 'Not computed' ?>)<br>
-      GFQ (Global Fragility Quotient) = NULL<br>
       <?php endif; ?>
       </p>
       <h3>Robustness (nb)</h3>
@@ -122,7 +152,7 @@ include 'includes/header.php';
       <h3>Effect Size</h3>
       <p>
       <?php
-        $eff = $result['effect'] ?? [];
+        $eff      = $result['effect'] ?? [];
         $ci_level = number_format($eff['CI_level'] ?? 95, 0);
         if ($eff['RR'] !== null):
       ?>
@@ -147,9 +177,9 @@ include 'includes/header.php';
 <script>
   (function () {
     const form = document.getElementById('pfr-form');
-    const btn = document.getElementById('pfr-reset');
-    const res = document.getElementById('pfr-result');
-    const err = document.getElementById('pfr-error');
+    const btn  = document.getElementById('pfr-reset');
+    const res  = document.getElementById('pfr-result');
+    const err  = document.getElementById('pfr-error');
     if (!btn || !form) return;
     btn.addEventListener('click', function () {
       form.querySelectorAll('input[type="number"]').forEach(i => { i.value = ''; });
