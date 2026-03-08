@@ -141,6 +141,9 @@ include 'includes/header.php';
       <p class="pfr-citation">
         <strong>Citation:</strong> Heston TF. Fragility Metrics Calculators. Zenodo. DOI = (pending)
       </p>
+      <p class="pfr-citation">
+        <strong>Note:</strong> The FI used here is a modified version that allows bidirectional moves (event to/from non-event) and defaults to the arm with the fewest subjects when the number of events is tied. For the original Walsh 2014 FI definition, see the <a href="calculate_original.php">Walsh 2014 FI Calculator</a>.
+      </p>
     </div>
   <?php endif; ?>
 </div>
