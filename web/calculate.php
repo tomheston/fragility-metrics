@@ -23,7 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $c = filter_input(INPUT_POST, 'c', FILTER_VALIDATE_INT);
     $d = filter_input(INPUT_POST, 'd', FILTER_VALIDATE_INT);
 
-    if ($a === false || $b === false || $c === false || $d === false || $a < 0 || $b < 0 || $c < 0 || $d < 0) {
+    // is_int() rejects both invalid values (false) and missing fields (null).
+    if (!is_int($a) || !is_int($b) || !is_int($c) || !is_int($d) || $a < 0 || $b < 0 || $c < 0 || $d < 0) {
         $error = "All values must be non-negative integers.";
     } else {
         try {
@@ -108,6 +109,7 @@ include 'includes/header.php';
       <?php if (isset($result['gfi']) && $result['gfi']['GFI'] !== null): ?>
         GFI (Global Fragility Index) = <?= $result['gfi']['GFI'] ?? 'NULL' ?><br>
         GFQ (Global Fragility Quotient) = <?= number_format($result['gfi']['GFQ'] ?? 0, 4) ?> (<?= $result['gfi']['verified'] ? 'Exact' : 'Estimated' ?>)<br>
+        [GFI significance test: two-sided Fisher's exact; baseline p = <?= number_format((float)($result['gfi']['baseline_p'] ?? 0), 6) ?>]<br>
         <?php if (!empty($result['gfi']['post_GFI'])): ?>
         Post-GFI table: {<?= (int)($result['gfi']['post_GFI']['a'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['b'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['c'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['d'] ?? 0) ?>}<br>
         Post-GFI p-value = <?= number_format((float)($result['gfi']['post_GFI_p'] ?? 0), 6) ?><br>
@@ -138,11 +140,11 @@ include 'includes/header.php';
       <?php endif; ?>
       </p>
       <hr style="margin: 22px 0; border: 0; border-top: 1px solid #ccc;">
-      <p class="pfr-citation">
-        <strong>Citation:</strong> Heston TF. Fragility Metrics Calculators. Zenodo. DOI = (pending)
+      <p class="pfr-citation" style="font-size:13px; color:#555; margin-bottom:6px;">
+        <strong>Note:</strong> The FI used here is a modified version that allows bidirectional moves (event to/from non-event) and defaults to the arm with the fewest subjects when the number of events is tied. Toggles are allowed in one treatment arm only. For the original Walsh 2014 FI definition, see the <a href="http://fragilitymetrics.org/calculate_original.php">Walsh 2014 FI Calculator</a>.
       </p>
       <p class="pfr-citation">
-        <strong>Note:</strong> The FI used here is a modified version that allows bidirectional moves (event to/from non-event) and defaults to the arm with the fewest subjects when the number of events is tied. For the original Walsh 2014 FI definition, see the <a href="calculate_original.php">Walsh 2014 FI Calculator</a>.
+        <strong>Citation:</strong> Heston TF. Fragility metrics toolkit v6.0.0. Zenodo. 2026. DOI: <a href="https://doi.org/10.5281/zenodo.17254763">10.5281/zenodo.17254763</a>
       </p>
     </div>
   <?php endif; ?>

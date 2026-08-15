@@ -29,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $c = filter_input(INPUT_POST, 'c', FILTER_VALIDATE_INT);
     $d = filter_input(INPUT_POST, 'd', FILTER_VALIDATE_INT);
 
-    if ($a === false || $b === false || $c === false || $d === false
+    // is_int() rejects both invalid values (false) and missing fields (null).
+    if (!is_int($a) || !is_int($b) || !is_int($c) || !is_int($d)
             || $a < 0 || $b < 0 || $c < 0 || $d < 0) {
         $error = "All values must be non-negative integers.";
     } else {
@@ -53,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'input' => ['a' => $a, 'b' => $b, 'c' => $c, 'd' => $d, 'N' => $N],
                 'p' => [
                     'value'       => round($p_val, 6),
-                    'significant' => ($p_val <= $alpha),
+                    'significant' => ($p_val < $alpha),
                     'alpha'       => $alpha,
                 ],
                 'fi'  => $fi,

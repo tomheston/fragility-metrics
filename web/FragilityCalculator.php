@@ -59,36 +59,21 @@ class FragilityCalculator {
         
         // Calculate fragility metrics (Walsh-compliant FI/MFQ)
         $fi_result = FragilityIndex::calculate($a, $b, $c, $d, $alpha);
-	// Build post-FI table + post-FI p-value
+	// Build post-FI table + post-FI p-value.
+	// Only when FI was actually attained: FragilityIndex returns the exact
+	// post-toggle table then. When FI is not attainable, post_toggle cells are
+	// null and there is no flipping table to show, so post_FI stays null.
 	$postFI = null;
 
-	if (isset($fi_result['post_toggle']) && is_array($fi_result['post_toggle'])) {
-	    // If FragilityIndex already returns the post-toggle table, use it
-	    if (isset($fi_result['post_toggle']['a'], $fi_result['post_toggle']['b'], $fi_result['post_toggle']['c'], $fi_result['post_toggle']['d'])) {
-	        $postFI = [
-	            'a' => (int)$fi_result['post_toggle']['a'],
-	            'b' => (int)$fi_result['post_toggle']['b'],
-	            'c' => (int)$fi_result['post_toggle']['c'],
-	            'd' => (int)$fi_result['post_toggle']['d'],
-	        ];
-	    } else {
-	        // Otherwise assume post_toggle carries the count of toggles (FI) and use arm+direction to build the table
-	        $k = (int)($fi_result['post_toggle'] ?? 0);
-	        $arm = $fi_result['arm'] ?? null;
-	        $dir = $fi_result['direction'] ?? null;
-
-        	$postFI = ['a'=>$a,'b'=>$b,'c'=>$c,'d'=>$d];
-
-	        if ($k > 0) {
-	            if ($arm === 'A') {
-	                if ($dir === 'non-event->event') { $postFI['a'] += $k; $postFI['b'] -= $k; }
-	                if ($dir === 'event->non-event') { $postFI['a'] -= $k; $postFI['b'] += $k; }
-	            } elseif ($arm === 'B') {
-	                if ($dir === 'non-event->event') { $postFI['c'] += $k; $postFI['d'] -= $k; }
-	                if ($dir === 'event->non-event') { $postFI['c'] -= $k; $postFI['d'] += $k; }
-	            }
-	        }
-	    }
+	if ($fi_result['FI'] !== null
+	    && isset($fi_result['post_toggle']['a'], $fi_result['post_toggle']['b'],
+	             $fi_result['post_toggle']['c'], $fi_result['post_toggle']['d'])) {
+	    $postFI = [
+	        'a' => (int)$fi_result['post_toggle']['a'],
+	        'b' => (int)$fi_result['post_toggle']['b'],
+	        'c' => (int)$fi_result['post_toggle']['c'],
+	        'd' => (int)$fi_result['post_toggle']['d'],
+	    ];
 	}
 
 	if ($postFI !== null) {
@@ -115,10 +100,11 @@ class FragilityCalculator {
 	    }
 	}
 
-	// If we have a post table, compute post-GFI p-value
+	// Report the p-value that actually crossed alpha in the GFI search
+	// (always two-sided Fisher's exact, same as every other metric here).
 	if ($postGFI !== null) {
 	    $gfi_result['post_GFI'] = $postGFI;
-	    $gfi_result['post_GFI_p'] = round(FisherExactTest::calculate($postGFI['a'], $postGFI['b'], $postGFI['c'], $postGFI['d']),6);
+	    $gfi_result['post_GFI_p'] = $gfi_result['final_p'];
 	}
 
         
@@ -139,7 +125,7 @@ class FragilityCalculator {
             ],
             'p' => [
                 'value' => round($p, 6),
-                'significant' => ($p <= $alpha),
+                'significant' => ($p < $alpha),
                 'alpha' => $alpha
             ],
             'fr' => [
@@ -157,6 +143,10 @@ class FragilityCalculator {
                 'GFQ' => $gfi_result['GFQ'],
                 'verified' => $gfi_result['verified'],
                 'method' => $gfi_result['method'],
+                'test_used' => $gfi_result['test_used'] ?? null,
+                'baseline_p' => $gfi_result['baseline_p'] ?? null,
+                'baseline_significant' => $gfi_result['baseline_significant'] ?? null,
+                'final_p' => $gfi_result['final_p'] ?? null,
                 'post_toggle' => $gfi_result['post_toggle'],
                 'note' => $gfi_result['note'],
 		'post_GFI' => $gfi_result['post_GFI'] ?? null,

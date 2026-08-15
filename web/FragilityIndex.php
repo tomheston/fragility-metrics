@@ -17,7 +17,8 @@ require_once 'FisherExactTest.php';
 class FragilityIndex {
     
     private const ALPHA = 0.05;
-    private const MAX_ITERATIONS = 100000;
+    /** Matches max_iter = 10**6 in the reference Python implementation. */
+    private const MAX_ITERATIONS = 1000000;
     
     /**
      * Calculate FI, FQ, MFQ for a 2×2 table
@@ -53,9 +54,11 @@ class FragilityIndex {
             ];
         }
         
-        // Get baseline p-value and state
+        // Get baseline p-value and state.
+        // Significance is strict: p = alpha counts as non-significant, matching
+        // the reference Python implementation and GlobalFragilityIndex.
         $baseline_p = FisherExactTest::calculate($a, $b, $c, $d);
-        $baseline_sig = ($baseline_p <= $alpha);
+        $baseline_sig = ($baseline_p < $alpha);
         $baseline_state = $baseline_sig ? 'significant' : 'non-significant';
         
         // Choose arm using Walsh tie-breaking logic
@@ -108,15 +111,15 @@ class FragilityIndex {
         
         return [
             'FI' => $FI,
-            'FQ' => round($FQ, 6),
-            'MFQ' => round($MFQ, 6),
-            'baseline_p' => round($baseline_p, 6),
+            'FQ' => $FQ,
+            'MFQ' => $MFQ,
+            'baseline_p' => $baseline_p,
             'baseline_state' => $baseline_state,
             'target_state' => $baseline_sig ? 'non-significant' : 'significant',
             'arm' => $arm,
             'direction' => $best['direction'],
             'n_mod' => $n_mod,
-            'final_p' => round($best['final_p'], 6),
+            'final_p' => $best['final_p'],
             'post_toggle' => [
                 'a' => $a_post,
                 'b' => $b_post,
@@ -207,9 +210,9 @@ class FragilityIndex {
             list($A, $B, $C, $D) = $result;
             $steps++;
             
-            // Check if significance flipped
+            // Check if significance flipped (strict: p = alpha is non-significant)
             $p_now = FisherExactTest::calculate($A, $B, $C, $D);
-            $sig_now = ($p_now <= $alpha);
+            $sig_now = ($p_now < $alpha);
             
             if ($sig_now !== $baseline_sig) {
                 // Flipped!

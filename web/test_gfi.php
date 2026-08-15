@@ -94,9 +94,11 @@ require_once 'FragilityIndex.php';
     </div>
     
     <div class="test">
-        <h3>Test 3: Large N (should skip GFI)</h3>
+        <h3>Test 3: Oversize N (should skip GFI)</h3>
         <?php
-        $a = 500; $b = 4500; $c = 600; $d = 4400;
+        // N = 300,000 exceeds the 250,000 threshold shared with the
+        // reference Python implementation, so GFI must be skipped.
+        $a = 50000; $b = 100000; $c = 60000; $d = 90000;
         $N = $a + $b + $c + $d;
         
         $gfi_result = GlobalFragilityIndex::calculate($a, $b, $c, $d);
