@@ -1,4 +1,4 @@
-# FRAGILITY METRICS v13.2.1
+# FRAGILITY METRICS v13.3.0
 
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 
@@ -6,9 +6,9 @@
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 13.2.1
+**Version:** 13.3.0
 
-**Date:** August 15, 2026
+**Date:** August 16, 2026
 ---
 
 ## Abstract
@@ -158,41 +158,42 @@ Robustness (nb) has opposite implications depending on the claim being made:
 
 ## Part II: Quick Reference Table
 
-| Metric                                                       | Type       | Scale                                                        | Primary/Secondary | Formula (core)                                               | Purpose                                               |
-| ------------------------------------------------------------ | ---------- | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| **FQ**                                                       | Fragility  | 0–1                                                          | LEGACY            | FI / N                                                       | Proportion to flip (classic, total N)                 |
-| **MFQ**                                                      | Fragility  | 0–1                                                          | PRIMARY           | FI / n_mod                                                   | Proportion to flip (arm-specific)                     |
-| **GFQ**                                                      | Fragility  | 0–1                                                          | PRIMARY           | GFI / N                                                      | Proportion to flip (global, r×c)                      |
-| **DFQ**                                                      | Fragility  | 0–1                                                          | PRIMARY           | DFI / n_relevant                                             | Proportion to flip (diagnostic)                       |
-| **BFQ**                                                      | Fragility  | 0–1                                                          | PRIMARY           | BFI / n_relevant (n_relevant = n)                            | Proportion to flip (single-arm vs benchmark)          |
-| **CFQ**                                                      | Fragility  | 0–1                                                          | PRIMARY           | \|\|T\| − t\*\| / (1 + \|\|T\| − t\*\|)                      | SE-scaled distance to p = 0.05 (continuous)           |
-| **PFI**                                                      | Fragility  | 0–1                                                          | PRIMARY           | 4 × \|x\| / N (x = fixed-margin path shift)                  | Independent-sample 2x2 sub-integer fragility          |
-| **RQ**                                                       | Robustness | 0–1                                                          | PRIMARY           | Σ\|O − E\| / [2N(m − 1)/m], m = min(r, c); for any 2×2 this equals Σ\|O − E\| / N = \|ad − bc\| / (N²/4) | Distance from independence                            |
-| **sRQ**                                                      | Robustness | −1–+1                                                        | PRIMARY           | 4(ad − bc) / N² (signed RQ; \|sRQ\| = RQ)                    | Signed distance from independence                     |
-| **wsRQ**                                                     | Robustness | −1–+1                                                        | PRIMARY (meta)    | Σ(sRQ_i · w_i), w_i = N_i/ΣN                                 | Pooled signed meta-analytic robustness                |
-| **wGFQ**                                                     | Fragility  | 0–1                                                          | PRIMARY (meta)    | Σ(GFQ_i · w_i), w_i = N_i/ΣN                                 | Pooled meta-analytic fragility                        |
-| **MHQ**                                                      | Robustness | 0–1                                                          | PRIMARY (matched) | \|b − c\| / (b + c) or 0 if b + c = 0                        | Distance from marginal homogeneity                    |
-| **DNB**                                                      | Robustness | 0–1                                                          | PRIMARY           | \|ln(DOR)\| / (1+\|ln(DOR)\|)                                | Diagnostic distance from neutrality                   |
-| **Proportion-NBF**                                           | Robustness | 0–1                                                          | PRIMARY           | \|p̂ − p₀\| / (\|p̂ − p₀\| + √[p₀(1 − p₀)/n_relevant])         | Single-arm distance from benchmark / chance agreement |
-| **MeCI**                                                     | Robustness | 0–1                                                          | PRIMARY           | d / (1 + d) where d = min(\|μ₁−c\|, \|μ₂−c\|) / √(s₁²+s₂²), c = (s₁μ₂+s₂μ₁)/(s₁+s₂) | Continuous distance from neutrality                   |
-| **DTI**                                                      | Robustness | 0–1                                                          | PRIMARY           | \|atanh(r)\| / (1 + \|atanh(r)\|)                            | Correlation distance from independence                |
-| **ZFQ**                                                      | Fragility  | 0–1                                                          | PRIMARY           | \|Z − 1.96\| / (1 + \|Z − 1.96\|) where Z = \|atanh(r)\|√(n−3), n > 3 | Correlation classification stability (Fisher-z)       |
-| **OFQ**                                                      | Fragility  | 0–1                                                          | PRIMARY           | \|\|z_WMW\| − 1.96\| / (1 + \|\|z_WMW\| − 1.96\|)            | SE-scaled distance to p = 0.05 (ordinal)              |
-| **ORQ**                                                      | Robustness | 0–1                                                          | PRIMARY           | \|ln(gOR)\| / (1 + \|ln(gOR)\|)                              | Distance from neutrality (ordinal)                    |
-| **ANOVA-FQ**                                                 | Fragility  | 0–1                                                          | PRIMARY (k≥2)     | \|√F − √F*\| / (1 + \|√F − √F*\|)                            | Stability of F-classification                         |
-| **ANOVAη²**                                                  | Robustness | 0–1                                                          | PRIMARY           | df_b·F / (df_b·F + df_w)                                     | Distance from equality of means                       |
-| **FI**                                                       | Count      | 0–N                                                          | Secondary         | Toggle count (classic)                                       | Raw fragility count (binary)                          |
-| **SFI**                                                      | Count      | 0–N                                                          | Secondary         | Toggle count (standardized)                                  | Label-invariant count                                 |
-| **GFI**                                                      | Count      | 0–N                                                          | Secondary         | Move count (global)                                          | Path-independent count                                |
-| **DFI**                                                      | Count      | 0–N                                                          | Secondary         | Toggle count vs benchmark                                    | Diagnostic count                                      |
-| **CFS**                                                      | Distance   | 0–∞                                                          | Secondary         | \|\|T\| − t\*\|                                              | SE-unit distance to p = 0.05 (continuous)             |
-| **SFM**                                                      | Scaling    | > 1                                                          | Secondary         | Factor k > 1 to flip (×k flips nonsignificant → significant; ÷k flips significant → nonsignificant) | Sample size fragility multiplier                      |
-| **UFI**                                                      | Unit       | >0                                                           | LEGACY            | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                             | Step-size definitions (fixed-margin unit size)        |
-| **SFQ**                                                      | Fragility  | 0–1                                                          | PRIMARY           | \|\|z_HR\| − 1.96\| / (1 + \|\|z_HR\| − 1.96\|)              | SE-scaled distance to p = 0.05 (survival)             |
-| **SRQ**                                                      | Robustness | 0–1                                                          | PRIMARY           | \|ln(HR)\| / (1 + \|ln(HR)\|)                                | Distance from neutrality (survival)                   |
-| t* is the critical value from the t-distribution.            |            |                                                              |                   |                                                              |                                                       |
-| F* is the critical F value at α = 0.05 for the reported df.  |            |                                                              |                   |                                                              |                                                       |
-| m = min(r, c). The denominator 2N(m − 1)/m is the maximum of Σ | O − E      | , attained under perfect association; for 2×2 it equals N, so 2×2 values are unchanged. |                   |                                                              |                                                       |
+| Metric                                                       | Type               | Scale                                                        | Primary/Secondary | Formula (core)                                               | Purpose                                               |
+| ------------------------------------------------------------ | ------------------ | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
+| **FQ**                                                       | Fragility          | 0–1                                                          | LEGACY            | FI / N                                                       | Proportion to flip (classic, total N)                 |
+| **MFQ**                                                      | Fragility          | 0–1                                                          | PRIMARY           | FI / n_mod                                                   | Proportion to flip (arm-specific)                     |
+| **GFQ**                                                      | Fragility          | 0–1                                                          | PRIMARY           | GFI / N                                                      | Proportion to flip (global, r×c)                      |
+| **DFQ**                                                      | Fragility          | 0–1                                                          | PRIMARY           | DFI / n_relevant                                             | Proportion to flip (diagnostic)                       |
+| **BFQ**                                                      | Fragility          | 0–1                                                          | PRIMARY           | BFI / n_relevant (n_relevant = n)                            | Proportion to flip (single-arm vs benchmark)          |
+| **CFQ**                                                      | Fragility          | 0–1                                                          | PRIMARY           | \|\|T\| − t\*\| / (1 + \|\|T\| − t\*\|)                      | SE-scaled distance to p = 0.05 (continuous)           |
+| **PFI**                                                      | Fragility          | 0–1                                                          | PRIMARY           | 4 × \|x\| / N (x = fixed-margin path shift)                  | Independent-sample 2x2 sub-integer fragility          |
+| **RQ**                                                       | Robustness         | 0–1                                                          | PRIMARY           | Σ\|O − E\| / [2N(m − 1)/m], m = min(r, c); for any 2×2 this equals Σ\|O − E\| / N = \|ad − bc\| / (N²/4) | Distance from independence                            |
+| **sRQ**                                                      | Robustness         | −1–+1                                                        | PRIMARY           | 4(ad − bc) / N² (signed RQ; \|sRQ\| = RQ)                    | Signed distance from independence                     |
+| **wsRQ**                                                     | Robustness         | −1–+1                                                        | PRIMARY (meta)    | Σ(sRQ_i · w_i), w_i = N_i/ΣN                                 | Pooled signed meta-analytic robustness                |
+| **wGFQ**                                                     | Fragility          | 0–1                                                          | PRIMARY (meta)    | Σ(GFQ_i · w_i), w_i = N_i/ΣN                                 | Pooled meta-analytic fragility                        |
+| **MHQ**                                                      | Robustness         | 0–1                                                          | PRIMARY (matched) | \|b − c\| / (b + c) or 0 if b + c = 0                        | Distance from marginal homogeneity                    |
+| **DNB**                                                      | Robustness         | 0–1                                                          | PRIMARY           | \|ln(DOR)\| / (1+\|ln(DOR)\|)                                | Diagnostic distance from neutrality                   |
+| **Proportion-NBF**                                           | Robustness         | 0–1                                                          | PRIMARY           | \|p̂ − p₀\| / (\|p̂ − p₀\| + √[p₀(1 − p₀)/n_relevant])         | Single-arm distance from benchmark / chance agreement |
+| **MeCI**                                                     | Robustness         | 0–1                                                          | PRIMARY           | d / (1 + d) where d = min(\|μ₁−c\|, \|μ₂−c\|) / √(s₁²+s₂²), c = (s₁μ₂+s₂μ₁)/(s₁+s₂) | Continuous distance from neutrality                   |
+| **DTI**                                                      | Robustness         | 0–1                                                          | PRIMARY           | \|atanh(r)\| / (1 + \|atanh(r)\|)                            | Correlation distance from independence                |
+| **ZFQ**                                                      | Fragility          | 0–1                                                          | PRIMARY           | \|Z − 1.96\| / (1 + \|Z − 1.96\|) where Z = \|atanh(r)\|√(n−3), n > 3 | Correlation classification stability (Fisher-z)       |
+| **OFQ**                                                      | Fragility          | 0–1                                                          | PRIMARY           | \|\|z_WMW\| − 1.96\| / (1 + \|\|z_WMW\| − 1.96\|)            | SE-scaled distance to p = 0.05 (ordinal)              |
+| **ORQ**                                                      | Robustness         | 0–1                                                          | PRIMARY           | \|ln(gOR)\| / (1 + \|ln(gOR)\|)                              | Distance from neutrality (ordinal)                    |
+| **ANOVA-FQ**                                                 | Fragility          | 0–1                                                          | PRIMARY (k≥2)     | \|√F − √F*\| / (1 + \|√F − √F*\|)                            | Stability of F-classification                         |
+| **ANOVAη²**                                                  | Robustness         | 0–1                                                          | PRIMARY           | df_b·F / (df_b·F + df_w)                                     | Distance from equality of means                       |
+| **FI**                                                       | Count              | 0–N                                                          | Secondary         | Toggle count (classic)                                       | Raw fragility count (binary)                          |
+| **SFI**                                                      | Count              | 0–N                                                          | Secondary         | Toggle count (standardized)                                  | Label-invariant count                                 |
+| **GFI**                                                      | Count              | 0–N                                                          | Secondary         | Move count (global)                                          | Path-independent count                                |
+| **DFI**                                                      | Count              | 0–N                                                          | Secondary         | Toggle count vs benchmark                                    | Diagnostic count                                      |
+| **NDI**                                                      | Count (robustness) | 0–N/4                                                        | Secondary         | round(N·RQ/4) = round(\|ad − bc\|/N), clamped to reachability | Coupled fixed-margin moves to neutrality (RR = 1)     |
+| **CFS**                                                      | Distance           | 0–∞                                                          | Secondary         | \|\|T\| − t\*\|                                              | SE-unit distance to p = 0.05 (continuous)             |
+| **SFM**                                                      | Scaling            | > 1                                                          | Secondary         | Factor k > 1 to flip (×k flips nonsignificant → significant; ÷k flips significant → nonsignificant) | Sample size fragility multiplier                      |
+| **UFI**                                                      | Unit               | >0                                                           | LEGACY            | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                             | Step-size definitions (fixed-margin unit size)        |
+| **SFQ**                                                      | Fragility          | 0–1                                                          | PRIMARY           | \|\|z_HR\| − 1.96\| / (1 + \|\|z_HR\| − 1.96\|)              | SE-scaled distance to p = 0.05 (survival)             |
+| **SRQ**                                                      | Robustness         | 0–1                                                          | PRIMARY           | \|ln(HR)\| / (1 + \|ln(HR)\|)                                | Distance from neutrality (survival)                   |
+| t* is the critical value from the t-distribution.            |                    |                                                              |                   |                                                              |                                                       |
+| F* is the critical F value at α = 0.05 for the reported df.  |                    |                                                              |                   |                                                              |                                                       |
+| m = min(r, c). The denominator 2N(m − 1)/m is the maximum of Σ | O − E              | , attained under perfect association; for 2×2 it equals N, so 2×2 values are unchanged. |                   |                                                              |                                                       |
 
 ## Part III: PRIMARY FRAGILITY METRICS
 
@@ -450,6 +451,7 @@ Calculate:
 **Interpretation**: nb = RQ. For example, nb = 0.20 means the data are moderately separated from independence.  
 **Neutrality**: Independence of variables (e.g. ad = bc for 2×2)  
 **Pairs with**: FQ, MFQ, GFQ, PFI  
+**Count counterpart**: NDI (Part V) — the integer count of coupled fixed-margin moves to neutrality. For any 2×2 table, NDI = round(N·RQ/4) (clamped to reachability). NDI and RQ quantify the same underlying cross-product distance from neutrality in different units: NDI expresses that distance as an integer number of coupled fixed-margin moves, whereas RQ expresses it as a normalized 0–1 geometric distance. NDI:RQ therefore forms an Index:Quotient pairing by structural analogy to GFI:GFQ, but not by direct division: RQ is not NDI/N.
 **Note**: Standard robustness measure for independent-sample binary and multinomial outcomes.  
 
 #### 4.1.1 sRQ — Signed Risk Quotient ⭐
@@ -624,6 +626,19 @@ Then:
 **Output**: Non-negative real number → cGFQ = cGFI / N. Undefined (NaN) only at the small-N floor, where no arrangement of N subjects can reach significance at the chosen α.
 **Note**: Continuous relaxation of the GFI. For tables scored by chi-square, cGFI ≤ GFI, since every integer reallocation path is also a continuous one; the gap between them measures how much of the integer index is quantization. Like PFI, cGFI resolves fragility differences among tables that share the same integer GFI (many tables have GFI = 1 yet sit at very different distances from the significance boundary), and like PFI it is a descriptive evidence-quality metric, not an inferential test: the intermediate fractional table need not be realizable. cGFI differs from PFI in move space — PFI is restricted to the single fixed-margin diagonal path, while cGFI minimizes over all continuous reallocation paths, so cGFI ≤ (N/4)·PFI on the common path and is the tighter boundary-distance measure.
 
+### **NDI — Neutrality Distance Index**
+
+**Definition**: Minimum number of coupled fixed-margin reassignments required to bring a 2×2 table to the reachable point closest to therapeutic neutrality (relative risk = 1, equivalently cross-product difference ad − bc = 0). Because exact neutrality (ad = bc) frequently cannot be realized on the integer lattice, the target is the reachable table minimizing |ad − bc|. Defined for every 2×2 table.
+**Move rule**: Within-row transfers only, applied as coupled anti-parallel pairs holding both row and column margins fixed. Forward move (a−1, b+1, c+1, d−1); reverse move (a+1, b−1, c−1, d+1) — equivalently a→b paired with d→c, and b→a paired with c→d. Cross-arm transfers (a→c, b→d) are inadmissible. Bidirectional: whichever coupled direction reaches closest approach in fewer moves is taken. This is the Feinstein/Walter fixed-both-margin move-set (the UFI move-set, Part VII), chosen because Fisher's exact test conditions on both margins, so the margin-preserving move is the perturbation commensurable with the conditional test, and neutrality (ad = bc) is itself a within-margin statement.
+**Formula**: Each coupled move changes the cross-product difference by exactly ∓N with both margins and N held fixed — (a−1)(d−1) − (b+1)(c+1) = (ad − bc) − N — so reachable cross-product differences are spaced N apart and **NDI = round(|ad − bc| / N) = round(N·RQ/4)**, clamped to the reachability window. Exact neutrality is attainable only when N divides (ad − bc).
+**Reachability**: The coupled move is bounded to x ∈ [−min(a, d), +min(b, c)]. Extreme or lopsided margins yield a narrow window, and NDI then reflects how little the table can move within Fisher's conditioning set.
+**Test dependence**: None. NDI depends only on ad − bc, a function of the observed cell counts; it invokes no significance test. This distinguishes it from the fragility counts (FI, GFI), whose target is a p-value threshold. NDI is a robustness metric expressed as an integer count.
+**Domain**: Always defined. Unlike the fixed-margin UFI — undefined when no reachable table flips significance — NDI's target is a minimization that always has a solution. NDI = 0 is a valid result: the observed table is already as close to neutrality as the fixed-margin moves permit.
+**Unit**: One coupled move = 1 unit, matching the published UFI. One coupled move relocates two patients (one per arm), so the fixed-margin indices (UFI, NDI) are on a per-coupled-move unit whereas single-transfer indices (GFI) are on a per-patient unit. The difference is by design, because the move-sets differ.
+**Output**: Integer count, range 0 to N/4 (since |ad − bc| ≤ N²/4). NDI is the count-based robustness metric; RQ (§4.1) is its normalized decimal partner, so NDI:RQ parallels the GFI:GFQ Index:Quotient pairing.
+**Note**: NDI = round(N·RQ/4) is an exact algebraic identity, not an empirical approximation — it follows from RQ = |ad − bc|/(N²/4) and the ∓N step size. The only departures from exactness are integer rounding (coarse near neutrality, where the lattice spacing N is large relative to a small |ad − bc|) and clamping at extreme margins where the reachability window binds. RQ is therefore *not* NDI/N.
+**Note**: Robustness counterpart to the fixed-margin unit fragility index (UFI, Part VII): UFI counts coupled fixed-margin moves to the significance boundary (p = 0.05); NDI counts the same coupled moves to the neutrality boundary (RR = 1). Together they instantiate both boundaries of the framework with one move-set. NDI is model-free (computed from the 2×2 summary counts alone, no distributional assumptions) and measures distance-to-neutrality in patient units, which p-values do not measure; it is not a transformation of p.
+
 ### **DFI — Diagnostic Fragility Index**
 
 **Definition**: Minimum number of "success" toggles required to switch the diagnostic benchmark classification between "below benchmark" and "not below benchmark" (one-sided exact binomial).  
@@ -710,6 +725,7 @@ Given unit size f, Walter defines UFI as the minimum number k of these fixed-mar
 - Walter UFI: the toggle count k, giving total shift k·f.  
 
 **Note**: Both strictly fixed-margin constructs. Conceptual precursors to PFI. Modern analyses use PFI for fixed margins and MFQ/GFQ otherwise.  
+**Note**: The Walter coupled fixed-margin move-set is reused by NDI (Part V), which counts the same moves to the neutrality boundary (RR = 1) rather than to the significance boundary (p = 0.05). UFI and NDI therefore instantiate both boundaries of the framework with a single move-set.  
 
 ### **MFI — Modified Fragility Index**  
 
@@ -894,8 +910,11 @@ ZFQ      = D / (1 + D)
 OFQ      = | |z_WMW| − 1.96| / (1 + | |z_WMW| − 1.96|)
 SFQ      = | |z_HR| − 1.96| / (1 + | |z_HR| − 1.96|)
 
+NDI  = round(N·RQ/4) = round(|ad − bc| / N)   (2×2; clamped to the reachability window)
+
 GFI ≤ FI (always)  
 GFI ≤ SFI (always)  
+0 ≤ NDI ≤ N/4 (always, since |ad − bc| ≤ N²/4)  
 
 All quotients: in [0,1]  
 All NBF metrics: in [0,1]
@@ -946,6 +965,7 @@ The modern statistical evidence framework consists of three complementary dimens
    * Survival: SRQ (distance from HR = 1)
    * Correlation: DTI (Fisher-z distance from independence, ρ = 0) 
    * Multi-group: ANOVAη²
+   * Count form (2×2, optional): NDI — the same distance expressed as an integer number of coupled fixed-margin moves to RR = 1, where a patient-unit statement is wanted alongside the decimal RQ (NDI = round(N·RQ/4)).
 
 Interpretation depends on the claim:  
 
@@ -1005,7 +1025,7 @@ The framework's metrics are organized into families to give the standing methods
 - **FQ family** (native fragility quotients): GFQ, MFQ, CFQ, SFQ, BFQ
 - **RQ family** (NBF robustness, independence/risk axis): RQ, sRQ, SRQ, MHQ
 - **Meta-analytic variants** (N-weighted pooled scalars + weight operator): wsRQ, wGFQ, weight operator w_i
-- **Index forms** (raw counts/distances): GFI, FI, MFI, SFI, UFI, PFI
+- **Index forms** (raw counts/distances): GFI, FI, MFI, SFI, UFI, PFI, NDI (NDI is the sole robustness-target member — it counts moves to neutrality rather than to significance)
 
 - **Distance-to-critical-value family** (fragility, form δ/(1+δ) with δ = |test statistic − α-critical value|): CFQ, ANOVA-FQ, ZFQ, OFQ, SFQ — one construct instantiated per design; each keeps its own statistic and critical value.
 - **Distance-from-neutrality transform family** (robustness, form |g(θ)|/(1+|g(θ)|) with g a variance-stabilizing transform of the effect estimate θ): DTI (g = atanh, θ = r), ORQ (g = ln, θ = gOR), SRQ (g = ln, θ = HR), DNB (g = ln, θ = DOR) — one construct instantiated per design.
@@ -1073,6 +1093,13 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the classic FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 13.3.0** (August 16, 2026)
+
+- Added **NDI — Neutrality Distance Index** (Part V): the minimum number of coupled fixed-margin reassignments required to bring a 2×2 table to the reachable point closest to therapeutic neutrality (RR = 1, i.e. minimal |ad − bc|). Integer-count robustness metric — the count counterpart to the decimal RQ, so NDI:RQ parallels the GFI:GFQ Index:Quotient pairing. Uses the Feinstein/Walter fixed-both-margin move-set (the UFI move-set), so UFI and NDI reach the framework's two boundaries — significance (p = 0.05) and neutrality (RR = 1) — with a single move-set. Test-independent (depends only on ad − bc), always defined, model-free, range 0 to N/4.
+- Established the closed form **NDI = round(N·RQ/4) = round(|ad − bc|/N)** as an exact algebraic identity rather than an empirical approximation, from the step-size result (a−1)(d−1) − (b+1)(c+1) = (ad − bc) − N: each coupled move shifts the cross-product difference by exactly ∓N, so reachable values are spaced N apart and exact neutrality requires N | (ad − bc). Departures from exactness are limited to integer rounding and clamping at the reachability window x ∈ [−min(a, d), +min(b, c)]. Stated explicitly that RQ is **not** NDI/N.
+- Integrated NDI across the document: Part II quick-reference row (Count (robustness), 0–N/4); Part IV §4.1 RQ gains a "Count counterpart" line; Part V definitional entry inserted between cGFI and DFI; Part VII UFI note recording the shared move-set; Part IX mathematical relationships (NDI = round(N·RQ/4)) and the bound 0 ≤ NDI ≤ N/4; Part X robustness summary; Part XI Index-forms family, flagged as the sole robustness-target member.
+- RQ, sRQ, GFI, GFQ, RRI, PFI, and UFI definitions are unchanged by this addition.
 
 **Version 13.2.1 **(August 15, 2026)
 
