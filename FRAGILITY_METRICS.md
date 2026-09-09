@@ -132,7 +132,7 @@ Native fragility quotients (MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BF
 
 **Statistical fragility** describes the stability of the significance classification. The taxonomy identifies which component of a study is allowed to vary while that classification is assessed. It first separates **analysis fragility** from **data fragility**. Data fragility then divides into **resampling fragility**, **perturbation fragility**, and **scaling fragility**. These are four forms of statistical fragility, not four interchangeable estimates of one quantity.
 
-![Statistical fragility divides into analysis fragility and data fragility. Data fragility divides into resampling, perturbation, and scaling fragility.](FRAGILITY_METRICS_taxonomy.png)
+![Statistical fragility divides into analysis fragility and data fragility. Data fragility divides into resampling, perturbation, and scaling fragility.](taxonomy.png)
 
 **Figure 1. The four forms of statistical fragility.** Analysis fragility changes the analytical rule. Data fragility holds that rule fixed and changes which patients are sampled, what is recorded, or how much data is studied.
 
