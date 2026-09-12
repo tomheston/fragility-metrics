@@ -5,17 +5,12 @@
  *
  * Identical output to calculate.php except the Fragility Index (FI) uses
  * the strict original Walsh (2014) definition via FragilityIndexWalsh.
- * GFI/GFQ are not calculated. All other metrics (p, RQ, RR) are unchanged.
- *
- * Citation: Heston, T. F. (2025). Fragility Metrics Toolkit [Software].
- * Zenodo. https://doi.org/10.5281/zenodo.17254763
- *
- * License: Creative Commons Attribution 4.0 International (CC BY 4.0)
- * https://creativecommons.org/licenses/by/4.0/
+ * All other metrics (p, GFI, RQ, RR) are unchanged.
  */
 
 require_once 'FisherExactTest.php';
 require_once 'FragilityIndexWalsh.php';
+require_once 'GlobalFragilityIndex.php';
 require_once 'RiskQuotient.php';
 require_once 'RelativeRisk.php';
 
@@ -29,8 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $c = filter_input(INPUT_POST, 'c', FILTER_VALIDATE_INT);
     $d = filter_input(INPUT_POST, 'd', FILTER_VALIDATE_INT);
 
-    // is_int() rejects both invalid values (false) and missing fields (null).
-    if (!is_int($a) || !is_int($b) || !is_int($c) || !is_int($d)
+    if ($a === false || $b === false || $c === false || $d === false
             || $a < 0 || $b < 0 || $c < 0 || $d < 0) {
         $error = "All values must be non-negative integers.";
     } else {
@@ -43,6 +37,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Strict Walsh FI
             $fi = FragilityIndexWalsh::calculate($a, $b, $c, $d, $alpha);
 
+            // GFI / GFQ (unchanged)
+            $gfi_result = GlobalFragilityIndex::calculate($a, $b, $c, $d, $alpha);
+
+            // Build post-GFI table and p-value (mirrors FragilityCalculator logic)
+            $postGFI = null;
+            if (isset($gfi_result['post_toggle']) && is_array($gfi_result['post_toggle'])) {
+                if (isset($gfi_result['post_toggle']['a'], $gfi_result['post_toggle']['b'],
+                          $gfi_result['post_toggle']['c'], $gfi_result['post_toggle']['d'])) {
+                    $postGFI = [
+                        'a' => (int)$gfi_result['post_toggle']['a'],
+                        'b' => (int)$gfi_result['post_toggle']['b'],
+                        'c' => (int)$gfi_result['post_toggle']['c'],
+                        'd' => (int)$gfi_result['post_toggle']['d'],
+                    ];
+                }
+            }
+            if ($postGFI !== null) {
+                $gfi_result['post_GFI']   = $postGFI;
+                $gfi_result['post_GFI_p'] = round(
+                    FisherExactTest::calculate(
+                        $postGFI['a'], $postGFI['b'], $postGFI['c'], $postGFI['d']
+                    ), 6);
+            }
+
             // Robustness (RQ)
             $rq_result = RiskQuotient::calculate($a, $b, $c, $d);
 
@@ -54,10 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'input' => ['a' => $a, 'b' => $b, 'c' => $c, 'd' => $d, 'N' => $N],
                 'p' => [
                     'value'       => round($p_val, 6),
-                    'significant' => ($p_val < $alpha),
+                    'significant' => ($p_val <= $alpha),
                     'alpha'       => $alpha,
                 ],
                 'fi'  => $fi,
+                'gfi' => $gfi_result,
                 'nb'  => ['RQ' => $rq_result['RQ']],
                 'effect' => [
                     'RR'         => $rr_result['RR'],
@@ -146,6 +165,18 @@ include 'includes/header.php';
       Post-FI table: {<?= (int)$fi['post_FI']['a'] ?>, <?= (int)$fi['post_FI']['b'] ?>, <?= (int)$fi['post_FI']['c'] ?>, <?= (int)$fi['post_FI']['d'] ?>}<br>
       Post-FI p-value = <?= number_format((float)($fi['post_FI_p'] ?? 0), 6) ?><br>
       <?php endif; ?>
+      <?php endif; ?>
+      <br>
+      <?php if (isset($result['gfi']) && $result['gfi']['GFI'] !== null): ?>
+        GFI (Global Fragility Index) = <?= $result['gfi']['GFI'] ?? 'NULL' ?><br>
+        GFQ (Global Fragility Quotient) = <?= number_format($result['gfi']['GFQ'] ?? 0, 4) ?> (<?= $result['gfi']['verified'] ? 'Exact' : 'Estimated' ?>)<br>
+        <?php if (!empty($result['gfi']['post_GFI'])): ?>
+        Post-GFI table: {<?= (int)($result['gfi']['post_GFI']['a'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['b'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['c'] ?? 0) ?>, <?= (int)($result['gfi']['post_GFI']['d'] ?? 0) ?>}<br>
+        Post-GFI p-value = <?= number_format((float)($result['gfi']['post_GFI_p'] ?? 0), 6) ?><br>
+        <?php endif; ?>
+      <?php else: ?>
+      GFI (Global Fragility Index) = NULL (<?= is_array($result['gfi'] ?? []) ? ($result['gfi']['note'] ?? 'Not computed') : 'Not computed' ?>)<br>
+      GFQ (Global Fragility Quotient) = NULL<br>
       <?php endif; ?>
       </p>
       <h3>Robustness (nb)</h3>

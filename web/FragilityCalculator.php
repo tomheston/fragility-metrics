@@ -7,7 +7,7 @@
  * Combines:
  * - p: Fisher's exact test (significance)
  * - fr: FI/MFQ (Walsh-compliant) + GFI/GFQ (gold standard)
- * - nb: RQ (robustness/distance from neutrality)
+ * - nb: NDI + RQ (robustness/distance from neutrality)
  * 
  * Citation: Heston, T. F. (2025). Fragility Metrics Toolkit [Software].
  * Zenodo. https://doi.org/10.5281/zenodo.17254763
@@ -20,7 +20,9 @@ require_once 'FisherExactTest.php';
 require_once 'FragilityIndex.php';
 require_once 'GlobalFragilityIndex.php';
 require_once 'RiskQuotient.php';
+require_once 'NeutralityDistanceIndex.php';
 require_once 'RelativeRisk.php';
+require_once 'RiskDifference.php';
 
 class FragilityCalculator {
     
@@ -110,9 +112,12 @@ class FragilityCalculator {
         
         // Calculate robustness
         $rq_result = RiskQuotient::calculate($a, $b, $c, $d);
+        $ndi_result = NeutralityDistanceIndex::calculate($a, $b, $c, $d);
 
-        // Calculate effect size (always 95% CI regardless of fragility alpha)
+        // Calculate effect size (always 95% CI regardless of fragility alpha):
+        // absolute (risk difference, NNT) and relative (RR)
         $rr_result = RelativeRisk::calculate($a, $b, $c, $d);
+        $rd_result = RiskDifference::calculate($a, $b, $c, $d);
 
         // Build result
         $result = [
@@ -153,7 +158,9 @@ class FragilityCalculator {
 		'post_GFI_p' => $gfi_result['post_GFI_p'] ?? null
             ],
             'nb' => [
-                'RQ' => $rq_result['RQ']
+                'NDI' => $ndi_result['NDI'],
+                'RQ' => $rq_result['RQ'],
+                'ndi' => $ndi_result
             ],
             'effect' => [
                 'RR'         => $rr_result['RR'],
@@ -161,7 +168,8 @@ class FragilityCalculator {
                 'CI_upper'   => $rr_result['CI_upper'],
                 'CI_level'   => $rr_result['CI_level'],
                 'correction' => $rr_result['correction'],
-                'note'       => $rr_result['note']
+                'note'       => $rr_result['note'],
+                'absolute'   => $rd_result
             ]
         ];
         

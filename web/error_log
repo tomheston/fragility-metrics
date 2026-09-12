@@ -1,0 +1,35 @@
+[14-Dec-2025 21:52:37 UTC] PHP Warning:  require_once(FragilityIndex.php): Failed to open stream: No such file or directory in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/test_fi.php on line 2
+[14-Dec-2025 21:52:37 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'FragilityIndex.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/test_fi.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/test_fi.php on line 2
+[14-Dec-2025 21:52:59 UTC] PHP Warning:  require_once(FragilityIndex.php): Failed to open stream: No such file or directory in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/test_fi.php on line 2
+[14-Dec-2025 21:52:59 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'FragilityIndex.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/test_fi.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/test_fi.php on line 2
+[15-Dec-2025 03:37:58 UTC] PHP Parse error:  syntax error, unexpected token ",", expecting "->" or "?->" or "{" or "[" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/debug_bfs.php on line 48
+[15-Dec-2025 03:43:19 UTC] PHP Parse error:  syntax error, unexpected token ",", expecting "->" or "?->" or "{" or "[" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/debug_bfs.php on line 50
+[26-Dec-2025 17:42:31 UTC] PHP Warning:  Undefined array key "interpretation" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 77
+[26-Dec-2025 17:42:31 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 77
+[26-Dec-2025 17:42:31 UTC] PHP Warning:  Undefined array key "interpretation" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 78
+[26-Dec-2025 17:42:31 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 78
+[26-Dec-2025 17:49:58 UTC] PHP Warning:  Undefined array key "interpretation" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 77
+[26-Dec-2025 17:49:58 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 77
+[26-Dec-2025 17:49:58 UTC] PHP Warning:  Undefined array key "interpretation" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 78
+[26-Dec-2025 17:49:58 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 78
+[26-Dec-2025 17:50:03 UTC] PHP Warning:  Undefined array key "interpretation" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 77
+[26-Dec-2025 17:50:03 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 77
+[26-Dec-2025 17:50:03 UTC] PHP Warning:  Undefined array key "interpretation" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 78
+[26-Dec-2025 17:50:03 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/DatabaseManager.php on line 78
+[26-Dec-2025 18:33:04 UTC] PHP Parse error:  syntax error, unexpected single-quoted string "post_FI", expecting "]" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/FragilityCalculator.php on line 130
+[26-Dec-2025 18:33:11 UTC] PHP Parse error:  syntax error, unexpected single-quoted string "post_FI", expecting "]" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/FragilityCalculator.php on line 130
+[26-Dec-2025 18:33:25 UTC] PHP Parse error:  syntax error, unexpected single-quoted string "post_FI", expecting "]" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/FragilityCalculator.php on line 130
+[26-Dec-2025 18:34:28 UTC] PHP Parse error:  syntax error, unexpected single-quoted string "post_FI", expecting "]" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/FragilityCalculator.php on line 130
+[26-Dec-2025 18:34:31 UTC] PHP Parse error:  syntax error, unexpected single-quoted string "post_FI", expecting "]" in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/FragilityCalculator.php on line 130
+[26-Dec-2025 19:19:41 UTC] PHP Fatal error:  strict_types declaration must be the very first statement in the script in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/calculate.php on line 3
+[26-Dec-2025 19:20:00 UTC] PHP Fatal error:  strict_types declaration must be the very first statement in the script in /home/rcf6itbarhlg/public_html/_DOMAINS1/FRAGILITYMETRICS.ORG/calculate.php on line 3
+[26-Dec-2025 21:36:37 UTC] Database save failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') VALUES (
+                ?, ?, ?, ?, ?,
+                ?, ?,
+             ...' at line 9

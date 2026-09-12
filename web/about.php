@@ -7,10 +7,10 @@ include 'includes/header.php';
 <h1>About Fragility Metrics</h1>
 
     <h2>The Mission</h2>
-    <p>Improve biomedical research reproducibility by having trials report complete statistical evidence (p-fr-nb triplet) as the standard.</p>
+    <p>Improve biomedical research reproducibility by having trials report complete statistical evidence (the p-fr-nb triplet), together with the absolute effect size, as the standard.</p>
 
     <h2>The Framework</h2>
-    <p>The p-fr-nb framework provides a complete assessment of statistical evidence through three orthogonal dimensions:</p>
+    <p>The p-fr-nb framework provides a complete assessment of statistical evidence through three complementary dimensions:</p>
     <ul>
         <li><strong>Significance:</strong> Traditional p-value</li>
         <li><strong>Fragility:</strong> Classification stability</li>
@@ -28,4 +28,4 @@ include 'includes/header.php';
     DISCUSSION BOARD: <a href="https://github.com/tomheston/fragility-metrics/discussions/">GitHub Discussions</a></p>
 
 
- <?php include 'includes/footer.php'; ?> g
+ <?php include 'includes/footer.php'; ?>

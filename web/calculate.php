@@ -93,13 +93,30 @@ include 'includes/header.php';
   </form>
   <?php if ($result): ?>
     <div id="pfr-result">
+      <?php
+        // p-fr-nb triplet: GFQ is the recommended fr for 2x2 tables, MFQ the fallback; nb is RQ.
+        $frName = null;
+        $frVal = null;
+        if (isset($result['gfi']['GFQ'])) {
+            $frName = 'GFQ';
+            $frVal = $result['gfi']['GFQ'];
+        } elseif (isset($result['fr']['MFQ'])) {
+            $frName = 'MFQ';
+            $frVal = $result['fr']['MFQ'];
+        }
+        $nbVal = $result['nb']['RQ'] ?? null;
+      ?>
+      <p><strong>p–fr–nb triplet:</strong> p = <?= number_format($result['p']['value'] ?? 0, 6) ?>,
+      fr = <?= $frName !== null ? $frName . ' = ' . number_format($frVal, 4) : 'not defined' ?>,
+      nb = <?= $nbVal !== null ? 'RQ = ' . number_format($nbVal, 4) : 'not defined' ?><br>
+      <span style="font-size:13px; color:#555;">GFQ is the recommended fragility (fr) metric for 2×2 tables; MFQ is used when GFI is not computed.</span></p>
       <h3>Significance (p)</h3>
       <p>baseline p-value = <?= number_format($result['p']['value'] ?? 0, 6) ?><br>
       [two-sided Fisher's exact test, alpha = <?= number_format($result['p']['alpha'] ?? 0.05, 2) ?>]
       </p>
       <h3>Fragility (fr)</h3>
       <p>FI (Fragility Index) = <?= $result['fr']['FI'] ?? 'NULL' ?><br>
-      FQ (Fragility Quotient) = <?= $result['fr']['FQ'] !== null ? number_format($result['fr']['FQ'], 4) : 'NULL' ?><br>
+      FQ (Fragility Quotient, legacy) = <?= $result['fr']['FQ'] !== null ? number_format($result['fr']['FQ'], 4) : 'NULL' ?><br>
       MFQ (Modified-Arm Fragility Quotient) = <?= $result['fr']['MFQ'] !== null ? number_format($result['fr']['MFQ'], 4) : 'NULL' ?><br>
       <?php if (!empty($result['fr']['post_FI'])): ?>
       Post-FI table: {<?= (int)($result['fr']['post_FI']['a'] ?? 0) ?>, <?= (int)($result['fr']['post_FI']['b'] ?? 0) ?>, <?= (int)($result['fr']['post_FI']['c'] ?? 0) ?>, <?= (int)($result['fr']['post_FI']['d'] ?? 0) ?>}<br>
@@ -120,9 +137,49 @@ include 'includes/header.php';
       <?php endif; ?>
       </p>
       <h3>Robustness (nb)</h3>
-      <p>RQ (Risk Quotient) = <?= number_format($result['nb']['RQ'] ?? 0, 4) ?></p>
+      <p>
+      <?php $ndi = $result['nb']['ndi'] ?? null; ?>
+      <?php if (is_array($ndi) && $ndi['NDI'] !== null): ?>
+      NDI (Neutrality Distance Index) = <?= (int)$ndi['NDI'] ?><br>
+      [coupled fixed-margin moves to the reachable point closest to neutrality (ad − bc = 0); one coupled move relocates two patients, one per arm]<br>
+      Cross-product difference (ad − bc) = <?= (int)$ndi['D'] ?><br>
+      <?php if ((int)$ndi['NDI'] > 0): ?>
+      Post-NDI table: {<?= (int)$ndi['post_table']['a'] ?>, <?= (int)$ndi['post_table']['b'] ?>, <?= (int)$ndi['post_table']['c'] ?>, <?= (int)$ndi['post_table']['d'] ?>}<br>
+      Post-NDI cross-product difference = <?= (int)$ndi['residual_D'] ?> (<?= !empty($ndi['exact_neutrality']) ? 'exact neutrality reached' : 'closest reachable approach; exact neutrality not on the integer lattice' ?>)<br>
+      <?php elseif (!empty($ndi['exact_neutrality'])): ?>
+      Table is at exact neutrality.<br>
+      <?php else: ?>
+      Table is already at the closest reachable approach to neutrality.<br>
+      <?php endif; ?>
+      <?php if (!empty($ndi['clamped'])): ?>
+      [Result clamped at the reachability window: only <?= (int)$ndi['NDI'] ?> coupled move(s) available in the <?= htmlspecialchars($ndi['direction'] ?? '') ?> direction]<br>
+      <?php endif; ?>
+      <?php else: ?>
+      NDI (Neutrality Distance Index) = NULL<br>
+      <?php endif; ?>
+      <br>
+      RQ (Risk Quotient) = <?= number_format($result['nb']['RQ'] ?? 0, 4) ?></p>
       <h3>Effect Size</h3>
       <p>
+      <?php $absEff = $result['effect']['absolute'] ?? null; ?>
+      <?php if (is_array($absEff) && $absEff['RD'] !== null): ?>
+        Risk in Arm A = <?= number_format($absEff['risk_A'] * 100, 2) ?>%; risk in Arm B = <?= number_format($absEff['risk_B'] * 100, 2) ?>%<br>
+        Risk difference (Arm A − Arm B) = <?= number_format($absEff['RD'], 4) ?><br>
+        <?= (int)$absEff['CI_level'] ?>% CI = (<?= number_format($absEff['CI_lower'], 4) ?>, <?= number_format($absEff['CI_upper'], 4) ?>) [Newcombe hybrid score]<br>
+        <?php if ($absEff['NNT'] !== null): ?>
+        NNT (Number Needed to Treat) = <?= (int)$absEff['NNT'] ?> [1 / |risk difference|, rounded up; a benefit or a harm depending on whether the event is desirable]<br>
+          <?php if ($absEff['NNT_CI_lower'] !== null): ?>
+        <?= (int)$absEff['CI_level'] ?>% CI for NNT = (<?= (int)$absEff['NNT_CI_lower'] ?>, <?= (int)$absEff['NNT_CI_upper'] ?>)<br>
+          <?php else: ?>
+        [The risk-difference interval includes 0, so the NNT interval is unbounded]<br>
+          <?php endif; ?>
+        <?php else: ?>
+        NNT = not defined (the risks are equal)<br>
+        <?php endif; ?>
+      <?php else: ?>
+        Risk difference = not calculable<?= (is_array($absEff) && !empty($absEff['note'])) ? ' (' . htmlspecialchars($absEff['note']) . ')' : '' ?><br>
+      <?php endif; ?>
+      <br>
       <?php
         $eff = $result['effect'] ?? [];
         $ci_level = number_format($eff['CI_level'] ?? 95, 0);
@@ -141,7 +198,7 @@ include 'includes/header.php';
       </p>
       <hr style="margin: 22px 0; border: 0; border-top: 1px solid #ccc;">
       <p class="pfr-citation" style="font-size:13px; color:#555; margin-bottom:6px;">
-        <strong>Note:</strong> The FI used here is a modified version that allows bidirectional moves (event to/from non-event) and defaults to the arm with the fewest subjects when the number of events is tied. Toggles are allowed in one treatment arm only. For the original Walsh 2014 FI definition, see the <a href="http://fragilitymetrics.org/calculate_original.php">Walsh 2014 FI Calculator</a>.
+        <strong>Note:</strong> The FI used here is the Heston Fragility Index: the minimum number of outcome toggles (event ↔ non-event) in the arm with fewer events, or the smaller arm if events are tied, that flips significance in either direction, so it is also defined for nonsignificant results. For the original Walsh 2014 FI definition, see the <a href="http://fragilitymetrics.org/calculate_original.php">Walsh 2014 FI Calculator</a>.
       </p>
       <p class="pfr-citation">
         <strong>Citation:</strong> Heston TF. Fragility metrics toolkit v6.0.0. Zenodo. 2026. DOI: <a href="https://doi.org/10.5281/zenodo.17254763">10.5281/zenodo.17254763</a>

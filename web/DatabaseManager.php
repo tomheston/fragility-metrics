@@ -29,7 +29,7 @@ class DatabaseManager {
                 a_post, b_post, c_post, d_post, p_value_post,
                 GFI, GFQ, gfi_verified, gfi_method,
                 a_gfi, b_gfi, c_gfi, d_gfi, p_value_gfi,
-                RQ
+                RQ, NDI
             ) VALUES (
                 :a, :b, :c, :d, :N,
                 :p_value, :p_significant,
@@ -37,7 +37,7 @@ class DatabaseManager {
                 :a_post, :b_post, :c_post, :d_post, :p_value_post,
                 :GFI, :GFQ, :gfi_verified, :gfi_method,
                 :a_gfi, :b_gfi, :c_gfi, :d_gfi, :p_value_gfi,
-                :RQ
+                :RQ, :NDI
             )";
             
             $stmt = $pdo->prepare($sql);
@@ -69,13 +69,58 @@ class DatabaseManager {
                 'c_gfi' => $result['gfi']['post_toggle']['c'] ?? null,
                 'd_gfi' => $result['gfi']['post_toggle']['d'] ?? null,
                 'p_value_gfi' => $result['gfi']['final_p'] ?? null,
-                'RQ' => $result['nb']['RQ'] ?? null
+                'RQ' => $result['nb']['RQ'] ?? null,
+                'NDI' => $result['nb']['NDI'] ?? null
             ]);
             
             return $pdo->lastInsertId();
             
         } catch (PDOException $e) {
             error_log("Database save failed: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Save a survival (SFQ/SRQ) calculation to the database
+     *
+     * @param array $result Result from SurvivalQuotients::calculate()
+     * @return int|false Insert ID on success, false on failure
+     */
+    public static function saveSurvivalCalculation($result) {
+        try {
+            $pdo = getDbConnection();
+
+            $sql = "INSERT INTO survival_calculations (
+                HR, CI_lower, CI_upper, CI_level,
+                SE_ln_HR, z, p_value, p_significant,
+                SFQ, SRQ, hr_outside_ci
+            ) VALUES (
+                :HR, :CI_lower, :CI_upper, :CI_level,
+                :SE_ln_HR, :z, :p_value, :p_significant,
+                :SFQ, :SRQ, :hr_outside_ci
+            )";
+
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->execute([
+                'HR' => $result['HR'],
+                'CI_lower' => $result['CI_lower'],
+                'CI_upper' => $result['CI_upper'],
+                'CI_level' => $result['CI_level'],
+                'SE_ln_HR' => $result['SE_ln_HR'],
+                'z' => $result['z'],
+                'p_value' => $result['p_recovered'],
+                'p_significant' => $result['significant'] ? 1 : 0,
+                'SFQ' => $result['SFQ'],
+                'SRQ' => $result['SRQ'],
+                'hr_outside_ci' => $result['hr_outside_ci'] ? 1 : 0
+            ]);
+
+            return $pdo->lastInsertId();
+
+        } catch (PDOException $e) {
+            error_log("Survival database save failed: " . $e->getMessage());
             return false;
         }
     }

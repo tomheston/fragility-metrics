@@ -4,7 +4,12 @@ $page_title = 'Documentation';
 include 'includes/header.php';
 
 // 1. GitHub raw URL for FRAGILITY_METRICS.md (public repo)
+//    This is what gets fetched, so it must stay raw.githubusercontent.com --
+//    the github.com/.../blob/... page URL returns GitHub's whole HTML page.
 $githubRawUrl = 'https://raw.githubusercontent.com/tomheston/fragility-metrics/main/FRAGILITY_METRICS.md';
+
+// Human-readable GitHub page, used only for the clickable Source link
+$githubPageUrl = 'https://github.com/tomheston/fragility-metrics/blob/main/FRAGILITY_METRICS.md';
 
 // 2. Simple caching settings (optional but recommended)
 $cacheFile = __DIR__ . '/cache/FRAGILITY_METRICS.md';
@@ -50,11 +55,18 @@ function fetchFromGithub(string $url): ?string
 
     $data = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $contentType = (string) curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
     $err = curl_error($ch);
     curl_close($ch);
 
     if ($httpCode !== 200 || $data === false) {
         error_log("Failed to fetch FRAGILITY_METRICS.md from GitHub: HTTP $httpCode; error: $err");
+        return null;
+    }
+
+    // Refuse an HTML page so a wrong URL can never be cached as Markdown
+    if (stripos($contentType, 'text/html') !== false) {
+        error_log("Refusing to cache FRAGILITY_METRICS.md: got $contentType from $url (use the raw.githubusercontent.com URL)");
         return null;
     }
 
@@ -176,7 +188,7 @@ if ($markdown === null) {
         <?php endif; ?>
 
         <div>
-            Source: <code class="inline"><?php echo htmlspecialchars($githubRawUrl, ENT_QUOTES, 'UTF-8'); ?></code>
+            Source: <a href="<?php echo htmlspecialchars($githubPageUrl, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener"><code class="inline"><?php echo htmlspecialchars($githubPageUrl, ENT_QUOTES, 'UTF-8'); ?></code></a>
         </div>
         <div>
             This page always reflects the latest committed <code class="inline">FRAGILITY_METRICS.md</code>
@@ -194,7 +206,7 @@ if ($markdown === null) {
         <p>
             This documentation covers classical fragility measures such as the Fragility Index (FI),
             Fragility Quotient (FQ), and Marginal Fragility Quotient (MFQ), as well as more general
-            extensions including the GFI and GFQ. It also outlines fragility methods for ANOVA,
+            extensions including the <a href="global-fragility-index.php">Global Fragility Index (GFI)</a> and GFQ. It also outlines fragility methods for ANOVA,
             regression models, and other settings beyond simple two-arm 2×2 tables.
         </p>
         <p>

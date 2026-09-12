@@ -78,6 +78,41 @@ hgroup p {
     color: #666;
 }
 
+/* Calculator sub-navigation (2x2 vs Survival) */
+.calc-tabs {
+    margin: 0;
+    color: #555;
+}
+
+.calc-tabs a {
+    color: #0066cc;
+    font-weight: 500;
+    padding: 0 0.25rem;
+}
+
+.calc-tabs a.active {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Images - never let a figure overflow its container */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.markdown img {
+    display: block;
+    margin: 1.5rem auto;
+}
+
+/* Wide reference tables scroll inside their own box instead of the page */
+.markdown table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
 /* Code */
 code {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;

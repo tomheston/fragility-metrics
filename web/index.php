@@ -9,6 +9,11 @@ include 'includes/header.php';
     <p>Calculate p-fr-nb triplets for 2×2 independent binary outcome trials</p>
 </hgroup>
 
+<div class="calc-tabs">
+    Calculate CSE for: <a href="index.php" class="active">2x2 Trials</a> | <a href="survival.php">Survival</a>
+</div>
+<br/>
+
 <article>
     <h2>2×2 Table Calculator</h2>
     <p>Enter your trial data to calculate complete statistical evidence (significance, fragility, and robustness).</p>
@@ -52,19 +57,19 @@ include 'includes/header.php';
 
 <article>
     <h2>Why Complete Evidence?</h2>
-    <p>Traditional reporting provides only p-values and confidence intervals — this is partial evidence. Complete statistical evidence requires three orthogonal dimensions:</p>
+    <p>Traditional reporting provides only p-values and confidence intervals — this is partial evidence. Complete statistical evidence requires three complementary dimensions:</p>
     <ul>
         <li><strong>Significance (p):</strong> Compatibility with null hypothesis</li>
-        <li><strong>Fragility (fr):</strong> Classification stability (MFQ)</li>
-        <li><strong>Robustness (nb):</strong> Distance from neutrality (RQ)</li>
+        <li><strong>Fragility (fr):</strong> Classification stability (<a href="global-fragility-index.php">GFQ</a>, or MFQ when the trial is too large for the exact GFI search)</li>
+        <li><strong>Robustness (nb):</strong> Distance from neutrality (RQ, with NDI as its optional count form)</li>
     </ul>
-    <p>Only when all three dimensions align do you have truly convincing, replication-ready evidence.</p>
+    <p>Only when all three dimensions align do you have truly convincing, replication-ready evidence. Clinical decisions also need the absolute effect size, such as the absolute risk reduction or number needed to treat: the triplet plus effect size is complete evidence.</p>
 </article>
 
 <p><a href="documentation.php" role="button">Read Full Documentation</a></p>
 
 <p style="font-size:13px; color:#555; margin-bottom:6px;">
-  <strong>Note:</strong> The FI used here is a modified version that allows bidirectional moves (event to/from non-event) and defaults to the arm with the fewest subjects when the number of events is tied. Toggles are allowed in one treatment arm only. For the original Walsh 2014 FI definition, see the <a href="http://fragilitymetrics.org/calculate_original.php">Walsh 2014 FI Calculator</a>.
+  <strong>Note:</strong> The FI used here is the Heston Fragility Index: the minimum number of outcome toggles (event ↔ non-event) in the arm with fewer events, or the smaller arm if events are tied, that flips significance in either direction, so it is also defined for nonsignificant results. For the original Walsh 2014 FI definition, see the <a href="http://fragilitymetrics.org/calculate_original.php">Walsh 2014 FI Calculator</a>.
 </p>
 <p style="font-size:14px; color:#666;">
   <strong>Citation:</strong> Heston TF. Fragility metrics toolkit v6.0.0. Zenodo. 2026. DOI: <a href="https://doi.org/10.5281/zenodo.17254763">10.5281/zenodo.17254763</a>
