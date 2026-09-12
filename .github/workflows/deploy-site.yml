@@ -1,0 +1,49 @@
+# Deploys web/ to fragilitymetrics.org whenever web/ changes on main.
+#
+# Needs four repository secrets (Settings -> Secrets and variables -> Actions):
+#   FTP_SERVER      the hosting server's hostname from cPanel, not
+#                   fragilitymetrics.org (that name is behind Cloudflare,
+#                   which does not pass FTP)
+#   FTP_USERNAME    the cPanel FTP account
+#   FTP_PASSWORD    its password
+#   FTP_SERVER_DIR  the site's document root as that FTP account sees it,
+#                   ending in "/" (for example public_html/)
+#
+# The action keeps a sync-state file on the server and only deletes files it
+# uploaded earlier that have since been removed from web/. Server-only files
+# (db_config.php, error_log, cache/) are excluded below, so they are never
+# uploaded, overwritten, or deleted.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/**']
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Sync web/ to the server over FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./web/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/db_config.php
+            **/error_log
+            **/cache/**
