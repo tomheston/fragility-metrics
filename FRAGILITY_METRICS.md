@@ -1,16 +1,16 @@
-# FRAGILITY METRICS v14.2.0
+# FRAGILITY METRICS v14.3.0
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 **Thomas F. Heston**
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 14.2.0
+**Version:** 14.3.0
 
-**Date:** September 9, 2026
+**Date:** September 13, 2026
 ---
 ## Abstract
 A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone ("partial evidence"), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a native fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
-**Fragility (fr)** is first quantified by native fragility quotients that measure the proportion of relevant data (or SE-scale shift) required to flip significance classification within a given design, with primary metrics MFQ, GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), and SFQ (survival outcomes via Cox regression z-statistic). fr is the native fragility quotient for the design at hand (MFQ, GFQ, CFQ, …), computed directly from the observed data; high fr indicates a stable classification, low fr indicates fragility. Native quotients are not numerically comparable across designs; a cross-design percentile scale is a deferred extension (see Part I).
+**Fragility (fr)** is first quantified by native fragility quotients that measure the proportion of relevant data (or SE-scale shift) required to flip significance classification within a given design, with primary metrics MFQ, GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), SFQ (survival outcomes via Cox regression z-statistic), and WFQ (the Wald Fragility Quotient; fallback for any effect estimate reported with a Wald z-statistic or 95% CI when no design-native metric applies). fr is the native fragility quotient for the design at hand (MFQ, GFQ, CFQ, …), computed directly from the observed data; high fr indicates a stable classification, low fr indicates fragility. Native quotients are not numerically comparable across designs; a cross-design percentile scale is a deferred extension (see Part I).
 **Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks and agreement vs chance), MeCI (continuous means), DTI (correlation), ANOVAη² (multi-group), ORQ (ordinal outcomes), and SRQ (survival outcomes).
 All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.
 This document finalizes the integration of continuous-outcome measures (CFQ, MeCI, ANOVA-FQ, ZFQ), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to nearly every standard study design with minimal assumptions. We define "complete statistical evidence" as the p–fr–nb triplet: p for significance, fr for fragility, and nb for robustness, replacing partial evidence based only on statistical significance or nonsignificance.
@@ -102,12 +102,12 @@ In most common trial designs, the framework provides **paired metrics** (both fr
 * Native notation: q_m ∈ [0,1] for each metric m.
 * Measures: Proportion of the sample (binary/diagnostic) or proportion of an SE-scale shift (continuous) required to flip the p-value classification.
 * Scale: 0 to 1 (native fragility quotients).
-* Primary native metrics: FQ, MFQ, GFQ, DFQ, BFQ, PFI, CFQ, ANOVA-FQ, ZFQ, OFQ, SFQ.
-* Secondary metrics: FI, SFI, GFI, FD (the fragility distance, with aFD, dFD), DFI, CFS (raw counts/units).
+* Primary native metrics: FQ, MFQ, GFQ, DFQ, BFQ, PFI, CFQ, ANOVA-FQ, ZFQ, OFQ, SFQ, WFQ (generic Wald fallback).
+* Secondary metrics: FI, SFI, GFI, FD (the fragility distance, with aFD, dFD), DFI, CFS, WFS (raw counts/units).
 * Interpretation (native): Lower q_m = less stable; higher q_m = more stable.
 
 #### Cross-Design Comparability
-Native fragility quotients (MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BFQ) provide direct physical interpretation within each study design, but their raw values have not been validated to be comparable across designs. A universal cross-design scale via percentile normalization against reference distributions is a possibility. Pending further work, fr is the native quotient, interpreted within its design family.
+Native fragility quotients (MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BFQ, WFQ) provide direct physical interpretation within each study design, but their raw values have not been validated to be comparable across designs. A universal cross-design scale via percentile normalization against reference distributions is a possibility. Pending further work, fr is the native quotient, interpreted within its design family.
 
 #### Taxonomy of Statistical Fragility
 
@@ -200,6 +200,8 @@ Unlike nb, fr is claim-invariant: higher fr always strengthens confidence in the
 | **UFI**           | Unit       | >0    | LEGACY                | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                                | Step-size definitions (fixed-margin unit size)    |
 | **SFQ**           | Fragility  | 0–1   | PRIMARY               | \|\|z_HR\| − 1.96\| / (1 + \|\|z_HR\| − 1.96\|)                 | SE-scaled distance to p = 0.05 (survival)         |
 | **SRQ**           | Robustness | 0–1   | PRIMARY               | \|ln(HR)\| / (1 + \|ln(HR)\|)                     | Distance from neutrality (survival)          |
+| **WFQ**           | Fragility  | 0–1   | PRIMARY (fallback)    | \|\|z\| − 1.96\| / (1 + \|\|z\| − 1.96\|), z = θ̂ / SE (SE from 95% CI) | SE-scaled distance to p = 0.05 (generic Wald; only when no design-native metric applies) |
+| **WFS**           | Distance   | 0–∞   | Secondary             | \|\|z\| − 1.96\|                                                | SE-unit distance to p = 0.05 (generic Wald)       |
 |t* is the critical value from the t-distribution.||||||
 |F* is the critical F value at α = 0.05 for the reported df.||||||
 |m = min(r, c). The denominator 2N(m − 1)/m is the maximum of Σ|O − E|, attained under perfect association; for 2×2 it equals N, so 2×2 values are unchanged.||||
@@ -314,8 +316,8 @@ b) Single-rater agreement vs chance (p₀ = 0.5) or another target benchmark whe
 - Sub-integer realizability (Type C, 2026-07-11): the perturbed intermediate table (a+x, b−x, c−x, d+x) with non-integer x is **not** itself a realizable contingency table, and PFI does not claim it is. Here x is a *distance to the significance boundary* measured in proportional-reallocation units, not a count of changed patients — in the same sense that a p-value is a continuous functional of a discrete table with no single realizable table sitting exactly 'at' p = 0.0493. The concrete gain over the integer fragility index is resolution within ties: many trials share FI = 1 or FI = 2 yet differ in how close they truly sit to α = 0.05, and PFI orders them. This is precisely why PFI is reported as a descriptive evidence-quality metric rather than an inferential test — it quantifies boundary proximity on a continuous scale, and its usefulness does not depend on the intermediate table being realizable.
 - PFI-M = McNemar-path fragility = the McNemar-test variant of PFI for matched-pair designs; identical path construction, McNemar χ² in place of Pearson χ². Note that along this path b and c change by the same amount, so the McNemar numerator (b − c)² is invariant; significance flips only through the change in the discordant-pair total (b + c − 2x). PFI-M therefore probes a narrower perturbation space than PFI.
 
-### Distance-to-Critical-Value Family (§3.7–3.11)
-Sections §3.7–3.11 are one construct — the bounded distance from the test statistic to its α = 0.05 critical value, fr = δ/(1 + δ) with δ = |stat − crit| — instantiated per design: continuous (CFQ), multi-group (ANOVA-FQ), correlation (ZFQ), ordinal (OFQ), and survival (SFQ). The umbrella is conceptual; the per-design instances below are what you compute.
+### Distance-to-Critical-Value Family (§3.7–3.12)
+Sections §3.7–3.12 are one construct — the bounded distance from the test statistic to its α = 0.05 critical value, fr = δ/(1 + δ) with δ = |stat − crit| — instantiated per design: continuous (CFQ), multi-group (ANOVA-FQ), correlation (ZFQ), ordinal (OFQ), survival (SFQ), and a generic Wald fallback for designs without a native metric (WFQ). The umbrella is conceptual; the per-design instances below are what you compute.
 
 ### 3.7 CFQ — Continuous Fragility Quotient ⭐
 **Application**: trials comparing two continuous outcomes where m₁, m₂, s₁, s₂, n₁, n₂ are all known.
@@ -418,6 +420,25 @@ Then:
 **Base metric**: | |z_HR| − 1.96 | (raw distance in z-statistic units to significance boundary)
 **NBF pair**: SRQ
 **Note**: SFQ assesses fragility (stability of significance classification) for survival outcomes. It complements SRQ, which measures robustness (distance from neutrality). Both should be reported together for time-to-event studies. Structurally identical to CFQ (continuous), ANOVA-FQ (multi-group), ZFQ (correlation), and OFQ (ordinal).
+
+### 3.12 WFQ — Wald Fragility Quotient ⭐
+
+**Application**: Fallback metric for any effect estimate reported with a Wald-type z-statistic, or with a 95% confidence interval from which one can be reconstructed, when no design-native metric in this document applies — e.g., regression coefficients (linear, logistic, Poisson, survey-weighted), prevalence or trend slopes, risk differences, and adjusted mean changes.
+**Precedence rule**: WFQ is never used where a design-native metric is computable. A Cox hazard ratio takes SFQ; a generalized odds ratio takes OFQ; a correlation takes ZFQ; two-group continuous summary statistics take CFQ; a multi-group F-test takes ANOVA-FQ; a contingency table takes GFQ (or MFQ at large N). WFQ covers the remainder.
+**Definition**: Bounded distance, in standard-error units, between the observed Wald z-statistic and the two-sided α = 0.05 critical value.
+**Formula**: Let θ̂ = reported effect estimate with 95% CI [CI_lower, CI_upper] on the same scale (for ratio measures — which the precedence rule routes to their native metrics — the estimate and CI are log-transformed first).
+Calculate:
+- SE ≈ (CI_upper − CI_lower) / (2 × 1.96) (standard error reconstructed from the confidence interval; when the analysis reports z, or t with large df, directly, use it and skip the reconstruction)
+- z = θ̂ / SE (Wald z-statistic)
+Then:
+**WFS = | |z| − 1.96 |** (Wald Fragility Score: raw SE-unit distance to the significance boundary)
+**WFQ = WFS / (1 + WFS)**
+**Range**: 0 to 1
+**Interpretation**: fr = WFQ. Defined for both significant and nonsignificant baselines (classification stability in either direction). Example: WFQ = 0.48 means the z-statistic sits 0.92 SE units from the p = 0.05 boundary (the map is invertible: WFS = WFQ/(1 − WFQ)); higher values indicate a more stable significance classification.
+**Advantages**: Works directly from the estimate + 95% CI pair, the most common summary format in the literature. No raw data, no model refitting. Structurally identical to CFQ, ANOVA-FQ, ZFQ, OFQ, and SFQ, extending the fragility framework to designs the named metrics do not reach.
+**Base metric**: WFS
+**NBF pair**: none for non-ratio estimates. Ratio estimates never reach WFQ (the precedence rule routes them to native metrics with native NBF pairs). For non-ratio coefficients — slopes, differences, adjusted changes — no nb metric is currently defined: the triplet is incomplete for this design, and results are reported as p–fr plus the absolute effect size with an explicit statement that nb is unavailable. Do not improvise an nb transform; defining one is future work.
+**Note**: z reconstructed from a CI is a Wald approximation, so WFQ values are asymptotic, matching the CI-only conventions of CFQ, OFQ, and SFQ. The critical value is fixed at 1.96 (normal approximation); when the source analysis used a t-reference with small degrees of freedom, use that t-critical value in place of 1.96 and state so. Because WFQ is a deterministic monotone function of |z| alone, within this design it is a re-expression of the reported test onto the boundary-distance scale — it adds interpretive resolution near the α boundary, not information beyond the reported statistic; design-native metrics that read table geometry (GFQ) remain preferred wherever computable, per the precedence rule. Case matters in the acronym family: uppercase-W WFQ/WFS are the generic Wald metrics; lowercase-w metrics (wGFQ, wsRQ, wFDQ) are the weighted meta-analytic pooled forms, and the two groups are unrelated.
 
 ## Part IV: Primary Robustness Metrics
 
@@ -693,6 +714,13 @@ FD is the envelope (lower bound) of the family. aFD, dFD, and 2·GFI are upper b
 **Output**: Raw distance → CFQ = CFS / (1 + CFS).  
 **Note**: Continuous analogue of FI/SFI/GFI.  
 
+### **WFS — Wald Fragility Score**
+
+**Definition**: SE-unit distance between the observed (or CI-reconstructed) Wald z-statistic and the two-sided α = 0.05 significance boundary, for generic estimates covered by WFQ (§3.12).  
+**Formula**: WFS = ||z| − 1.96|.  
+**Output**: Raw distance → WFQ = WFS / (1 + WFS).  
+**Note**: Generic-Wald analogue of CFS; asymptotic when z is reconstructed from a 95% CI.  
+
 ## Part VI: Continuous Fragility Units
 
 ### **CFU — Continuous Fragility Unit**
@@ -944,6 +972,7 @@ ANOVA-FQ = ANOVA-FS / (1 + ANOVA-FS)
 ZFQ      = D / (1 + D)
 OFQ      = | |z_WMW| − 1.96| / (1 + | |z_WMW| − 1.96|)
 SFQ      = | |z_HR| − 1.96| / (1 + | |z_HR| − 1.96|)
+WFQ      = WFS / (1 + WFS),  WFS = | |z| − 1.96|  (generic Wald fallback)
 
 FDQ = min(1, FD / m),  m = min(n_A, n_B, a + c, b + d) of the observed table; flagged margin-limited when FD > m
 wFDQ = Σ min(FD_i, m_i) / Σ m_i   (pooled; margin-weighted, see Addendum)
@@ -995,6 +1024,7 @@ The modern statistical evidence framework consists of three complementary dimens
    * Ordinal: OFQ (Wilcoxon-Mann-Whitney / proportional odds)
    * Survival: SFQ (Cox regression hazard ratios)
    * Correlation: ZFQ (Fisher-z distance from the α=0.05 boundary)
+   * Generic Wald fallback (regression coefficients, trend slopes, risk differences, adjusted changes — only when no design-native metric applies): WFQ (with WFS as the underlying SE-scale distance). For non-ratio estimates no nb partner is defined; report p–fr plus absolute effect size and state that nb is unavailable.
    * For each design, the native fragility quotient q_m (e.g., MFQ, GFQ, CFQ) is computed directly from the observed data and serves as fr, the fragility coordinate of the p–fr–nb triplet.
 
 3. **ROBUSTNESS** (NBF-based): How far from neutrality?  
@@ -1071,7 +1101,7 @@ The framework's metrics are organized into families to give the standing methods
 - **Index forms** (raw counts/distances): GFI, FI, MFI, SFI, UFI, PFI, NDI (NDI is the sole robustness-target member — it counts moves to neutrality rather than to significance)
 - **Fragility distance family (FD family)** (N free; unit = one patient added to or removed from any cell; Fisher's exact): FD (the fragility distance — the unconstrained L1 minimum and primary member), aFD (additions only), dFD (deletions only), with quotient FDQ = min(1, FD / m), m the smallest margin of the observed table (margin-limited cap flagged), and pooled form wFDQ = Σ min(FD_i, m_i) / Σ m_i. Distinct from the reallocation family (GFI, cGFI: N fixed) and the toggle family (FI, MFI, SFI, UFI: N fixed, within-arm or fixed-margin) — those are indices (constrained path lengths in moves); FD is the distance (unconstrained L1 minimum in patients). Ordering: FD ≤ aFD, FD ≤ dFD, FD ≤ 2·GFI.
 
-- **Distance-to-critical-value family** (fragility, form δ/(1+δ) with δ = |test statistic − α-critical value|): CFQ, ANOVA-FQ, ZFQ, OFQ, SFQ — one construct instantiated per design; each keeps its own statistic and critical value.
+- **Distance-to-critical-value family** (fragility, form δ/(1+δ) with δ = |test statistic − α-critical value|): CFQ, ANOVA-FQ, ZFQ, OFQ, SFQ, WFQ (generic Wald fallback; base metric WFS) — one construct instantiated per design; each keeps its own statistic and critical value.
 - **Distance-from-neutrality transform family** (robustness, form |g(θ)|/(1+|g(θ)|) with g a variance-stabilizing transform of the effect estimate θ): DTI (g = atanh, θ = r), ORQ (g = ln, θ = gOR), SRQ (g = ln, θ = HR), DNB (g = ln, θ = DOR) — one construct instantiated per design.
 
 These groupings are organizational for the methods-note series and do not override any individual metric's canonical definition or NBF pairing stated elsewhere in this document.
@@ -1139,6 +1169,16 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the Walsh FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 14.3.0** (September 13, 2026)
+
+- **Added WFQ — Wald Fragility Quotient (§3.12)** and its base metric **WFS — Wald Fragility Score** (Part V), the sixth member of the distance-to-critical-value family. WFS = ||z| − 1.96|, WFQ = WFS/(1 + WFS), with z taken directly from the report or reconstructed from a 95% CI as z = θ̂ / SE, SE = (CI_upper − CI_lower)/(2 × 1.96). Defined for both significant and nonsignificant baselines. Motivating case: survey-weighted regression trend coefficients (JAMA Pediatr adolescent-obesity trends letter, doi:10.1001/jamapediatrics.2026.3932), a design no named metric reached.
+- **Explicit precedence rule**: WFQ is a fallback, never used where a design-native metric is computable (SFQ for HR, OFQ for gOR, ZFQ for r, CFQ for two-group continuous, ANOVA-FQ for F, GFQ/MFQ for contingency tables). This keeps the generic instance from eroding the design-specific metrics, which carry information (table geometry, in GFQ's case) that a z-transform cannot.
+- **nb partner deliberately left undefined for non-ratio estimates**: ratio estimates never reach WFQ under the precedence rule; for slopes, differences, and adjusted changes the triplet is declared incomplete (report p–fr plus absolute effect size, stating nb unavailable) rather than inventing a standardization. Defining an nb for this design is recorded as future work.
+- Stated in the §3.12 note that WFQ, being a deterministic monotone function of |z| alone, re-expresses the reported test on the boundary-distance scale rather than adding information beyond it — consistent with the family's existing CI-only conventions (asymptotic values; t-critical substitution when the source used a small-df t-reference).
+- **No interpretation bands** stated for WFQ, consistent with v14.1.0 (bands stated for GFQ only). Anchor points follow from the map: p = .05 → WFQ = 0, p = .01 → WFQ ≈ 0.38, p = .001 → WFQ ≈ 0.57 (normal reference).
+- Acronym-case note added: uppercase-W WFQ/WFS (generic Wald) vs lowercase-w wGFQ/wsRQ/wFDQ (weighted meta-analytic pooled forms) are unrelated groups.
+- Integrated across the document: Abstract primary-metric list; Part I primary/secondary metric lists and cross-design comparability list; Part II quick-reference rows (WFQ, WFS); §3.7 family umbrella (now §3.7–3.12); Part IX relationships; Part X summary; Part XI distance-to-critical-value family. Existing metric definitions, formulas, pairings, thresholds, and values are unchanged.
 
 **Version 14.2.0** (September 9, 2026)
 
