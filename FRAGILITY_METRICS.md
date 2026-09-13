@@ -1,62 +1,47 @@
-# FRAGILITY METRICS v14.0.0
-
+# FRAGILITY METRICS v14.2.0
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
-
 **Thomas F. Heston**
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 14.0.0
+**Version:** 14.2.0
 
-**Date:** September 6, 2026
+**Date:** September 9, 2026
 ---
-
 ## Abstract
-
 A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone ("partial evidence"), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a native fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
 **Fragility (fr)** is first quantified by native fragility quotients that measure the proportion of relevant data (or SE-scale shift) required to flip significance classification within a given design, with primary metrics MFQ, GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), and SFQ (survival outcomes via Cox regression z-statistic). fr is the native fragility quotient for the design at hand (MFQ, GFQ, CFQ, …), computed directly from the observed data; high fr indicates a stable classification, low fr indicates fragility. Native quotients are not numerically comparable across designs; a cross-design percentile scale is a deferred extension (see Part I).
 **Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks and agreement vs chance), MeCI (continuous means), DTI (correlation), ANOVAη² (multi-group), ORQ (ordinal outcomes), and SRQ (survival outcomes).
 All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.
-This document finalizes the integration of continuous-outcome measures (CFQ, MeCI, ANOVA-FQ, ZFQ), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to nearly every standard study design with minimal assumptions. We define "complete statistical evidence" as the p–fr–nb triplet: p for significance, fr for fragility, and nb for robustness, replacing partial evidence based only on statistical significance or nonsignificance.  
-Keywords: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics  
+This document finalizes the integration of continuous-outcome measures (CFQ, MeCI, ANOVA-FQ, ZFQ), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to nearly every standard study design with minimal assumptions. We define "complete statistical evidence" as the p–fr–nb triplet: p for significance, fr for fragility, and nb for robustness, replacing partial evidence based only on statistical significance or nonsignificance.
 
+**Keywords**: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics
 ---
-
 ## Executive Summary
-
 > **Whereas p < 0.05 establishes statistical significance, a concordant p–fr–nb triplet (low p + high fr + high nb) establishes convincing, complete statistical evidence.**
-> Traditional practice reports only the p-value for a given analysis, which we term partial evidence: it addresses compatibility with the null but not the stability of that decision or the distance from therapeutic neutrality. We define complete statistical evidence as the triplet (p, fr, nb), where p quantifies statistical significance; fr is the native fragility quotient for the design (MFQ, GFQ, CFQ, etc.), a 0–1 measure of the proportion of data or SE-shift needed to flip significance — high fr means the classification is stable, low fr means unstable; and nb is a 0–1 robustness metric measuring geometric distance from the neutrality boundary. Only when all three dimensions align (low p, high fr, high nb for "effect exists" claims) do we regard the statistical evidence as complete in the sense of being decision-ready and replication-ready.
-> Reporting only p-values yields partial evidence, because it ignores both the stability of the conclusion (fragility) and the distance from neutrality (robustness). The p–fr–nb triplet restores these missing dimensions and constitutes complete statistical evidence for a result.
-
+Traditional practice reports only the p-value for a given analysis, which we term partial evidence: it addresses compatibility with the null but not the stability of that decision or the distance from therapeutic neutrality. We define complete statistical evidence as the triplet (p, fr, nb), where p quantifies statistical significance; fr is the native fragility quotient for the design (MFQ, GFQ, CFQ, etc.), a 0–1 measure of the proportion of data or SE-shift needed to flip significance — high fr means the classification is stable, low fr means unstable; and nb is a 0–1 robustness metric measuring geometric distance from the neutrality boundary. Only when all three dimensions align (low p, high fr, high nb for "effect exists" claims) do we regard the statistical evidence as complete in the sense of being decision-ready and replication-ready.
+Reporting only p-values yields partial evidence, because it ignores both the stability of the conclusion (fragility) and the distance from neutrality (robustness). The p–fr–nb triplet restores these missing dimensions and constitutes complete statistical evidence for a result.
 ## Quick Start: Your First p–fr–nb Triplet
-
 **You have a 2×2 table from a binary outcome trial:**
-
-|                | Events | Non-events |
-| -------------- | ------ | ---------- |
-| Treatment      | 13     | 87         |
-| Control        | 25     | 75         |
-| **Calculate:** |        |            |
-
+| | Events | Non-events |
+|---------|--------|------------|
+| Treatment | 13 | 87 |
+| Control | 25 | 75 |
+**Calculate:**
 - p = 0.046 (Fisher's exact, two-sided)
 - fr = MFQ = 0.01 (1 toggle / 100 in the treatment arm; changing a single treatment-arm outcome from non-event to event raises p to 0.073, losing significance)
 - nb = RQ = 0.12 (|ad − bc| / (N²/4) = 1200 / 10000)
-  **Interpret:** p-significant, fr-unstable, nb-intermediate → **Classic unstable result: significance rests on a single outcome. Treat as low-quality evidence; replicate before use.**
-  **Calculators:** https://doi.org/10.5281/zenodo.17254763
-
+**Interpret:** p-significant, fr-unstable, nb-intermediate → **Classic unstable result: significance rests on a single outcome. Treat as low-quality evidence; replicate before use.**
+**Calculators:** https://doi.org/10.5281/zenodo.17254763
 ### The Statistical Evidence Framework
-
 Modern evidence assessment rests on three complementary statistical dimensions plus clinical effect size:
-
-| Secret question from every skeptical reader                  | p alone answers | p–fr–nb triplet answers                                      |
-| ------------------------------------------------------------ | --------------- | ------------------------------------------------------------ |
-| Significant?                                                 | Yes             | **Yes** (p)                                                  |
-| Flippable by a few outcome changes or dropouts?              | ?               | **Yes** — fr quantifies the fragility of the p-value         |
-| Real separation from zero, or just lucky sampling noise that barely hit p<0.05? | ?               | **Yes** — nb quantifies distance from the neutrality boundary |
-| Only when **all three dimensions align strongly** (low p + high fr + high nb) do we have truly compelling, replication-ready evidence that an intervention works. |                 |                                                              |
-
+| Secret question from every skeptical reader | p alone answers | p–fr–nb triplet answers |
+|-------------------------------------------------------------------------------|-----------------|--------------------------------------------------------------|
+| Significant? | Yes | **Yes** (p) |
+| Flippable by a few outcome changes or dropouts? | ? | **Yes** — fr quantifies the fragility of the p-value |
+| Real separation from zero, or just lucky sampling noise that barely hit p<0.05? | ? | **Yes** — nb quantifies distance from the neutrality boundary |
+Only when **all three dimensions align strongly** (low p + high fr + high nb) do we have truly compelling, replication-ready evidence that an intervention works.
 ### Definitions
-
 **Probability (p-value)**: the p-value quantifies the compatibility of the observed data with the null hypothesis (no effect). Lower p-values indicate stronger evidence against the null hypothesis. Conventional threshold: p < 0.05 for "statistically significant."
 **Fragility (fr)**: the fragility summary statistic, fr, measures the stability of the significance classification. **A high fr indicates stability**, i.e., it takes a significant shift in outcomes to flip significance. **A low fr indicates fragility**, i.e., it takes only a slight change in outcomes to flip significance. Fragility quantifies the minimal perturbation to the data required to reverse the p-value decision. fr ∈ [0,1] is the native fragility quotient for the design (e.g., MFQ, GFQ, CFQ), computed directly from the observed data. fr is a **perturbation-fragility** metric. Part I places it within the broader taxonomy of analysis fragility and data fragility, with resampling, perturbation, and scaling as the three data-fragility forms.
 **Robustness (nb)**: The robustness summary statistic, nb, measures how far the observed result sits from therapeutic neutrality (no effect), expressed as a bounded, sign-agnostic **standardized effect magnitude** on a 0–1 scale. nb ∈ [0,1] where high nb = far from neutrality and low nb = near neutrality. nb is a property of the point estimate: it is computed from the observed effect magnitude, **not** from its precision — sampling uncertainty is carried by p and by fragility, not by nb. This separation is deliberate: it is what lets the triplet distinguish a large-but-imprecise effect (high nb, unstable) from a genuinely null one (low nb), and it is what the founding metric RQ already does (RQ is scale-invariant — multiplying every cell of a 2×2 by a constant leaves it unchanged). Here "robustness" denotes distance from therapeutic neutrality — a standardized effect magnitude — and **not** the classical statistical sense of insensitivity to modeling assumptions or outliers. **A high nb** indicates the result is far from neutrality; **a low nb** indicates it is statistically close to neutrality (which is not, by itself, affirmative evidence that no effect exists). nb is comparable across trials **within a design**; native nb values are **not** equivalent across designs (empirically they diverge), so cross-design nb supports a common interpretive language (near/intermediate/far), not numerical equivalence.
@@ -68,7 +53,6 @@ Modern evidence assessment rests on three complementary statistical dimensions p
 ### The Three Statistical Dimensions
 
 #### 1. Statistical Significance (p)
-
 - **Question**: How compatible are the data with the null?
 - **Scale**: 0 to 1
 - **Interpretation**: Lower p = stronger evidence against the null
@@ -76,7 +60,6 @@ Modern evidence assessment rests on three complementary statistical dimensions p
 #### 2. Fragility (fr)
 
 **Native fragility quotients (fr ∈ [0,1])**
-
 - **Question**: What proportion of the data (or of an SE-scale shift) must change to flip the significance classification?
 - **Native metrics**: FQ, MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BFQ
 - **Interpretation**: Lower fr = less stable; higher fr = more stable. fr is the native quotient for the design at hand, computed directly from the observed data; the p–fr–nb triplet uses this native quotient as its fragility coordinate.
@@ -84,7 +67,6 @@ Modern evidence assessment rests on three complementary statistical dimensions p
 *Cross-design normalization (deferred).* Native quotients are not numerically comparable across designs (binary medians run lower than continuous). A percentile-normalized universal scale is a planned extension pending published reference distributions; until then, fr is interpreted within its design family.
 
 #### 3. Robustness (nb ∈ [0,1])
-
 - **Question**: How far is the result from the neutrality boundary?
 - **Unified metric**: **nb** (all NBF metrics output nb directly)
 - **Interpretation**: Higher nb = farther from the neutrality boundary
@@ -125,7 +107,6 @@ In most common trial designs, the framework provides **paired metrics** (both fr
 * Interpretation (native): Lower q_m = less stable; higher q_m = more stable.
 
 #### Cross-Design Comparability
-
 Native fragility quotients (MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BFQ) provide direct physical interpretation within each study design, but their raw values have not been validated to be comparable across designs. A universal cross-design scale via percentile normalization against reference distributions is a possibility. Pending further work, fr is the native quotient, interpreted within its design family.
 
 #### Taxonomy of Statistical Fragility
@@ -136,12 +117,12 @@ Native fragility quotients (MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BF
 
 **Figure 1. The four forms of statistical fragility.** Analysis fragility changes the analytical rule. Data fragility holds that rule fixed and changes which patients are sampled, what is recorded, or how much data is studied.
 
-| Branch             | Form         | What changes                                   | What is held fixed                                           | Assessment and units                                         |
-| ------------------ | ------------ | ---------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Analysis fragility | Analysis     | The analytical rule                            | The observed data                                            | Classification under alternative analyses; report each rule, p-value, and classification |
-| Data fragility     | Resampling   | Which patients are sampled                     | Sample size, analytical rule, and specified sampling process | Estimated probability or percentage of replicate samples that reverse classification |
-| Data fragility     | Perturbation | Recorded outcomes or particular patient counts | Analytical rule and the metric's stated constraints          | Minimum toggles, transfers, or unit edits; matching quotient, or continuous boundary distance |
-| Data fragility     | Scaling      | The amount of data                             | Observed proportions, allocation ratio, and analytical rule  | Sample-size fragility multiplier (SFM), a scaling factor     |
+| Branch | Form | What changes | What is held fixed | Assessment and units |
+|---|---|---|---|---|
+| Analysis fragility | Analysis | The analytical rule | The observed data | Classification under alternative analyses; report each rule, p-value, and classification |
+| Data fragility | Resampling | Which patients are sampled | Sample size, analytical rule, and specified sampling process | Estimated probability or percentage of replicate samples that reverse classification |
+| Data fragility | Perturbation | Recorded outcomes or particular patient counts | Analytical rule and the metric's stated constraints | Minimum toggles, transfers, or unit edits; matching quotient, or continuous boundary distance |
+| Data fragility | Scaling | The amount of data | Observed proportions, allocation ratio, and analytical rule | Sample-size fragility multiplier (SFM), a scaling factor |
 
 **Analysis fragility.** The observed data remain fixed while the analytical rule changes. Choices include the statistical test and its convention, covariate adjustment, handling of missing data, multiplicity correction, interim stopping rule, and significance threshold. Analysis fragility comes first in the logical order: each subsequent data-fragility assessment requires a fixed analytical rule. Changing the test during a perturbation search mixes analysis and perturbation fragility and prevents interpretation as a single perturbation count.
 
@@ -160,86 +141,77 @@ The matching quotients retain their existing definitions: MFQ = FI / n_mod; GFQ 
 **Source:** Thomas F. Heston, *A Taxonomy of Statistical Fragility in Clinical Trials: Analysis, Resampling, Perturbation, and Scaling*, supplied manuscript `manuscript04_v4.docx`. This section incorporates its conceptual taxonomy; metric formulas retain the canonical definitions given in this document.
 
 #### 3. Robustness (Geometric Distance)
-
 * **Concept**: Quantifies the distance from therapeutic neutrality on a scale of 0 (neutral) to 1 (robust separation).
 * **Unified notation**: **nb ∈ [0,1]**
 * **Measures**: Geometric distance from the neutrality boundary (no effect).
 * **Scale**: 0 to 1 (NBF normalized)
 * **Primary metrics**: RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB, Proportion-NBF, MeCI, DTI, ANOVAη² → all compute **nb**
 * **Interpretation**: Lower nb = near neutrality; higher nb = far from neutrality.
-
 ---
-
 ### The Interpretation Layer
-
 **Measurement ≠ Interpretation**
 Robustness (nb) has opposite implications depending on the claim being made:
-
-| Claim                               | High Robustness (far from neutral) | Low Robustness (near neutral) |
-| ----------------------------------- | ---------------------------------- | ----------------------------- |
-| **"Effect exists"** (p ≤ 0.05)      | Supports the claim                 | Undermines the claim          |
-| **"No effect"** (p > 0.05)          | Undermines the claim               | Supports the claim            |
-| Fragility (fr) behaves differently: |                                    |                               |
-
+| Claim                          | High Robustness (far from neutral) | Low Robustness (near neutral) |
+| ------------------------------ | ---------------------------------- | ----------------------------- |
+| **"Effect exists"** (p ≤ 0.05) | Supports the claim                 | Undermines the claim          |
+| **"No effect"** (p > 0.05)     | Undermines the claim               | Supports the claim            |
+Fragility (fr) behaves differently:
 * **Low fr** (near 0): unstable — small outcome changes flip the significance classification
 * **High fr** (near 1): stable — the significance classification is well-supported
-  Unlike nb, fr is claim-invariant: higher fr always strengthens confidence in the observed classification — whether significant or nonsignificant — and lower fr always weakens it. Only nb's interpretation flips with the claim.
+Unlike nb, fr is claim-invariant: higher fr always strengthens confidence in the observed classification — whether significant or nonsignificant — and lower fr always weakens it. Only nb's interpretation flips with the claim.
 
 ---
 
 ## Part II: Quick Reference Table
-
-| Metric                                                       | Type                  | Scale                                                        | Primary/Secondary | Formula (core)                                               | Purpose                                                      |
-| ------------------------------------------------------------ | --------------------- | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **FQ**                                                       | Fragility             | 0–1                                                          | LEGACY            | FI / N                                                       | Proportion to flip (Walsh-derived, total N)                  |
-| **MFQ**                                                      | Fragility             | 0–1                                                          | PRIMARY           | FI / n_mod                                                   | Proportion to flip (arm-specific)                            |
-| **GFQ**                                                      | Fragility             | 0–1                                                          | PRIMARY           | GFI / N                                                      | Proportion to flip (global, r×c)                             |
-| **DFQ**                                                      | Fragility             | 0–1                                                          | PRIMARY           | DFI / n_relevant                                             | Proportion to flip (diagnostic)                              |
-| **BFQ**                                                      | Fragility             | 0–1                                                          | PRIMARY           | BFI / n_relevant (n_relevant = n)                            | Proportion to flip (single-arm vs benchmark)                 |
-| **CFQ**                                                      | Fragility             | 0–1                                                          | PRIMARY           | \|\|T\| − t\*\| / (1 + \|\|T\| − t\*\|)                      | SE-scaled distance to p = 0.05 (continuous)                  |
-| **PFI**                                                      | Fragility             | 0–1                                                          | PRIMARY           | 4 × \|x\| / N (x = fixed-margin path shift)                  | Independent-sample 2x2 sub-integer fragility                 |
-| **RQ**                                                       | Robustness            | 0–1                                                          | PRIMARY           | Σ\|O − E\| / [2N(m − 1)/m], m = min(r, c); for any 2×2 this equals Σ\|O − E\| / N = \|ad − bc\| / (N²/4) | Distance from independence                                   |
-| **sRQ**                                                      | Robustness            | −1–+1                                                        | PRIMARY           | 4(ad − bc) / N² (signed RQ; \|sRQ\| = RQ)                    | Signed distance from independence                            |
-| **wsRQ**                                                     | Robustness            | −1–+1                                                        | PRIMARY (meta)    | Σ(sRQ_i · w_i), w_i = N_i/ΣN                                 | Pooled signed meta-analytic robustness                       |
-| **wGFQ**                                                     | Fragility             | 0–1                                                          | PRIMARY (meta)    | Σ(GFQ_i · w_i), w_i = N_i/ΣN                                 | Pooled meta-analytic fragility                               |
-| **MHQ**                                                      | Robustness            | 0–1                                                          | PRIMARY (matched) | \|b − c\| / (b + c) or 0 if b + c = 0                        | Distance from marginal homogeneity                           |
-| **DNB**                                                      | Robustness            | 0–1                                                          | PRIMARY           | \|ln(DOR)\| / (1+\|ln(DOR)\|)                                | Diagnostic distance from neutrality                          |
-| **Proportion-NBF**                                           | Robustness            | 0–1                                                          | PRIMARY           | \|p̂ − p₀\| / (\|p̂ − p₀\| + √[p₀(1 − p₀)/n_relevant])         | Single-arm distance from benchmark / chance agreement        |
-| **MeCI**                                                     | Robustness            | 0–1                                                          | PRIMARY           | d / (1 + d) where d = min(\|μ₁−c\|, \|μ₂−c\|) / √(s₁²+s₂²), c = (s₁μ₂+s₂μ₁)/(s₁+s₂) | Continuous distance from neutrality                          |
-| **DTI**                                                      | Robustness            | 0–1                                                          | PRIMARY           | \|atanh(r)\| / (1 + \|atanh(r)\|)                            | Correlation distance from independence                       |
-| **ZFQ**                                                      | Fragility             | 0–1                                                          | PRIMARY           | \|Z − 1.96\| / (1 + \|Z − 1.96\|) where Z = \|atanh(r)\|√(n−3), n > 3 | Correlation classification stability (Fisher-z)              |
-| **OFQ**                                                      | Fragility             | 0–1                                                          | PRIMARY           | \|\|z_WMW\| − 1.96\| / (1 + \|\|z_WMW\| − 1.96\|)            | SE-scaled distance to p = 0.05 (ordinal)                     |
-| **ORQ**                                                      | Robustness            | 0–1                                                          | PRIMARY           | \|ln(gOR)\| / (1 + \|ln(gOR)\|)                              | Distance from neutrality (ordinal)                           |
-| **ANOVA-FQ**                                                 | Fragility             | 0–1                                                          | PRIMARY (k≥2)     | \|√F − √F*\| / (1 + \|√F − √F*\|)                            | Stability of F-classification                                |
-| **ANOVAη²**                                                  | Robustness            | 0–1                                                          | PRIMARY           | df_b·F / (df_b·F + df_w)                                     | Distance from equality of means                              |
-| **FI**                                                       | Count                 | 0–N                                                          | Secondary         | Toggle count (single-arm)                                    | Raw fragility count (binary)                                 |
-| **SFI**                                                      | Count                 | 0–N                                                          | Secondary         | Toggle count (standardized)                                  | Label-invariant count                                        |
-| **GFI**                                                      | Count                 | 0–N                                                          | Secondary         | Move count (global)                                          | Path-independent count                                       |
-| **FD**                                                       | Count (edit distance) | 0–∞                                                          | Secondary         | min # unit edits (add or remove one patient in any cell; N free) to cross p = 0.05 (Fisher) | Fragility distance: unconstrained L1 edit distance to the significance boundary |
-| **FDQ**                                                      | Fragility             | 0–1                                                          | Secondary         | min(1, FD / m), m = smallest margin of the observed table (n_A, n_B, a+c, b+d); flagged margin-limited when FD > m | Fragility distance as a fraction of the scarce margin (not on the GFQ scale) |
-| **aFD**                                                      | Count (edit distance) | 0–∞                                                          | Secondary         | FD search restricted to additions only (N grows)             | Addition-only edit distance; upper bound on FD               |
-| **dFD**                                                      | Count (edit distance) | 0–N                                                          | Secondary         | FD search restricted to deletions only (N shrinks)           | Deletion-only edit distance; upper bound on FD               |
-| **DFI**                                                      | Count                 | 0–N                                                          | Secondary         | Toggle count vs benchmark                                    | Diagnostic count                                             |
-| **NDI**                                                      | Count (robustness)    | 0–N/4                                                        | Secondary         | round(N·RQ/4) = round(\|ad − bc\|/N), clamped to reachability | Coupled fixed-margin moves to neutrality (RR = 1)            |
-| **CFS**                                                      | Distance              | 0–∞                                                          | Secondary         | \|\|T\| − t\*\|                                              | SE-unit distance to p = 0.05 (continuous)                    |
-| **SFM**                                                      | Scaling               | > 1                                                          | Secondary         | Factor k > 1 to flip (×k flips nonsignificant → significant; ÷k flips significant → nonsignificant) | Sample size fragility multiplier                             |
-| **UFI**                                                      | Unit                  | >0                                                           | LEGACY            | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                             | Step-size definitions (fixed-margin unit size)               |
-| **SFQ**                                                      | Fragility             | 0–1                                                          | PRIMARY           | \|\|z_HR\| − 1.96\| / (1 + \|\|z_HR\| − 1.96\|)              | SE-scaled distance to p = 0.05 (survival)                    |
-| **SRQ**                                                      | Robustness            | 0–1                                                          | PRIMARY           | \|ln(HR)\| / (1 + \|ln(HR)\|)                                | Distance from neutrality (survival)                          |
-| t* is the critical value from the t-distribution.            |                       |                                                              |                   |                                                              |                                                              |
-| F* is the critical F value at α = 0.05 for the reported df.  |                       |                                                              |                   |                                                              |                                                              |
-| m = min(r, c). The denominator 2N(m − 1)/m is the maximum of Σ | O − E                 | , attained under perfect association; for 2×2 it equals N, so 2×2 values are unchanged. |                   |                                                              |                                                              |
+| Metric            | Type       | Scale | Primary/Secondary     | Formula (core)                                                  | Purpose                                           |
+|-------------------|------------|-------|-----------------------|-----------------------------------------------------------------|---------------------------------------------------|
+| **FQ**            | Fragility  | 0–1   | LEGACY                | FI / N                                                          | Proportion to flip (Walsh-derived, total N)       |
+| **MFQ**           | Fragility  | 0–1   | PRIMARY               | FI / n_mod                                                      | Proportion to flip (arm-specific)                 |
+| **GFQ**           | Fragility  | 0–1   | PRIMARY               | GFI / N                                                         | Proportion to flip (global, r×c)                  |
+| **DFQ**           | Fragility  | 0–1   | PRIMARY               | DFI / n_relevant                                                | Proportion to flip (diagnostic)                   |
+| **BFQ**           | Fragility  | 0–1   | PRIMARY               | BFI / n_relevant (n_relevant = n)                               | Proportion to flip (single-arm vs benchmark)      |
+| **CFQ**           | Fragility  | 0–1   | PRIMARY               | \|\|T\| − t\*\| / (1 + \|\|T\| − t\*\|)                        | SE-scaled distance to p = 0.05 (continuous)       |
+| **PFI**           | Fragility  | 0–1   | PRIMARY               | 4 × \|x\| / N (x = fixed-margin path shift)                     | Independent-sample 2x2 sub-integer fragility      |
+| **RQ** | Robustness | 0–1 | PRIMARY | Σ\|O − E\| / [2N(m − 1)/m], m = min(r, c); for any 2×2 this equals Σ\|O − E\| / N = \|ad − bc\| / (N²/4) | Distance from independence |
+| **sRQ** | Robustness | −1–+1 | PRIMARY | 4(ad − bc) / N² (signed RQ; \|sRQ\| = RQ) | Signed distance from independence |
+| **wsRQ** | Robustness | −1–+1 | PRIMARY (meta) | Σ(sRQ_i · w_i), w_i = N_i/ΣN | Pooled signed meta-analytic robustness |
+| **wGFQ** | Fragility | 0–1 | PRIMARY (meta) | Σ(GFQ_i · w_i), w_i = N_i/ΣN | Pooled meta-analytic fragility |
+| **MHQ**           | Robustness | 0–1   | PRIMARY (matched)     | \|b − c\| / (b + c) or 0 if b + c = 0                           | Distance from marginal homogeneity                |
+| **DNB**           | Robustness | 0–1   | PRIMARY               | \|ln(DOR)\| / (1+\|ln(DOR)\|)                              | Diagnostic distance from neutrality               |
+| **Proportion-NBF**| Robustness | 0–1   | PRIMARY               | \|p̂ − p₀\| / (\|p̂ − p₀\| + √[p₀(1 − p₀)/n_relevant])          | Single-arm distance from benchmark / chance agreement |
+| **MeCI**          | Robustness | 0–1   | PRIMARY               | d / (1 + d) where d = min(\|μ₁−c\|, \|μ₂−c\|) / √(s₁²+s₂²), c = (s₁μ₂+s₂μ₁)/(s₁+s₂)                 | Continuous distance from neutrality               |
+| **DTI**           | Robustness | 0–1   | PRIMARY               | \|atanh(r)\| / (1 + \|atanh(r)\|)                               | Correlation distance from independence            |
+| **ZFQ**           | Fragility  | 0–1   | PRIMARY               | \|Z − 1.96\| / (1 + \|Z − 1.96\|) where Z = \|atanh(r)\|√(n−3), n > 3 | Correlation classification stability (Fisher-z)   |
+| **OFQ**           | Fragility  | 0–1   | PRIMARY               | \|\|z_WMW\| − 1.96\| / (1 + \|\|z_WMW\| − 1.96\|)               | SE-scaled distance to p = 0.05 (ordinal)          |
+| **ORQ**           | Robustness | 0–1   | PRIMARY               | \|ln(gOR)\| / (1 + \|ln(gOR)\|)                  | Distance from neutrality (ordinal)            |
+| **ANOVA-FQ**       | Fragility  | 0–1   | PRIMARY (k≥2)         | \|√F − √F*\| / (1 + \|√F − √F*\|)             | Stability of F-classification                |
+| **ANOVAη²**        | Robustness | 0–1   | PRIMARY               | df_b·F / (df_b·F + df_w)                      | Distance from equality of means              |
+| **FI**            | Count      | 0–N   | Secondary             | Toggle count (single-arm)                                       | Raw fragility count (binary)                      |
+| **SFI**           | Count      | 0–N   | Secondary             | Toggle count (standardized)                                     | Label-invariant count                             |
+| **GFI**           | Count      | 0–N   | Secondary             | Move count (global)                                             | Path-independent count                            |
+| **FD**          | Count (edit distance) | 0–∞ | Secondary        | min # unit edits (add or remove one patient in any cell; N free) to cross p = 0.05 (Fisher) | Fragility distance: unconstrained L1 edit distance to the significance boundary |
+| **FDQ**          | Fragility  | 0–1   | Secondary             | min(1, FD / m), m = smallest margin of the observed table (n_A, n_B, a+c, b+d); flagged margin-limited when FD > m | Fragility distance as a fraction of the scarce margin (not on the GFQ scale) |
+| **aFD**          | Count (edit distance) | 0–∞ | Secondary        | FD search restricted to additions only (N grows)              | Addition-only edit distance; upper bound on FD  |
+| **dFD**          | Count (edit distance) | 0–N | Secondary        | FD search restricted to deletions only (N shrinks)            | Deletion-only edit distance; upper bound on FD  |
+| **DFI**           | Count      | 0–N   | Secondary             | Toggle count vs benchmark                                       | Diagnostic count                                  |
+| **NDI**           | Count (robustness) | 0–N/4 | Secondary        | round(N·RQ/4) = round(\|ad − bc\|/N), clamped to reachability    | Coupled fixed-margin moves to neutrality (RR = 1)  |
+| **CFS**           | Distance   | 0–∞   | Secondary             | \|\|T\| − t\*\|                                                 | SE-unit distance to p = 0.05 (continuous)         |
+| **SFM**            | Scaling    | > 1 | Secondary            | Factor k > 1 to flip (×k flips nonsignificant → significant; ÷k flips significant → nonsignificant) | Sample size fragility multiplier                  |
+| **UFI**           | Unit       | >0    | LEGACY                | N/(n₁n₂) or 1/max(n₁, n₂) or 1/N                                | Step-size definitions (fixed-margin unit size)    |
+| **SFQ**           | Fragility  | 0–1   | PRIMARY               | \|\|z_HR\| − 1.96\| / (1 + \|\|z_HR\| − 1.96\|)                 | SE-scaled distance to p = 0.05 (survival)         |
+| **SRQ**           | Robustness | 0–1   | PRIMARY               | \|ln(HR)\| / (1 + \|ln(HR)\|)                     | Distance from neutrality (survival)          |
+|t* is the critical value from the t-distribution.||||||
+|F* is the critical F value at α = 0.05 for the reported df.||||||
+|m = min(r, c). The denominator 2N(m − 1)/m is the maximum of Σ|O − E|, attained under perfect association; for 2×2 it equals N, so 2×2 values are unchanged.||||
 
 ## Part III: PRIMARY FRAGILITY METRICS
 
 ### Core Concept
-
 **Naming rule (Walsh FI).** The 2014 single-arm toggle index is referred to as the Walsh FI (or, for the bidirectional minimum, the Heston FI). The adjective "classic" is banned as a name for it throughout canon, manuscripts, and code comments: it asserts stature, not definition. Refer to metrics by originator or by mechanism (single-arm toggle, transfer, edit).
 
 Fragility quotients measure the proportion of the sample (binary/diagnostic) or the proportion of SE-scale movement (continuous) required to flip statistical significance. All primary native fragility quotients range 0–1 (MFQ, GFQ, CFQ, SFQ, etc.). fr is the native fragility quotient for the design at hand, computed directly from the observed data. Cross-design percentile normalization is a deferred extension (see Part I), not part of the operational framework.
 
 ### 3.1 FQ — Fragility Quotient
-
 **Application**: Legacy metric for any binary outcome 2×2 table (independent samples) using total N denominator.
 **Definition**: Proportion of the total sample that must toggle to flip significance
 **Formula**: FQ = FI/N
@@ -251,7 +223,6 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Note**: FQ is a legacy metric and is not recommended as the primary fr metric for 2-arm binary outcome studies. GFQ is preferred (path-independent and label-invariant); when large N makes GFI computation intractable, MFQ is the fallback, which is allocation-fair (denominating against the arm actually modified) and label-resistant.
 
 ### 3.2 MFQ — Modified-arm Fragility Quotient ⭐
-
 **Application**: Fallback for independent-sample 2×2 binary outcome trials (any allocation ratio) when large sample size (≈5000+) makes GFI computation intractable, or when compatibility with the Walsh FI count is required.
 **Definition**: Proportion of the arm that was actually modified in the Walsh fragility index procedure required to flip statistical significance.
 **Formula**: MFQ = FI / n_mod, where n_mod = sample size of the arm subjected to toggling in the standard FI calculation (i.e., the arm with fewer events; if tied, the smaller arm).
@@ -263,7 +234,6 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Note**: For 2×2 binary outcome tables, GFQ is the recommended default (§3.3); use MFQ when GFI is computationally intractable at large N, or when comparability with the universally recognized FI count is needed. MFQ remains allocation-fair by denominating against the arm that actually needs to change. When MFQ is used, pair it as MFQ + RQ.
 
 ### 3.3 GFQ — Global Fragility Quotient ⭐
-
 **Application**: Recommended default and gold standard for any r×c contingency table or multinomial outcomes (independent samples), including 2×2 binary outcome trials.
 **Definition**: Proportion of sample involved in minimal cell moves
 **Formula**: GFQ = GFI/N
@@ -275,30 +245,25 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Note**: Considered the gold standard for binary and multinomial fragility assessment because of its path-independence and label-invariance, and it is the recommended default for 2×2 binary outcome tables. For large sample sizes (≈5000+), computing GFI becomes computationally intractable, and MFQ becomes the practical fallback for two-arm binary outcome studies (§3.2). The GFQ complements RQ, which measures robustness (distance from independence). Both should be reported together — GFQ + RQ is the standard pair for binary and multinomial outcomes. Both the GFI and the GFQ show label-invariance.
 
 ### 3.4 DFQ — Diagnostic Fragility Quotient ⭐
-
 **Application**: Diagnostic metrics from full 2×2 table (TP, FN, FP, TN) with ground truth.
 **Definition**: Proportion of the relevant subset of observations that must toggle to change the diagnostic classification (below vs not below benchmark) using a one-sided exact binomial test against p₀, paired with DNB.
 **Formula**: DFQ = DFI / n_relevant, where n_relevant depends on the metric:
-
 - Sensitivity: n_relevant = TP + FN (disease+)
 - Specificity: n_relevant = TN + FP (disease−)
 - PPV: n_relevant = TP + FP (test+)
 - NPV: n_relevant = TN + FN (test−)
 - ACCURACY (agreement with truth): n_relevant = TP + FN + FP + TN = N
-  **Range**: 0 to 1
-  **Interpretation**: For DFQ, **fr = DFQ** (e.g., DFQ = 0.06 means 6% of the relevant cases must change to flip the benchmark classification).
-  **Advantages**: Correctly targets the subset of observations that determine each diagnostic metric, and uses a one-sided exact test appropriate for benchmark comparisons.
-  **Base metric**: DFI (diagnostic fragility index)
-  **NBF pair**: DNB
-  **Note**: Uses a one-sided exact binomial test against the investigator-specified benchmark p₀:
-  H₀: p = p₀ vs H₁: p < p₀ (for “below benchmark” diagnostic standards); the direction may be reversed (H₁: p > p₀) when the claim is framed as meeting or exceeding the benchmark, matching the direction convention of BFQ (§3.5).
-  For agreement against chance, p₀ = 0.5 is standard. For PPV/NPV/ACCURACY, data should be normalized to 50% disease prevalence (see §3.4.1). DFQ assesses fragility (stability of the benchmark classification) for diagnostic metrics derived from a full 2×2 table with ground truth. It complements DNB, which measures robustness (distance of the diagnostic odds ratio from neutrality). Both should be reported together for diagnostic accuracy studies. **For single-arm benchmark analyses based only on (k, n, p₀), use BFQ + Proportion-NBF instead of DFQ + DNB.**
-
+**Range**: 0 to 1
+**Interpretation**: For DFQ, **fr = DFQ** (e.g., DFQ = 0.06 means 6% of the relevant cases must change to flip the benchmark classification).
+**Advantages**: Correctly targets the subset of observations that determine each diagnostic metric, and uses a one-sided exact test appropriate for benchmark comparisons.
+**Base metric**: DFI (diagnostic fragility index)
+**NBF pair**: DNB
+**Note**: Uses a one-sided exact binomial test against the investigator-specified benchmark p₀:
+H₀: p = p₀ vs H₁: p < p₀ (for “below benchmark” diagnostic standards); the direction may be reversed (H₁: p > p₀) when the claim is framed as meeting or exceeding the benchmark, matching the direction convention of BFQ (§3.5).
+For agreement against chance, p₀ = 0.5 is standard. For PPV/NPV/ACCURACY, data should be normalized to 50% disease prevalence (see §3.4.1). DFQ assesses fragility (stability of the benchmark classification) for diagnostic metrics derived from a full 2×2 table with ground truth. It complements DNB, which measures robustness (distance of the diagnostic odds ratio from neutrality). Both should be reported together for diagnostic accuracy studies. **For single-arm benchmark analyses based only on (k, n, p₀), use BFQ + Proportion-NBF instead of DFQ + DNB.**
 #### 3.4.1 Prevalence Normalization for PPV/NPV/ACCURACY (Standard Procedure)
-
 **Rationale**: We cannot compare a test's PPV/NPV/ACCURACY across studies unless the underlying prevalence is normalized. Since clinical testing is most helpful when diagnostic uncertainty is high (pretest ≈ 50%), prevalence is set to 50%.
 **Procedure**:
-
 - Identify minority class: min(n_disease+, n_disease−)
 - Scale the majority class to match the minority, preserving its internal ratio:
   - If scaling disease−: maintain FP:TN
@@ -308,35 +273,32 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 - DFQ = DFI / n_relevant_normalized
 
 ### 3.5 BFQ — Benchmark Fragility Quotient ⭐
-
 **Application**: Single-arm benchmark tests and agreement vs benchmark when only (k, n, p₀) are available. Typical use cases:
 a) Single-arm response rate vs a benchmark proportion p₀
 b) Single-rater agreement vs chance (p₀ = 0.5) or another target benchmark when the full TP/FN/FP/TN table is not available
 **Definition**: Proportion of observations in a single-arm proportion that must toggle (success ↔ failure) to change the benchmark classification under a one-sided exact binomial test.
 **Formula**: BFQ = BFI / n_relevant, where:
-
 - n_relevant = n (denominator of the observed proportion)
 - BFI = minimal number of success/failure toggles that flips the one-sided exact binomial test classification at the benchmark proportion p₀
-  **Test**: One-sided exact binomial test vs benchmark p₀
+**Test**: One-sided exact binomial test vs benchmark p₀
 - H₀: p = p₀
 - H₁: p > p₀ (for “above benchmark” claims; direction may be reversed if the benchmark is framed as a maximum allowable rate).
-  **Range**: 0 to 1
-  **Interpretation**: fr = BFQ (e.g., BFQ = 0.08 means 8% of the observations in the single-arm proportion must change to flip the benchmark decision).
-  **Advantages**:
+**Range**: 0 to 1
+**Interpretation**: fr = BFQ (e.g., BFQ = 0.08 means 8% of the observations in the single-arm proportion must change to flip the benchmark decision).
+**Advantages**:
 - Establishes the fragility of a single-arm test, giving a success rate vs the benchmark.
 - Applies when only (k, n, p₀) are available (no full diagnostic 2×2 table).
 - Mirrors the DFQ logic but in a single-arm setting.
 - Uses the same exact binomial test that defines the underlying benchmark decision.
-  **Base metric**: BFI (Benchmark Fragility Index) = minimal number of success/failure toggles required to change the benchmark classification under the specified one-sided exact binomial test.
-  **NBF pair**: Proportion-NBF
-  **Note**: Use BFQ when the analysis is “proportion/agreement vs a benchmark” based only on (k, n, p₀). For full diagnostic accuracy studies with TP/FN/FP/TN and a diagnostic odds ratio, use **DFQ + DNB** instead.
-  **Common applications:**
+**Base metric**: BFI (Benchmark Fragility Index) = minimal number of success/failure toggles required to change the benchmark classification under the specified one-sided exact binomial test.
+**NBF pair**: Proportion-NBF
+**Note**: Use BFQ when the analysis is “proportion/agreement vs a benchmark” based only on (k, n, p₀). For full diagnostic accuracy studies with TP/FN/FP/TN and a diagnostic odds ratio, use **DFQ + DNB** instead.
+**Common applications:**
 - Single-arm response rates vs historical control
 - Agreement vs chance (p₀ = 0.5) when no ground truth available
 - Any proportion vs pre-specified benchmark
 
 ### 3.6 PFI — Percent Fragility Index⭐
-
 **Application:** independent-sample binary 2×2 trials (continuous analog of FI/SFI/UFI for sub-integer fragility resolution).
 **Definition:** Proportion of one balanced cell's expected count that must be reallocated along a fixed-margin perturbation path to flip the Pearson chi-square significance classification in an independent-sample 2×2 design.
 **Formula:** PFI = |x| / (N/4) = 4|x| / N, where x is the smallest margin-preserving change in the four cells, applied along the path (a+x, b−x, c−x, d+x), that flips the two-sided Pearson chi-square decision across the α = 0.05 boundary (sign ignored), and N/4 is the expected count per cell in a perfectly balanced 2×2 under independence. For reporting, PFI is conventionally multiplied by 100 and expressed as a percent (e.g., PFI = 0.02 is reported as 2%).
@@ -347,18 +309,15 @@ b) Single-rater agreement vs chance (p₀ = 0.5) or another target benchmark whe
 **Base metric:** x (minimal margin-preserving cell perturbation along the fixed-margin path)
 **NBF pair:** RQ
 **Note:** The fixed-margin path is a sensitivity construct, not a claim that the trial had fixed margins by design. It holds row sums (arm sizes) and column sums (total events) constant so that any admissible change is a coupled diagonal exchange, isolating sensitivity to proportional redistribution. The continuous (chi-square) criterion is required for sub-integer resolution; PFI is a descriptive evidence-quality metric, not an inferential test, so the perturbation geometry and the significance criterion need not share a single likelihood. For strictly matched-pair or crossover designs in which both margins are fixed by the design itself, McNemar-based fragility (with MHQ robustness) is the design-coherent choice; PFI as defined here targets the independent-sample case.
-
 - Boundary-limited cases: When the feasible shift range along the fixed-margin path is exhausted before the chi-square p-value can cross α = 0.05 (e.g., the table is already at maximal directional imbalance), no admissible perturbation flips significance. In these cases, PFI returns the maximum feasible proportion along the path, capped at 1.0 (100%), and is flagged "boundary-limited," indicating maximal stability of the current classification under the fixed-margin constraint.
 - PFI values are not numerically comparable to GFQ or MFQ because they assess fragility under different perturbation models and significance criteria.
 - Sub-integer realizability (Type C, 2026-07-11): the perturbed intermediate table (a+x, b−x, c−x, d+x) with non-integer x is **not** itself a realizable contingency table, and PFI does not claim it is. Here x is a *distance to the significance boundary* measured in proportional-reallocation units, not a count of changed patients — in the same sense that a p-value is a continuous functional of a discrete table with no single realizable table sitting exactly 'at' p = 0.0493. The concrete gain over the integer fragility index is resolution within ties: many trials share FI = 1 or FI = 2 yet differ in how close they truly sit to α = 0.05, and PFI orders them. This is precisely why PFI is reported as a descriptive evidence-quality metric rather than an inferential test — it quantifies boundary proximity on a continuous scale, and its usefulness does not depend on the intermediate table being realizable.
 - PFI-M = McNemar-path fragility = the McNemar-test variant of PFI for matched-pair designs; identical path construction, McNemar χ² in place of Pearson χ². Note that along this path b and c change by the same amount, so the McNemar numerator (b − c)² is invariant; significance flips only through the change in the discordant-pair total (b + c − 2x). PFI-M therefore probes a narrower perturbation space than PFI.
 
 ### Distance-to-Critical-Value Family (§3.7–3.11)
-
 Sections §3.7–3.11 are one construct — the bounded distance from the test statistic to its α = 0.05 critical value, fr = δ/(1 + δ) with δ = |stat − crit| — instantiated per design: continuous (CFQ), multi-group (ANOVA-FQ), correlation (ZFQ), ordinal (OFQ), and survival (SFQ). The umbrella is conceptual; the per-design instances below are what you compute.
 
 ### 3.7 CFQ — Continuous Fragility Quotient ⭐
-
 **Application**: trials comparing two continuous outcomes where m₁, m₂, s₁, s₂, n₁, n₂ are all known.
 **Definition**: Proportion of an SE-scaled shift in the estimated mean difference required to flip statistical significance in a two-sample continuous comparison (Welch t-test).
 **Formula**: Let
@@ -383,15 +342,13 @@ Continuous Fragility Quotient: CFQ = CFS / (1 + CFS).
 **Note**: CFQ assesses fragility (stability of significance). It complements MeCI, which assesses robustness (distance from neutrality). Both should be reported for continuous outcomes. CI-only implementation note: When only a 95% CI for the mean difference is available, T and SE are reconstructed using a large-sample z-based approximation (t ≈ 1.96). Under this approximation, p and CFS/CFQ values are asymptotic. MeCI cannot be computed from a mean-difference CI alone because the crossover-point formula requires separate group means and SDs; in CI-only scenarios, report CFQ alone or reconstruct group-level summary statistics where possible.
 **Note on Paired/Matched Data:**
 For crossover trials, pre-post measurements, or matched pairs, the CFQ formula applies directly using the paired t-statistic:
-
 - T_paired = mean_diff / (s_diff / √n)
 - Degrees of freedom = n − 1 (paired)
 - CFS = | |T_paired| − t* |
 - CFQ = CFS / (1 + CFS)
-  For MeCI in paired designs, compute the crossover point between the two measurement conditions (e.g., pre/post means and SDs, or crossover arms 1/2) using the standard crossover-point formula c = (s₁·μ₂ + s₂·μ₁)/(s₁+s₂), then MeCI = d/(1+d) where d = min(|μ₁−c|, |μ₂−c|) / √(s₁²+s₂²). MeCI in paired designs uses the group-level summary statistics of the two conditions, not the paired-differences summary.
+For MeCI in paired designs, compute the crossover point between the two measurement conditions (e.g., pre/post means and SDs, or crossover arms 1/2) using the standard crossover-point formula c = (s₁·μ₂ + s₂·μ₁)/(s₁+s₂), then MeCI = d/(1+d) where d = min(|μ₁−c|, |μ₂−c|) / √(s₁²+s₂²). MeCI in paired designs uses the group-level summary statistics of the two conditions, not the paired-differences summary.
 
 ### 3.8 ANOVA-FQ — ANOVA Fragility Quotient  ⭐
-
 **Application**: One-way ANOVA with k ≥ 2 independent groups (continuous outcome, equal or unequal variances assumed by the reported F-test).
 **Definition**: Bounded (0–1) distance in √F space from the α = 0.05 classification boundary. At k = 2, √F space coincides exactly with the SE-scaled t space of CFQ; for k > 2 it serves as the analogous distance scale.
 **Formula**:
@@ -401,18 +358,16 @@ where F* is the critical F value at α = 0.05 for the reported (df_b, df_w).
 **Range**: 0 to 1
 **Interpretation**: fr = ANOVA-FQ (higher = more stable classification)
 **Advantages**:
-
 - Model-free (uses only reported F and df)
 - Path-independent (√F geometry is unique)
 - Reduces exactly to CFQ when k = 2 and the F-test and t-test share the same variance assumption: a pooled-variance F reduces to the pooled-variance Student-t form of CFS (F = t² → √F = |t|, and √F* = t*); a Welch F reduces to the Welch-based CFQ as defined in §3.7. When variance assumptions differ (pooled-variance F vs Welch CFQ under heteroscedasticity), the correspondence is approximate, not exact.
 - Completes the p–fr–nb triplet for one-way ANOVA designs
-  **Base metric**: ANOVA-FS (raw fragility score in √F units)
-  **NBF pair**: ANOVAη² (official robustness metric, unchanged)
-  **Note**: Supersedes previous v9.6 statement that “no model-free fragility exists for k>2”. The √F transformation provides a canonical, assumption-free distance metric that satisfies all framework requirements. Effective v10.0, one-way ANOVA has a complete p–fr–nb triplet.
-  **Reference**: Heston TF. Extending the Fragility Quotient to Multi-Group ANOVA via √F Geometry. (in preparation, 2025)
+**Base metric**: ANOVA-FS (raw fragility score in √F units)
+**NBF pair**: ANOVAη² (official robustness metric, unchanged)
+**Note**: Supersedes previous v9.6 statement that “no model-free fragility exists for k>2”. The √F transformation provides a canonical, assumption-free distance metric that satisfies all framework requirements. Effective v10.0, one-way ANOVA has a complete p–fr–nb triplet.
+**Reference**: Heston TF. Extending the Fragility Quotient to Multi-Group ANOVA via √F Geometry. (in preparation, 2025)
 
 ### 3.9 ZFQ — Fisher-z Fragility Quotient (Correlation) ⭐
-
 **Application**: Pearson or Spearman correlation reported as (r, n), with n > 3 and |r| < 1.
 **Definition**: Symmetric fragility metric measuring distance from the α = 0.05 classification boundary in Fisher-z space.
 **Formula**:
@@ -429,23 +384,21 @@ where F* is the critical F value at α = 0.05 for the reported (df_b, df_w).
 **Note**: Completes the p–fr–nb triplet for correlation analyses. ZFQ measures classification stability; DTI measures robustness (distance from independence). Both required for complete correlation evidence assessment.
 
 ### 3.10 OFQ — Ordinal Fragility Quotient ⭐
-
 **Application**: Ordinal outcomes analyzed via Wilcoxon-Mann-Whitney test, proportional odds models, or ordinal logistic regression (e.g., modified Rankin Scale, NIHSS, pain scales, functional status scores).
 **Definition**: Proportion of SE-scaled shift in the ordinal test z-statistic required to flip statistical significance for ordinal outcomes.
 **Formula**: Let gOR = generalized odds ratio (common odds ratio from proportional odds model), with 95% CI [CI_lower, CI_upper], where gOR, CI_lower, and CI_upper are all > 0.
 Calculate:
-
 - ln(gOR) = natural log of the generalized odds ratio
 - SE_log_gOR ≈ [ln(CI_upper) − ln(CI_lower)] / (2 × 1.96) (standard error reconstructed from the confidence interval)
 - z ≈ ln(gOR) / SE_log_gOR (Wald z-statistic for ln(gOR); under the proportional odds assumption this approximates the Wilcoxon-Mann-Whitney z-statistic, denoted z_WMW)
-  Then:
-  **OFQ = | |z_WMW| − 1.96 | / (1 + | |z_WMW| − 1.96 |)**
-  **Range**: 0 to 1
-  **Interpretation**: fr = OFQ. Example: OFQ = 0.33 means the z-statistic is moderately far from the p = 0.05 boundary on the OFQ scale; higher values indicate more stable significance classification (significant or non-significant).
-  **Advantages**: Works directly from reported gOR and 95% CI (standard reporting for ordinal outcomes). No raw data, ranks, or distributional assumptions beyond proportional odds required. Extends the fragility framework to ordinal shift analysis.
-  **Base metric**: | |z_WMW| − 1.96 | (raw distance in z-statistic units to the two-sided significance boundary)
-  **NBF pair**: ORQ
-  **Note**: OFQ assesses fragility (stability of significance classification) for ordinal outcomes. It complements ORQ, which measures robustness (distance from neutrality). Both should be reported together for ordinal outcome studies. Structurally identical to CFQ (continuous), ANOVA-FQ (multi-group), and ZFQ (correlation). Because z is reconstructed from the CI via a Wald approximation, OFQ values are asymptotic; when the exact WMW z-statistic is reported directly, use it in place of the CI reconstruction.
+Then:
+**OFQ = | |z_WMW| − 1.96 | / (1 + | |z_WMW| − 1.96 |)**
+**Range**: 0 to 1
+**Interpretation**: fr = OFQ. Example: OFQ = 0.33 means the z-statistic is moderately far from the p = 0.05 boundary on the OFQ scale; higher values indicate more stable significance classification (significant or non-significant).
+**Advantages**: Works directly from reported gOR and 95% CI (standard reporting for ordinal outcomes). No raw data, ranks, or distributional assumptions beyond proportional odds required. Extends the fragility framework to ordinal shift analysis.
+**Base metric**: | |z_WMW| − 1.96 | (raw distance in z-statistic units to the two-sided significance boundary)
+**NBF pair**: ORQ
+**Note**: OFQ assesses fragility (stability of significance classification) for ordinal outcomes. It complements ORQ, which measures robustness (distance from neutrality). Both should be reported together for ordinal outcome studies. Structurally identical to CFQ (continuous), ANOVA-FQ (multi-group), and ZFQ (correlation). Because z is reconstructed from the CI via a Wald approximation, OFQ values are asymptotic; when the exact WMW z-statistic is reported directly, use it in place of the CI reconstruction.
 
 ### 3.11 SFQ — Survival Fragility Quotient ⭐
 
@@ -453,12 +406,11 @@ Calculate:
 **Definition**: Proportion of SE-scaled shift in the Cox regression z-statistic required to flip statistical significance for survival outcomes.
 **Formula**: Let HR = hazard ratio from Cox regression, with 95% CI [CI_lower, CI_upper].
 Calculate:
-
 - ln(HR) = natural log of the hazard ratio
 - SE_ln_HR ≈ [ln(CI_upper) - ln(CI_lower)] / (2 × 1.96) (standard error from confidence interval)
 - z_HR = ln(HR) / SE_ln_HR (Cox z-statistic)
-  Then:
-  **SFQ = | |z_HR| − 1.96 | / (1 + | |z_HR| − 1.96 |)**
+Then:
+**SFQ = | |z_HR| − 1.96 | / (1 + | |z_HR| − 1.96 |)**
 
 **Range**: 0 to 1
 **Interpretation**: fr = SFQ. Example: SFQ = 0.15 means the z-statistic is relatively close to the p = 0.05 boundary on the SFQ scale; higher values indicate more stable significance classification.
@@ -477,6 +429,8 @@ Calculate:
 **Interpretation**: 0 = at neutrality, 1 = maximally separated.
 
 **Distance-from-neutrality transform family.** DTI, ORQ, SRQ, and DNB share one construct — a bounded, sign-agnostic distance from neutrality of the form |g(θ)|/(1 + |g(θ)|), where g is a variance-stabilizing transform of the effect estimate θ (atanh for correlation r; ln for the ratio metrics gOR, HR, DOR). One idea, instantiated per design; each keeps its own θ, and each is computed from the effect estimate alone, not its precision.  
+
+**The NNT analogy.** NBF is to effect sizes what the number needed to treat (NNT) is to the absolute risk reduction: no new information, a repackaging onto the scale where decisions are made. NNT is algebraically nothing more than 1/ARR, yet it became indispensable because it moved the same quantity onto the scale where clinical judgment operates. NBF makes the identical move for distance from neutrality. Each metric is a monotone transform of a familiar effect estimate — RQ is a normalized cross-product distance related to the phi coefficient; SRQ, ORQ, and DNB are bounded log-ratios; DTI is a bounded Fisher z — and the contribution is the common bounded scale and the claim-dependent reading, not new mathematics. The comparison limit travels with the analogy: nb supports numerical comparison within a design family; across designs it supplies a common interpretive language (near / intermediate / far), not equivalent numbers.
 
 ### 4.1 RQ — Risk Quotient ⭐
 
@@ -508,7 +462,6 @@ Calculate:
 **Definition**: NBF-based robustness metric measuring the diagnostic odds ratio's (DOR) distance from neutrality.  
 **Formula**: DNB = |ln(DOR)| / (1 + |ln(DOR)|)  
 where:  
-
 - DOR = (TP × TN) / (FP × FN)  
 
 **Range**: 0 to 1.  
@@ -566,15 +519,14 @@ where:
 **Application**: Single-arm proportion vs benchmark analyses (e.g., single-arm response rates or agreement vs benchmark) when only k, n_relevant, and p₀ are available.  
 **Definition**: Proportion-NBF measures geometric distance between an observed single-arm proportion and a benchmark proportion p₀. It is the NBF counterpart to BFQ when only k, n_relevant, and p₀ are available.  
 **Formula**: 
-
 - Let k = number of successes, n_relevant = total number of trials, p̂ = observed_proportion = k / n_relevant, p₀ = benchmark proportion used in the one-sided exact binomial test, and S = √[ p₀ × (1 − p₀) ]  (fixed, sample-independent scale; provisional — see changelog). 
 - Then:  Proportion-NBF = |p̂ − p₀| / (|p̂ − p₀| + S).  
-  **Range**: 0 to 1.  
-  **Interpretation**: Identical to all NBF metrics. Values near 0 indicate data lying on the neutrality boundary. Values above 0.50 reflect far separation from neutrality.  
-  **Neutrality**: p̂ = p₀.  
-  **Pairs with**: BFQ  
-  **Note**: This metric is the geometric robustness partner to BFQ for single-proportion benchmark tests and generalizes the Agreement-NBF structure to arbitrary p₀. The special case p₀ = 0.5 corresponds to agreement vs chance (previously referred to as “Agreement-NBF”). Used for single-arm response rates compared with a benchmark p₀. Inputs: k (successes), n_relevant (denominator), p₀ (benchmark).
-  **Common applications:**
+**Range**: 0 to 1.  
+**Interpretation**: Identical to all NBF metrics. Values near 0 indicate data lying on the neutrality boundary. Values above 0.50 reflect far separation from neutrality.  
+**Neutrality**: p̂ = p₀.  
+**Pairs with**: BFQ  
+**Note**: This metric is the geometric robustness partner to BFQ for single-proportion benchmark tests and generalizes the Agreement-NBF structure to arbitrary p₀. The special case p₀ = 0.5 corresponds to agreement vs chance (previously referred to as “Agreement-NBF”). Used for single-arm response rates compared with a benchmark p₀. Inputs: k (successes), n_relevant (denominator), p₀ (benchmark).
+**Common applications:**
 - Pairs with BFQ for single-arm response rates
 - Agreement studies (p₀ = 0.5 for chance agreement)
 - Any single-proportion benchmark comparison
@@ -760,7 +712,6 @@ Base metric for CFQ.
 ## Part VII: Rarely Used and Outdated Secondary Metrics
 
 ### **RRI — Relative Risk Index**
-
 **Definition**: Raw geometric distance from independence in a multinomial table, defined as the average absolute difference between observed and expected cell counts.  
 **Formula**: RRI = (1/k) Σ|O − E|, where k is the number of cells (k = r×c), O are observed counts, and E are expected counts under independence.  
 **Output**: Distance value → RQ = k·RRI / [2N(m − 1)/m], m = min(r, c); since k·RRI = Σ|O − E|, this equals the general RQ of §4.1. The shortcut RQ = RRI / (N/k) = Σ|O − E| / N holds only when m = 2 (any 2×c or r×2 table, including 2×2), where 2N(m − 1)/m reduces to N; for min(r, c) ≥ 3 it does not, and the general form applies.  
@@ -795,7 +746,6 @@ defining the smallest allowable perturbation under fixed row/column totals.
 Given unit size f, Walter defines UFI as the minimum number k of these fixed-margin unit shifts required to reverse significance.  
 
 **Output**:  
-
 - Feinstein UFI: the unit size f.  
 - Walter UFI: the toggle count k, giving total shift k·f.  
 
@@ -828,20 +778,20 @@ Interpretation depends on the claim being made:
 
 #### If claiming "EFFECT EXISTS" (typically p ≤ 0.05)  
 
-| Metric         | Desirable                      | Problematic             |
-| -------------- | ------------------------------ | ----------------------- |
-| **Fragility**  | High quotient (stable p-value) | Low quotient (unstable) |
-| **Robustness** | High NBF (far from neutral)    | Low NBF (near neutral)  |
+| Metric          | Desirable                      | Problematic                 |   
+| --------------- | ------------------------------ | --------------------------- |   
+| **Fragility**   | High quotient (stable p-value) | Low quotient (unstable)     |   
+| **Robustness**  | High NBF (far from neutral)    | Low NBF (near neutral)      |  
 
 **Best case**: High fragility quotient + High robustness  
 **Worst case**: Low fragility quotient + Low robustness  
 
 #### If claiming "NO EFFECT" (typically p > 0.05)  
 
-| Metric         | Desirable                      | Problematic                 |
-| -------------- | ------------------------------ | --------------------------- |
-| **Fragility**  | High quotient (stable p-value) | Low quotient (unstable)     |
-| **Robustness** | Low NBF (near neutral)         | High NBF (far from neutral) |
+| Metric         | Desirable                      | Problematic                  |  
+| -------------- | ------------------------------ | ---------------------------- |  
+| **Fragility**  | High quotient (stable p-value) | Low quotient (unstable)      |  
+| **Robustness** | Low NBF (near neutral)         | High NBF (far from neutral)  |  
 
 **Best case**: High fragility quotient + Low robustness  
 **Worst case**: Low fragility quotient + High robustness  
@@ -850,7 +800,6 @@ Interpretation depends on the claim being made:
 ### The Exam Analogy: Understanding the p–fr–nb Triplet
 
 To understand complete statistical evidence, consider an exam where:
-
 - **Passing score** = 60% (analogous to α = 0.05)
 - **Your score** = How far from the pass/fail boundary you landed (analogous to **fragility**)
 - **Your mastery** = How much you actually know, independent of this particular test (analogous to **robustness**)
@@ -863,25 +812,25 @@ These can diverge. A knowledgeable student can score poorly (bad luck on questio
 
 #### Passed the Exam (p ≤ 0.05)
 
-| Score | Mastery | Triplet                                         | Interpretation                                               |
-| ----- | ------- | ----------------------------------------------- | ------------------------------------------------------------ |
-| 61%   | 30%     | p-sig, fr-unstable, nb-near **(Pattern 1,1,0)** | **Barely passed with minimal knowledge.** The pass is legitimate but mastery is negligible. **Thin evidence**—potentially real mastery, but trivial competence. Do not certify for practice. |
-| 61%   | 55%     | p-sig, fr-unstable, nb-intermediate             | Barely passed, knows something. **Inconclusive**—may or may not replicate. |
-| 61%   | 85%     | p-sig, fr-unstable, nb-far                      | Barely passed despite strong knowledge. Unlucky draw of questions. **Underpowered true positive**—effect is real but study was too small to detect it reliably. |
-| 85%   | 30%     | p-sig, fr-stable, nb-near                       | Passed easily but knows little. Test was too easy. **Statistically robust but trivial mastery**—overpowered detection of negligible competence. |
-| 85%   | 55%     | p-sig, fr-stable, nb-intermediate               | Solid pass, moderate knowledge. **Good evidence of real, modest mastery.** |
-| 85%   | 85%     | p-sig, fr-stable, nb-far                        | Clear pass, clear mastery. **Compelling evidence. This is the goal.** |
+| Score | Mastery | Triplet | Interpretation |
+|-------|---------|---------|----------------|
+| 61% | 30% | p-sig, fr-unstable, nb-near **(Pattern 1,1,0)** | **Barely passed with minimal knowledge.** The pass is legitimate but mastery is negligible. **Thin evidence**—potentially real mastery, but trivial competence. Do not certify for practice. |
+| 61% | 55% | p-sig, fr-unstable, nb-intermediate | Barely passed, knows something. **Inconclusive**—may or may not replicate. |
+| 61% | 85% | p-sig, fr-unstable, nb-far | Barely passed despite strong knowledge. Unlucky draw of questions. **Underpowered true positive**—effect is real but study was too small to detect it reliably. |
+| 85% | 30% | p-sig, fr-stable, nb-near | Passed easily but knows little. Test was too easy. **Statistically robust but trivial mastery**—overpowered detection of negligible competence. |
+| 85% | 55% | p-sig, fr-stable, nb-intermediate | Solid pass, moderate knowledge. **Good evidence of real, modest mastery.** |
+| 85% | 85% | p-sig, fr-stable, nb-far | Clear pass, clear mastery. **Compelling evidence. This is the goal.** |
 
 #### Failed the Exam (p > 0.05)
 
-| Score | Mastery | Triplet                                | Interpretation                                               |
-| ----- | ------- | -------------------------------------- | ------------------------------------------------------------ |
-| 59%   | 30%     | p-nonsig, fr-unstable, nb-near         | Barely failed, doesn't know much. **Probably true negative**, but the verdict does not hold. |
-| 59%   | 55%     | p-nonsig, fr-unstable, nb-intermediate | Barely failed, knows something. **Inconclusive**—needs more data. |
-| 59%   | 85%     | p-nonsig, fr-unstable, nb-far          | Barely failed despite strong knowledge. Bad luck on questions. **Likely false negative**—effect exists but was missed. |
-| 45%   | 30%     | p-nonsig, fr-stable, nb-near           | Clearly failed, doesn't know much. **Strong evidence of no meaningful competence. True negative.** |
-| 45%   | 55%     | p-nonsig, fr-stable, nb-intermediate   | Clearly failed but has some knowledge. **Underpowered**—a real effect may have been missed. |
-| 45%   | 85%     | p-nonsig, fr-stable, nb-far            | Clearly failed despite clearly knowing material. **Severely underpowered**—test design was fundamentally inadequate to assess this student. |
+| Score | Mastery | Triplet | Interpretation |
+|-------|---------|---------|----------------|
+| 59% | 30% | p-nonsig, fr-unstable, nb-near | Barely failed, doesn't know much. **Probably true negative**, but the verdict does not hold. |
+| 59% | 55% | p-nonsig, fr-unstable, nb-intermediate | Barely failed, knows something. **Inconclusive**—needs more data. |
+| 59% | 85% | p-nonsig, fr-unstable, nb-far | Barely failed despite strong knowledge. Bad luck on questions. **Likely false negative**—effect exists but was missed. |
+| 45% | 30% | p-nonsig, fr-stable, nb-near | Clearly failed, doesn't know much. **Strong evidence of no meaningful competence. True negative.** |
+| 45% | 55% | p-nonsig, fr-stable, nb-intermediate | Clearly failed but has some knowledge. **Underpowered**—a real effect may have been missed. |
+| 45% | 85% | p-nonsig, fr-stable, nb-far | Clearly failed despite clearly knowing material. **Severely underpowered**—test design was fundamentally inadequate to assess this student. |
 
 #### Why Score and Mastery Diverge  
 
@@ -897,28 +846,38 @@ Thresholds are recommendations and still require empirical validation and should
 
 #### Fragility Quotients (dichotomous)
 
-Numeric fragility cutoffs (for example, an MFQ "unstable vs stable" threshold) are under validation and are omitted here pending publication. Interpret fr qualitatively — lower = less stable, higher = more stable — within each design family.
+**Fragility bands.** A result is classified **unstable** when **GFI = 1 or GFQ < 0.01**, and **stable** otherwise.
+
+**GFI = 1 is unstable by definition.** Above the small-N floor it is the smallest perturbation the metric admits, so a single patient recorded differently reverses the significance classification.
+
+**GFQ < 0.01 is a declared convention, not a derived value.** Its rationale is tolerance: a finding that does not survive a 1% reallocation of its sample is less stable than the error rates medicine accepts elsewhere. The threshold is deliberately lenient and under-counts rather than over-counts instability — GFQ < 0.01 alone classifies 27% of the 164-table reference corpus as unstable, against 73% at 0.05. It is revisable as evidence accumulates.
+
+The two conditions cover disjoint cases: GFI = 1 with GFQ ≥ 0.01 occurs exactly when N ≤ 100.
+
+The band is stated for GFQ, the recommended default quotient for 2×2 tables (§3.3). Native quotients for other designs are not on the GFQ scale and are still interpreted qualitatively — lower = less stable, higher = more stable — within each design family.
 
 #### Robustness: rounded tertiles (n=118 real trials + 1 M simulated trials)
 
 **RQ Percentiles (1M mixed simulated trials)**
 
-| 1%     | 5%     | 10%    | 25%    | 33%        | 50%    | 67%        | 75%    | 90%    | 95%    | 99%    |
-| ------ | ------ | ------ | ------ | ---------- | ------ | ---------- | ------ | ------ | ------ | ------ |
-| 0.0018 | 0.0092 | 0.0188 | 0.0525 | **0.0746** | 0.1358 | **0.2274** | 0.2875 | 0.4322 | 0.4942 | 0.5825 |
+|    1% | 5% | 10% |   25% |   33% |   50% |   67% |   75% |   90% |   95% |   99% |  
+|----|---|---|----|-----|-----|-----|----|----|-----|-----|  
+| 0.0018 | 0.0092 | 0.0188| 0.0525| **0.0746**| 0.1358| **0.2274**| 0.2875| 0.4322| 0.4942| 0.5825 |  
 
 Proposed Empirical Cutoffs:  
 Near (close to neutrality):    RQ <  0.075   
 Intermediate:                  RQ  0.075  -  0.227   
 Far (far from neutrality):     RQ >  0.227   
 
-| Range       | Distance from Neutrality                   |
-| ----------- | ------------------------------------------ |
-| < 0.075     | **Near** — close to neutrality             |
-| 0.075-0.227 | **Intermediate** — intermediate separation |
-| ≥ 0.227     | **Far** — far from neutrality              |
+| Range     | Distance from Neutrality |  
+| --------- | ------------------------ |  
+| < 0.075    | **Near** — close to neutrality   |  
+| 0.075-0.227 | **Intermediate** — intermediate separation   |  
+| ≥ 0.227    | **Far** — far from neutrality      |  
 
 **Terminology note**: These bands are named **near / intermediate / far** to describe the distance being measured. The earlier labels weak / moderate / strong are deprecated: they implied that a low nb was an inferior result, when a low nb paired with a stable, nonsignificant result is in fact the favorable pattern for a no-effect claim.
+
+**Retired pattern names**: Patterns are named significance-fragility-robustness using the current labels, as in **significant-unstable-near**. The earlier **significant-fragile-weak (SFW)** form is retired. It denotes the same pattern and appears throughout the published corpus, including the hub paper; cite it as significant-unstable-near going forward.
 
 
 ### Strength-of-Evidence under the p–fr–nb framework  
@@ -927,47 +886,46 @@ The following strength-of-evidence tables are calibrated for 2×2 binary trials 
 
 **When p ≤ 0.05 (statistically significant)**
 
-| Fragility    | Robustness        | Interpretation                               | Diagnosis                                                    | Action                                                       |
-| ------------ | ----------------- | -------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **Stable**   | **Far** (RQ high) | Significant, robust, large effect            | Reliable detection of substantial effect.                    | ✅ **Strong Evidence** if effect size clears clinical threshold |
-| Stable       | Intermediate      | Stable significance with intermediate effect | Reliable detection of modest effect. Clinical significance depends on absolute benefit and baseline risk. | ✅ **Consider** if effect size clears clinical threshold      |
-| Stable       | **Near** (RQ low) | Stable significance but near neutrality      | Trivial effect reliably detected. Statistically significant ≠ clinically meaningful. | ⚠️ **Caution** - effect too small                             |
-| **Unstable** | **Far**           | Unstable significance far from neutrality    | Significant but easily overturned. Effect appears real.      | ⚠️ **Caution** - verify in larger sample                      |
-| Unstable     | Intermediate      | Classic unstable result                      | Effect of uncertain magnitude. Could be real, could be noise. | ⚠️ **Replicate** before use                                   |
-| Unstable     | **Near**          | Pattern (1,1,0)                              | **Thin evidence.** Effect uncertain. Significant p-value provides false confidence. | ⛔ **Remain Skeptical**                                       |
+| Fragility | Robustness | Interpretation | Diagnosis | Action |
+|-----------|------------|----------------|-----------|--------|
+| **Stable** | **Far** (RQ high) | Significant, robust, large effect | Reliable detection of substantial effect. | ✅ **Strong Evidence** if effect size clears clinical threshold |
+| Stable | Intermediate | Stable significance with intermediate effect | Reliable detection of modest effect. Clinical significance depends on absolute benefit and baseline risk. | ✅ **Consider** if effect size clears clinical threshold |
+| Stable | **Near** (RQ low) | Stable significance but near neutrality | Trivial effect reliably detected. Statistically significant ≠ clinically meaningful. | ⚠️ **Caution** - effect too small |
+| **Unstable** | **Far** | Unstable significance far from neutrality | Significant but easily overturned. Effect appears real. | ⚠️ **Caution** - verify in larger sample |
+| Unstable | Intermediate | Classic unstable result | Effect of uncertain magnitude. Could be real, could be noise. | ⚠️ **Replicate** before use |
+| Unstable | **Near** | Pattern (1,1,0) | **Thin evidence.** Effect uncertain. Significant p-value provides false confidence. | ⛔ **Remain Skeptical** |
 
 **When p > 0.05 (statistically nonsignificant)**
 
-| Fragility    | Robustness        | Interpretation                                    | Diagnosis                                                    | Action                                             |
-| ------------ | ----------------- | ------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
-| **Stable**   | **Near** (RQ low) | Stable nonsignificance near neutrality            | **Strong evidence of no effect.** Reliable null result. Effect truly absent or negligible. | ✅ **Trust** the null                               |
-| Stable       | Intermediate      | Stable nonsignificance with intermediate effect   | Possible effect not reaching significance. Directionally consistent but underpowered. | ⚠️ **Consider** replication if clinically important |
-| Stable       | **Far** (RQ high) | Stable nonsignificance yet far from neutrality    | **Severely underpowered.** Effect clearly exists but remains nonsignificant. Design inadequate to detect real effect. | ⛔ **Underpowered** - need larger trial             |
-| **Unstable** | **Near**          | Unstable nonsignificance near neutrality          | Likely true negative, but the classification does not hold. Probably no effect. Leans toward null. | ✅ **Likely null** (low confidence)                 |
-| Unstable     | Intermediate      | Unstable nonsignificance with intermediate effect | Inconclusive. Cannot distinguish "no effect" from "missed effect." Borderline case. | ⚠️ **Inconclusive** - need more data                |
-| Unstable     | **Far**           | Unstable nonsignificance yet far from neutrality  | **Likely false negative.** Effect exists but wasn't detected. Just missed significance threshold. | ⛔ **False negative** - increase power              |
+| Fragility | Robustness | Interpretation | Diagnosis | Action |
+|-----------|------------|----------------|-----------|--------|
+| **Stable** | **Near** (RQ low) | Stable nonsignificance near neutrality | **Strong evidence of no effect.** Reliable null result. Effect truly absent or negligible. | ✅ **Trust** the null |
+| Stable | Intermediate | Stable nonsignificance with intermediate effect | Possible effect not reaching significance. Directionally consistent but underpowered. | ⚠️ **Consider** replication if clinically important |
+| Stable | **Far** (RQ high) | Stable nonsignificance yet far from neutrality | **Severely underpowered.** Effect clearly exists but remains nonsignificant. Design inadequate to detect real effect. | ⛔ **Underpowered** - need larger trial |
+| **Unstable** | **Near** | Unstable nonsignificance near neutrality | Likely true negative, but the classification does not hold. Probably no effect. Leans toward null. | ✅ **Likely null** (low confidence) |
+| Unstable | Intermediate | Unstable nonsignificance with intermediate effect | Inconclusive. Cannot distinguish "no effect" from "missed effect." Borderline case. | ⚠️ **Inconclusive** - need more data |
+| Unstable | **Far** | Unstable nonsignificance yet far from neutrality | **Likely false negative.** Effect exists but wasn't detected. Just missed significance threshold. | ⛔ **False negative** - increase power |
 
 ---
 
 **Key:**
-
-- **Fragility:** unstable = small outcome changes flip significance; stable = robust to outcome changes. (Numeric MFQ cutoffs are under validation and omitted pending publication.)
+- **Fragility:** unstable = small outcome changes flip significance; stable = robust to outcome changes. Banded as GFI = 1 or GFQ < 0.01 (see Quantitative Thresholds above).
 - **Robustness:** RQ terciles based on null hypothesis distribution (RR=1.0): near (bottom tercile, indistinguishable from neutrality), intermediate (middle tercile), far (top tercile, clearly separated from neutrality)
 
 **Critical Note:** *These classifications assess statistical robustness and proximity to neutrality. Always evaluate absolute effect sizes (NNT, risk difference, absolute risk reduction) and baseline risk before clinical application. A statistically robust finding with clinically negligible absolute magnitude still warrants caution.*  
 
 **Quick Reference: What Went Wrong?**
 
-| Pattern                                         | Problem                                                 | Solution                                                     |
-| ----------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------ |
-| p-sig, fr-stable, nb-near                       | Trivial effect reliably detected                        | Question clinical relevance; report absolute effect size     |
-| p-sig, fr-unstable, nb-far                      | Underpowered for real effect                            | Replicate with adequate power                                |
-| p-sig, fr-unstable, nb-near **(Pattern 1,1,0)** | **Evidence consistent with a trivial effect**           | **Treat as clinically negligible unless replicated with an nb farther from neutrality.** |
-| p-nonsig, fr-stable, nb-far                     | Severely underpowered despite real effect               | Redesign with proper power calculation                       |
-| p-nonsig, fr-unstable, nb-far                   | Underpowered, missed real effect                        | Replicate with adequate power                                |
-| p-nonsig, fr-stable, nb-near                    | Nothing wrong—correct null finding                      | Trust the null                                               |
-| p-sig, fr-unstable, nb-intermediate             | Classic borderline result—uncertain magnitude           | Replicate before clinical implementation                     |
-| p-nonsig, fr-unstable, nb-intermediate          | Inconclusive—cannot distinguish null from missed effect | Need more data to resolve                                    |
+| Pattern | Problem | Solution |
+|---------|---------|----------|
+| p-sig, fr-stable, nb-near | Trivial effect reliably detected | Question clinical relevance; report absolute effect size |
+| p-sig, fr-unstable, nb-far | Underpowered for real effect | Replicate with adequate power |
+| p-sig, fr-unstable, nb-near **(Pattern 1,1,0)** | **Evidence consistent with a trivial effect** | **Treat as clinically negligible unless replicated with an nb farther from neutrality.** |
+| p-nonsig, fr-stable, nb-far | Severely underpowered despite real effect | Redesign with proper power calculation |
+| p-nonsig, fr-unstable, nb-far | Underpowered, missed real effect | Replicate with adequate power |
+| p-nonsig, fr-stable, nb-near | Nothing wrong—correct null finding | Trust the null |
+| p-sig, fr-unstable, nb-intermediate | Classic borderline result—uncertain magnitude | Replicate before clinical implementation |
+| p-nonsig, fr-unstable, nb-intermediate | Inconclusive—cannot distinguish null from missed effect | Need more data to resolve |
 
 *Note: This table highlights problematic patterns requiring action. Omitted patterns (p-sig with stable+far, stable+intermediate, or unstable+intermediate) represent acceptable findings when absolute effects are clinically meaningful.*
 
@@ -1010,7 +968,7 @@ All NBF metrics: in [0,1]
 * For nonsignificant results, lower robustness is typically desirable.  
 * For continuous outcomes: CFQ and MeCI should tell a coherent story with the reported CI.  
 * For single-arm benchmark analyses: BFQ and Proportion-NBF should be consistent with the one-sided exact binomial test versus p₀.
-
+  
 ### Reporting Checklist  
 
 □ Form of fragility named (analysis, resampling, perturbation, or scaling), with units and permitted changes stated  
@@ -1058,7 +1016,6 @@ Interpretation depends on the claim:
 * Claiming no effect → high fragility quotient (i.e. high stability) + low robustness preferred.  
 
 ## ADDENDUM: Complete vs Partial Evidence in Meta-Analysis
-
 - Individual study reports p-fr-nb → Can contribute to COMPLETE synthesis
 - Individual study reports p only → Can only contribute to PARTIAL synthesis
 - Meta-analysis synthesizing p-fr-nb across studies → COMPLETE
@@ -1066,16 +1023,13 @@ Interpretation depends on the claim:
 - **High-quality methodology cannot transform partial evidence into complete evidence**
 
 ### Operationalization at the meta-analytic level (binary outcomes)
-
 The robustness and fragility dimensions at the meta-analytic level are not separate metrics. For binary-outcome meta-analyses they are operationalized as **N-weighted pooled scalars** over the per-study metrics already defined in this document: **wsRQ** (weighted signed RQ) for the robustness dimension and **wGFQ** (weighted global fragility quotient) for the fragility dimension. All inputs are computed from the aggregate event/non-event counts already published for each component study; no patient-level data, simulation, or distributional assumptions are required.
 
 #### Weight operator (w_i)
-
 **Definition**: N-proportional weighting. w_i = N_i / ΣN_j, where N_i is the sample size of component study i and the sum runs over all contributing studies (Σw_i = 1).
 **Constraint**: The weight MUST be N-proportional. It is **neither** inverse-variance **nor** Mantel–Haenszel. N-weighting preserves RQ's model-free, estimator-independent property (see advantages note below); inverse-variance or Mantel–Haenszel weighting would forfeit it by reintroducing dependence on the between-study variance estimator.
 
 #### wsRQ — Weighted Signed Risk Quotient ⭐
-
 **Application**: Meta-analytic robustness for binary outcomes; the signed, pooled distance from therapeutic neutrality across component studies.
 **Formula**: wsRQ = Σ(sRQ_i · w_i), where sRQ_i = 4(ad − bc)/N² for study i (§4.1.1) and w_i is the N-proportional weight.
 **Range**: −1 to +1.
@@ -1084,7 +1038,6 @@ The robustness and fragility dimensions at the meta-analytic level are not separ
 **Pairs with**: wGFQ.
 
 #### wGFQ — Weighted Global Fragility Quotient ⭐
-
 **Application**: Meta-analytic fragility for binary outcomes; the pooled proportion-to-flip across component studies.
 **Formula**: wGFQ = Σ(GFQ_i · w_i), where GFQ_i = GFI_i / N_i (§3.3) and GFI_i is computed per the Dijkstra two-phase calculator (Fragility Metrics Toolkit, Zenodo 10.5281/zenodo.17254763), and w_i is the N-proportional weight.
 **Range**: 0 to 1.
@@ -1092,7 +1045,6 @@ The robustness and fragility dimensions at the meta-analytic level are not separ
 **Pairs with**: wsRQ.
 
 #### wFDQ — Weighted Fragility Distance Quotient
-
 **Application**: Meta-analytic pooling of FDQ across component 2×2 tables.
 **Formula**: wFDQ = Σ min(FD_i, m_i) / Σ m_i, where m_i is the smallest margin of study i. Equivalent to weighting each FDQ_i by m_i / Σm_j: total edits over total scarce resource.
 **Weight operator**: margin-proportional, **not** N-proportional. FDQ is denominated in the scarce margin, so pooling in the same unit preserves its meaning (the pooled value is the fraction of the pooled scarce resource that must be edited); N-weighting would let a tiny-margin trial enter at the weight of its non-events. Each quotient is pooled in the unit it is denominated in — GFQ in patients (wGFQ, N-weights), FDQ in scarce margin (wFDQ, margin weights). Both remain estimator-independent.
@@ -1105,7 +1057,6 @@ These pooled weighted scalars (wsRQ, wGFQ) are the **primary** meta-analytic ope
 A practical advantage: sRQ/RQ and GFQ are computed independently of the P-value and of the between-study variance estimator, so the pooled scalars do not shift when a meta-analytic FI shifts under different model choices (fixed vs. random effects, REML vs. DerSimonian-Laird, HKSJ CI adjustment). The N-proportional weight operator preserves this estimator-independence; inverse-variance or Mantel–Haenszel weighting would not. See Heston TF, *Reverse Fragility in Cochrane Meta-Analyses with P Values 0.05 to 0.20 Requires a Robustness Dimension*, Internet Med J. 2026;1:e19741629 (doi:10.5281/zenodo.19741629).
 
 #### Superseded: categorical six-cell synthesis (earlier approach, retired)
-
 A prior operationalization (v11.1.2) sorted each nonsignificant meta-analysis into one of six interpretive cells defined by fragility (fragile vs. stable) × distance from independence (weak / moderate / strong), aggregating per-study triplets without pooling to a scalar. **This categorical sort is superseded by the pooled weighted scalars (wsRQ, wGFQ) above and is retired.** It is retained here only as a record of the supersession, not as a recommended method. Note: the published reverse-fragility commentary (Internet Med J 2026;1:e19741629, doi:10.5281/zenodo.19741629) used the prior categorical framing, so canon now diverges from that piece.
 
 *Note: "nb_meta" is not a defined metric in this framework. Earlier internal tracking notes used "nb_meta" as informal shorthand for the meta-analytic robustness dimension; the correct operationalization for binary outcomes is the pooled weighted scalar wsRQ (paired with wGFQ), as specified above.*
@@ -1132,7 +1083,6 @@ Every methods note in the standing series is uniform and Scholar-optimized. Requ
 **Title**: contains the metric or family name verbatim.
 
 **Body sections (in order):**
-
 1. Definition
 2. Formula
 3. Worked example
@@ -1189,6 +1139,23 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the Walsh FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 14.2.0** (September 9, 2026)
+
+- Added the **NNT analogy** to the Part IV NBF core concept: NBF repackages known effect sizes onto a decision-ready 0–1 scale exactly as NNT repackages ARR — no new information, decision-ready packaging — with each metric's lineage named (RQ, a normalized cross-product distance related to the phi coefficient; SRQ/ORQ/DNB, bounded log-ratios; DTI, a bounded Fisher z). Stating the lineage openly preempts the rebranding objection.
+- The within-design comparison limit is written inside the analogy so the analogy cannot be quoted without it: numerical comparability holds within a design family; across designs nb supplies a common interpretive language, not equivalent numbers.
+- Interpretive addition only: no metric, formula, threshold, pairing, or classification changes.
+
+**Version 14.1.0** (September 7, 2026)
+
+- **Stated the fragility (fr) bands for the first time.** A result is unstable when GFI = 1 or GFQ < 0.01, stable otherwise. This is additive: no prior release stated an fr cutoff, so nothing is redefined and no published value changes.
+- The two conditions are grounded differently and the document says so. GFI = 1 is unstable **by definition**, being the smallest perturbation the metric admits above the small-N floor. GFQ < 0.01 is a **declared convention** justified by tolerance — a finding that does not survive a 1% reallocation is less stable than the error rates medicine accepts elsewhere — and is explicitly revisable.
+- Recorded that the convention is deliberately lenient and therefore under-counts instability: on the 164-table reference corpus, GFQ < 0.01 alone classifies 27% unstable against 73% at 0.05. A threshold that disfavors the framework's own thesis is stated as such rather than defended.
+- Noted that the two conditions cover disjoint cases, since GFI = 1 with GFQ ≥ 0.01 occurs exactly when N ≤ 100.
+- Band stated for GFQ only. Native quotients for other designs remain qualitative within their design family, per the cross-design non-comparability rule.
+- Updated the Key beneath the strength-of-evidence tables, which previously recorded the cutoffs as omitted pending publication.
+- **Made the SFW retirement visible.** v13.9.0 recorded the significant-fragile-weak → significant-unstable-near mapping in its changelog only. A "Retired pattern names" note now sits beside the nb terminology note where the patterns are actually used.
+- Not resolved in this release: the operational definition of "fragile" used for the SFW pattern in the hub paper (24 of 77). If it is not GFQ < 0.01, the hub's figure is not reproducible under this release and the Divergence Register gains an entry.
 
 **Version 14.0.0** (September 6, 2026)
 
@@ -1323,20 +1290,17 @@ Defines the Walsh FI and the canonical toggle rule on which MFQ is based.
 - Added sRQ/wsRQ/wGFQ rows to the Part II quick-reference table
 
 **Version 11.1.3** (June 21, 2026)
-
 - Redefined PFI for independent-sample 2×2 designs (Pearson χ² on a fixed-margin perturbation path; PFI = 4|x|/N, range 0–1); NBF pair changed MHQ → RQ
 - Added PFI-M as the McNemar-test variant of PFI for matched-pair designs (identical path construction, McNemar χ² in place of Pearson χ²); PFI-M is MHQ's fragility partner
 - Updated metrics table, paired-metrics list, formula reference, and §4.7 MHQ block to match
 - Reconciles canonical definition with dissertation_v3 / research-paper usage
 
 **Version 11.1.2** (June 14, 2026)
-
 - Expanded meta-analysis addendum: named synthesized RQ (+MFQ) as the binary-outcome operationalization of meta-analytic robustness, noting RQ's invariance to the between-study variance estimator
 - Retired informal "nb_meta" shorthand; clarified it is not a defined metric
 - Cited the April 2026 Cochrane reverse-fragility commentary (Internet Med J; doi:10.5281/zenodo.19741629)
 
 **Version 11.0.0** (December 17, 2025)
-
 - Added percentile normalization framework: fr redefined as universal percentile rank of native metrics
 - Native fragility metrics (GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BFQ) preserve physical interpretation
 - Established provisional categorical thresholds: fr ≤ 0.33 (fragile), 0.33-0.67 (moderate), > 0.67 (stable)
@@ -1344,61 +1308,50 @@ Defines the Walsh FI and the canonical toggle rule on which MFQ is based.
 - Reference distributions to be generated via large-scale simulation (100K+ trials per metric)
 
 **Version 10.3.6** (December 15, 2025)
-
 - Updated fr interpretation tables based on simulation results
 
 **Version 10.3.5** (December 4, 2025)
-
 - Updated interpretation tables based on simulation results
 
 **Version 10.3.4** (December 3, 2025)
-
 - Added addendum: complete vs partial statistical evidence in meta-analyses
 
 **Version 10.3.3** (November 29, 2025)
-
 - Added exam analogy for interpreting p–fr–nb triplet
 - Added "Diagnosis" column and "What Went Wrong?" quick reference to Strength-of-Evidence tables
 - Clarified all 12 triplet combinations with researcher-oriented interpretations
 
 **Version 10.3.2** (November 28, 2025)
-
 - Added SFQ/SRQ for survival outcomes (Cox regression)
 - Added OFQ/ORQ for ordinal outcomes (Wilcoxon-Mann-Whitney, proportional odds)
 - Added paired/matched data support for CFQ/MeCI
 - Updated interpretation thresholds from empirical validation (n=118 trials + 1M simulations)
 
 **Version 10.3.1** (November 27, 2025)
-
 - Added ZFQ (Fisher-z Fragility Quotient) for correlations
 - MILESTONE: p–fr–nb triplet complete for 100% of standard parametric designs
 
 **Version 10.3.0** (November 25, 2025)
-
 - Added ANOVA-FQ for multi-group continuous outcomes
 - Added BFQ + Proportion-NBF for single-arm benchmark analyses
 - Added MHQ for matched-pair designs
 - Updated PFI to McNemar χ² path
 
 **Version 10.0–10.2** (October–November 2025)
-
 - Introduced unified fr/nb notation
 - Integrated CFQ + MeCI for continuous outcomes
 - Established NBF framework for all robustness metrics
 
 **Version 9.x** (September–October 2025)
-
 - Developed GFI/GFQ as gold standard for binary outcomes
 - Introduced MFQ for allocation-fair fragility assessment
 - Added DNB for diagnostic accuracy studies
 
 **Version 1.0–8.x** (2024–2025)
-
 - Initial framework development based on Walsh et al. FI
 - Progressive expansion to diagnostic, continuous, and matched designs
 
 ## License  
-
 **License:** CC-BY-4.0  
 **© 2025 Thomas F. Heston**
 
