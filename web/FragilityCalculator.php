@@ -23,6 +23,7 @@ require_once 'RiskQuotient.php';
 require_once 'NeutralityDistanceIndex.php';
 require_once 'RelativeRisk.php';
 require_once 'RiskDifference.php';
+require_once 'ResamplingFragility.php';
 
 class FragilityCalculator {
     
@@ -119,6 +120,10 @@ class FragilityCalculator {
         $rr_result = RelativeRisk::calculate($a, $b, $c, $d);
         $rd_result = RiskDifference::calculate($a, $b, $c, $d);
 
+        // Resampling fragility: reported as its own category, outside the
+        // p-fr-nb triplet (model-dependent; see ResamplingFragility.php).
+        $resampling_result = ResamplingFragility::calculate($a, $b, $c, $d, $alpha);
+
         // Build result
         $result = [
             'input' => [
@@ -170,7 +175,8 @@ class FragilityCalculator {
                 'correction' => $rr_result['correction'],
                 'note'       => $rr_result['note'],
                 'absolute'   => $rd_result
-            ]
+            ],
+            'resampling' => $resampling_result
         ];
         
         return $result;

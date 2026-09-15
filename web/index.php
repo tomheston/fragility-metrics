@@ -64,6 +64,7 @@ include 'includes/header.php';
         <li><strong>Robustness (nb):</strong> Distance from neutrality (RQ, with NDI as its optional count form)</li>
     </ul>
     <p>Only when all three dimensions align do you have truly convincing, replication-ready evidence. Clinical decisions also need the absolute effect size, such as the absolute risk reduction or number needed to treat: the triplet plus effect size is complete evidence.</p>
+    <p>The calculator also reports <strong>resampling fragility</strong> — the probability that the significance classification would reverse in a new sample of the same size under a stated replication model — as its own output category. Resampling fragility is a form of data fragility, but because it depends on a replication model it sits outside the model-free p–fr–nb triplet.</p>
 </article>
 
 <p><a href="documentation.php" role="button">Read Full Documentation</a></p>

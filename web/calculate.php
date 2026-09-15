@@ -196,6 +196,18 @@ include 'includes/header.php';
         RR (Relative Risk) = not calculable<?= !empty($eff['note']) ? ' (' . htmlspecialchars($eff['note']) . ')' : '' ?>
       <?php endif; ?>
       </p>
+      <h3>Resampling Fragility</h3>
+      <p>
+      <?php $rsf = $result['resampling'] ?? null; ?>
+      <?php if (is_array($rsf) && $rsf['reversal_probability'] !== null): ?>
+      Reversal probability = <?= number_format($rsf['reversal_probability'], 4) ?> (<?= number_format($rsf['reversal_probability'] * 100, 1) ?>%)<br>
+      Retention probability = <?= number_format($rsf['retention_probability'], 4) ?> (<?= number_format($rsf['retention_probability'] * 100, 1) ?>%)<br>
+      [Estimated probability that the significance classification (baseline: <?= $rsf['baseline_significant'] ? 'significant' : 'nonsignificant' ?>) would reverse in a new sample of the same size. Replication model: independent binomial draws per arm at the observed event rates, arm sizes fixed; two-sided Fisher's exact test recomputed for every replicate table, alpha = <?= number_format($rsf['alpha'], 2) ?>. Computed exactly by summation over all replicate tables, not by simulation.]<br>
+      <span style="font-size:13px; color:#555;">Resampling fragility is a form of data fragility in the taxonomy of statistical fragility (analysis, resampling, perturbation, scaling). Its value depends on the stated replication model, so it is reported as a separate category: it is not part of the p–fr–nb triplet, whose fr coordinate is a model-free perturbation-fragility quotient computed from the observed table alone.</span>
+      <?php else: ?>
+      Resampling fragility = NULL<?= (is_array($rsf) && !empty($rsf['note'])) ? ' (' . htmlspecialchars($rsf['note']) . ')' : '' ?><br>
+      <?php endif; ?>
+      </p>
       <hr style="margin: 22px 0; border: 0; border-top: 1px solid #ccc;">
       <p class="pfr-citation" style="font-size:13px; color:#555; margin-bottom:6px;">
         <strong>Note:</strong> The FI used here is the Heston Fragility Index: the minimum number of outcome toggles (event ↔ non-event) in the arm with fewer events, or the smaller arm if events are tied, that flips significance in either direction, so it is also defined for nonsignificant results. For the original Walsh 2014 FI definition, see the <a href="http://fragilitymetrics.org/calculate_original.php">Walsh 2014 FI Calculator</a>.
