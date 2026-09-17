@@ -1,6 +1,6 @@
 <?php
-// index.php
-$page_title = 'Home';
+$page_title = 'Statistical Fragility Calculator';
+$canonical_url = 'https://fragilitymetrics.org/';
 include 'includes/header.php';
 ?>
 
