@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v14.3.0
+# FRAGILITY METRICS v14.4.0
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 **Thomas F. Heston**
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 14.3.0
+**Version:** 14.4.0
 
-**Date:** September 13, 2026
+**Date:** September 19, 2026
 ---
 ## Abstract
 A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone ("partial evidence"), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a native fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
@@ -126,7 +126,9 @@ Native fragility quotients (MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BF
 
 **Analysis fragility.** The observed data remain fixed while the analytical rule changes. Choices include the statistical test and its convention, covariate adjustment, handling of missing data, multiplicity correction, interim stopping rule, and significance threshold. Analysis fragility comes first in the logical order: each subsequent data-fragility assessment requires a fixed analytical rule. Changing the test during a perturbation search mixes analysis and perturbation fragility and prevents interpretation as a single perturbation count.
 
-**Resampling fragility.** This is the estimated probability that the original significance classification would reverse in another sample of the same size under a specified data-generating process. It may be estimated by bootstrap resampling or Monte Carlo simulation under a specified or fitted population model, with the analysis and threshold held fixed. It concerns hypothetical samples and depends on the resampling procedure or population model. It is recognized in the taxonomy but remains outside the operational p–fr–nb triplet because it introduces sampling assumptions beyond a direct measurement of the observed evidence. A reversal probability is not an outcome-edit count.
+**Resampling fragility (RF).** This is the estimated probability that the original significance classification would reverse in another sample of the same size under a specified data-generating process. It may be estimated by bootstrap resampling or Monte Carlo simulation under a specified or fitted population model, with the analysis and threshold held fixed. It concerns hypothetical samples and depends on the resampling procedure or population model. It is recognized in the taxonomy but remains outside the operational p–fr–nb triplet because it introduces sampling assumptions beyond a direct measurement of the observed evidence. A reversal probability is not an outcome-edit count.
+
+**Number needed to reverse (NNR).** NNR = 1/RF: the number of identical repeat trials expected to produce one reversal of the significance classification. It is the replication companion of the number needed to treat — no information beyond RF, a repackaging onto the scale of counted trials. Under the normal approximation, RF is a function of the p-value alone: with z = Phi^-1(1 - p/2), RF = Phi(1.96 - z) - Phi(-1.96 - z) for a significant baseline and the complement for a nonsignificant baseline, so NNR is computable from p at any sample size. Anchors: NNR = 2.0 at p = 0.05; 2.4 at p = 0.03; 3.7 at p = 0.01; 5.0 at p = 0.005; 10.9 at p = 0.001; 37 at p = 0.0001. For counted outcomes under the Fisher exact test the closed form is approximate, with deviations confined to small sparse tables. NNR, like RF, sits outside the operational p–fr–nb triplet and is claim-symmetric: for a significant baseline it counts expected repeats until a nonsignificant result, and for a nonsignificant baseline the reverse. RF was labeled RV (resampling variability) in early program output; RF and NNR are the canonical names.
 
 **Perturbation fragility.** This measures the minimum change to the recorded data required to reverse significance under a fixed analytical rule and a declared move set. For binary tables, FI toggles outcomes within the specified arm; GFI transfers patients between any cells while holding N fixed; FD adds or removes one patient from one cell at a time, with N and margins free. A toggle or transfer changes two cells and costs two L1 units; one FD edit changes one cell and costs one L1 unit. Thus FD ≤ 2·GFI under the same test, not necessarily FD ≤ GFI. Particular patient removals, including loss-to-follow-up scenarios, belong here even though N changes: they do not preserve the observed proportions as scaling does.
 
@@ -1169,6 +1171,11 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the Walsh FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 14.4.0** (September 19, 2026)
+
+- Abbreviated **resampling fragility** as **RF** and retired the early program label RV (resampling variability).
+- Added the **number needed to reverse (NNR)** = 1/RF: the number of identical repeat trials expected to produce one reversal of the significance classification. Recorded the closed form of RF from the p-value under the normal approximation, the NNR anchors (2.0 at p = 0.05; 3.7 at p = 0.01; 10.9 at p = 0.001), the NNT analogy (a translation, not new information), the claim-symmetric reading, and the Fisher-exact discreteness caveat. NNR, like RF, remains outside the operational p–fr–nb triplet.
 
 **Version 14.3.0** (September 13, 2026)
 
