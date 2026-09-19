@@ -200,8 +200,18 @@ include 'includes/header.php';
       <p>
       <?php $rsf = $result['resampling'] ?? null; ?>
       <?php if (is_array($rsf) && $rsf['reversal_probability'] !== null): ?>
-      Reversal probability = <?= number_format($rsf['reversal_probability'], 4) ?> (<?= number_format($rsf['reversal_probability'] * 100, 1) ?>%)<br>
-      Retention probability = <?= number_format($rsf['retention_probability'], 4) ?> (<?= number_format($rsf['retention_probability'] * 100, 1) ?>%)<br>
+      Resampling Fragility (RF) = probability of significance classification reversal with resampling = <?= number_format($rsf['reversal_probability'], 4) ?> (<?= number_format($rsf['reversal_probability'] * 100, 1) ?>%)<br>
+      Retention probability = 1 - RF = <?= number_format($rsf['retention_probability'], 4) ?> (<?= number_format($rsf['retention_probability'] * 100, 1) ?>%)<br>
+      <?php if ($rsf['reversal_probability'] > 0): ?>
+      <?php
+        $nnr = 1 / $rsf['reversal_probability'];
+        $retentionOdds = $rsf['retention_probability'] / $rsf['reversal_probability'];
+      ?>
+      Number Needed to Reverse significance classification (NNR) = 1 / RF = <?= number_format($nnr, 1) ?><br>
+      An NNR of <?= number_format($nnr, 1) ?> means that out of <?= number_format($nnr, 1) ?> trials of the same size from the same population, 1 trial is expected to reverse the significance classification. This table is <?= $rsf['baseline_significant'] ? 'significant' : 'nonsignificant' ?> at baseline (p <?= $rsf['baseline_significant'] ? '&lt;' : '&ge;' ?> <?= number_format($rsf['alpha'], 2) ?>), so reversal means becoming <?= $rsf['baseline_significant'] ? 'nonsignificant' : 'significant' ?>. Retention of original significance classification-to-reversal odds = <?= number_format($retentionOdds, 1) ?> to 1.<br>
+      <?php else: ?>
+      Number Needed to Reverse significance classification (NNR) = not defined (RF = 0; no replicate table reverses the classification)<br>
+      <?php endif; ?>
       [Estimated probability that the significance classification (baseline: <?= $rsf['baseline_significant'] ? 'significant' : 'nonsignificant' ?>) would reverse in a new sample of the same size. Replication model: independent binomial draws per arm at the observed event rates, arm sizes fixed; two-sided Fisher's exact test recomputed for every replicate table, alpha = <?= number_format($rsf['alpha'], 2) ?>. Computed exactly by summation over all replicate tables, not by simulation.]<br>
       <span style="font-size:13px; color:#555;">Resampling fragility is a form of data fragility in the taxonomy of statistical fragility (analysis, resampling, perturbation, scaling). Its value depends on the stated replication model, so it is reported as a separate category: it is not part of the p–fr–nb triplet, whose fr coordinate is a model-free perturbation-fragility quotient computed from the observed table alone.</span>
       <?php else: ?>
