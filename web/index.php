@@ -97,52 +97,58 @@ include 'includes/header.php';
     },
     {
       "@type": "DefinedTermSet",
-      "@id": "https://fragilitymetrics.org/#fragility-terms",
-      "name": "Heston Fragility and Robustness Metrics (p-fr-nb framework)",
+      "@id": "https://fragilitymetrics.org/documentation.php#terms",
+      "name": "Fragility Metrics: the p–fr–nb framework",
       "url": "https://fragilitymetrics.org/documentation.php",
       "description": "Metrics of the p-fr-nb framework for complete statistical evidence in clinical trials: significance (p), fragility (fr, stability of the significance classification), and robustness (nb, distance from therapeutic neutrality). Fragility and robustness are two separate axes, not opposite ends of one scale.",
       "hasDefinedTerm": [
         {
           "@type": "DefinedTerm",
+          "@id": "https://fragilitymetrics.org/documentation.php#fr",
           "termCode": "fr",
           "name": "Fragility (fr)",
           "description": "How much the data must change before the statistical-significance classification flips. Unstable means a small change flips the classification; stable means a larger change is required. Reported as a design-specific fragility quotient from 0 to 1, where lower values indicate an unstable classification.",
-          "inDefinedTermSet": "https://fragilitymetrics.org/#fragility-terms"
+          "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
         },
         {
           "@type": "DefinedTerm",
+          "@id": "https://fragilitymetrics.org/documentation.php#nb",
           "termCode": "nb",
           "name": "Robustness (nb)",
           "description": "Geometric distance from therapeutic neutrality (for example RR = 1 or mean difference = 0), expressed as a bounded, sign-agnostic standardized effect magnitude from 0 to 1, computed from the point estimate rather than its precision. Banded as near, intermediate, or far from neutrality. Robustness describes separation from no effect, not whether the result is good or bad.",
-          "inDefinedTermSet": "https://fragilitymetrics.org/#fragility-terms"
+          "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
         },
         {
           "@type": "DefinedTerm",
+          "@id": "https://fragilitymetrics.org/global-fragility-index.php#gfq",
           "termCode": "GFQ",
           "name": "Global Fragility Quotient (GFQ)",
           "description": "GFI divided by N: the minimum number of cell-to-cell reallocations needed to flip the significance classification of a contingency table, as a proportion of sample size. The recommended default fragility quotient for binary and multinomial tables; path-independent and label-invariant.",
-          "inDefinedTermSet": "https://fragilitymetrics.org/#fragility-terms"
+          "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
         },
         {
           "@type": "DefinedTerm",
+          "@id": "https://fragilitymetrics.org/documentation.php#mfq",
           "termCode": "MFQ",
           "name": "Modified-arm Fragility Quotient (MFQ)",
           "description": "The Heston Fragility Index divided by the size of the arm actually modified. Fallback fragility quotient for two-arm binary trials when the exact GFI search is computationally intractable at large sample sizes; allocation-fair and label-resistant.",
-          "inDefinedTermSet": "https://fragilitymetrics.org/#fragility-terms"
+          "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
         },
         {
           "@type": "DefinedTerm",
+          "@id": "https://fragilitymetrics.org/documentation.php#rq",
           "termCode": "RQ",
           "name": "Risk Quotient (RQ)",
           "description": "Primary robustness metric for independent-sample binary and multinomial tables. For any 2x2 table, RQ = |ad - bc| / (N^2 / 4), a scale-invariant measure of distance from therapeutic neutrality on a 0-to-1 scale.",
-          "inDefinedTermSet": "https://fragilitymetrics.org/#fragility-terms"
+          "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
         },
         {
           "@type": "DefinedTerm",
+          "@id": "https://fragilitymetrics.org/documentation.php#ndi",
           "termCode": "NDI",
           "name": "Neutrality Distance Index (NDI)",
           "description": "Integer counterpart to the Risk Quotient: the minimum number of coupled fixed-margin moves needed to bring a 2x2 table to the point closest to RR = 1, computed as round(|ad - bc| / N) and clamped to reachability. Test-independent count form of robustness.",
-          "inDefinedTermSet": "https://fragilitymetrics.org/#fragility-terms"
+          "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
         }
       ]
     }

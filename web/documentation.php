@@ -1,6 +1,8 @@
 <?php
 // index.php
 $page_title = 'Documentation';
+$page_description = 'Official documentation of the p-fr-nb framework for complete statistical evidence in clinical trials: significance (p), fragility (fr), and robustness (nb), synced from FRAGILITY_METRICS.md on GitHub.';
+$canonical_url = 'https://fragilitymetrics.org/documentation.php';
 include 'includes/header.php';
 
 // 1. GitHub raw URL for FRAGILITY_METRICS.md (public repo)
@@ -205,7 +207,7 @@ if ($markdown === null) {
         </p>
         <p>
             This documentation covers classical fragility measures such as the Fragility Index (FI),
-            Fragility Quotient (FQ), and Marginal Fragility Quotient (MFQ), as well as more general
+            Fragility Quotient (FQ), and Modified-arm Fragility Quotient (MFQ), as well as more general
             extensions including the <a href="global-fragility-index.php">Global Fragility Index (GFI)</a> and GFQ. It also outlines fragility methods for ANOVA,
             regression models, and other settings beyond simple two-arm 2×2 tables.
         </p>
@@ -229,5 +231,55 @@ if ($markdown === null) {
         </div>
     <?php endif; ?>
 </div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://fragilitymetrics.org/documentation.php#webpage",
+      "url": "https://fragilitymetrics.org/documentation.php",
+      "name": "Fragility Metrics Documentation",
+      "description": "Official documentation of the p-fr-nb framework for complete statistical evidence in clinical trials: significance (p), fragility (fr), and robustness (nb), synced from FRAGILITY_METRICS.md on GitHub.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://fragilitymetrics.org/#website",
+        "name": "Fragility Metrics",
+        "url": "https://fragilitymetrics.org/"
+      },
+      "about": { "@id": "https://fragilitymetrics.org/documentation.php#terms" },
+      "author": { "@id": "https://orcid.org/0000-0002-5655-2512" },
+      "citation": [ { "@id": "https://doi.org/10.5281/zenodo.17254763" } ]
+    },
+    {
+      "@type": "DefinedTermSet",
+      "@id": "https://fragilitymetrics.org/documentation.php#terms",
+      "name": "Fragility Metrics: the p–fr–nb framework",
+      "url": "https://fragilitymetrics.org/documentation.php",
+      "description": "Canonical term set of the p-fr-nb framework for complete statistical evidence in clinical trials: significance (p), fragility (fr, stability of the significance classification), and robustness (nb, distance from therapeutic neutrality). Fragility and robustness are two separate axes, not opposite ends of one scale. Definitions are synced from FRAGILITY_METRICS.md in the fragility-metrics GitHub repository."
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://doi.org/10.5281/zenodo.17254763",
+      "name": "Fragility Metrics Toolkit",
+      "author": { "@id": "https://orcid.org/0000-0002-5655-2512" },
+      "codeRepository": "https://github.com/tomheston/fragility-metrics",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "identifier": { "@type": "PropertyValue", "propertyID": "DOI", "value": "10.5281/zenodo.17254763" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://orcid.org/0000-0002-5655-2512",
+      "name": "Thomas F. Heston",
+      "sameAs": [
+        "https://orcid.org/0000-0002-5655-2512",
+        "https://github.com/tomheston"
+      ]
+    }
+  ]
+}
+</script>
 </body>
 </html>

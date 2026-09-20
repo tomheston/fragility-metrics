@@ -37,6 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $page_title = 'Survival Analysis';
+$page_description = 'Free SFQ/SRQ calculator for survival outcomes. Enter a hazard ratio and its confidence interval to get the complete p-fr-nb evidence triplet: significance, fragility, and robustness.';
+$canonical_url = 'https://fragilitymetrics.org/survival.php';
 include 'includes/header.php';
 ?>
 
@@ -163,5 +165,57 @@ include 'includes/header.php';
 <p style="font-size:14px; color:#666;">
   <strong>Citation:</strong> Heston TF. Fragility metrics toolkit v6.0.0. Zenodo. 2026. DOI: <a href="https://doi.org/10.5281/zenodo.17254763">10.5281/zenodo.17254763</a>
 </p>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://fragilitymetrics.org/survival.php#calculator",
+      "name": "Survival (SFQ/SRQ) Calculator",
+      "url": "https://fragilitymetrics.org/survival.php",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free calculator for time-to-event outcomes. Enter a published hazard ratio and its confidence interval to get the complete p-fr-nb evidence triplet: significance (p), fragility (SFQ), and robustness (SRQ). No patient-level data required.",
+      "author": { "@id": "https://orcid.org/0000-0002-5655-2512" }
+    },
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://fragilitymetrics.org/survival.php#sfq",
+      "name": "Survival Fragility Quotient",
+      "alternateName": "SFQ",
+      "termCode": "SFQ",
+      "description": "The fragility (fr) metric for time-to-event outcomes: the distance of the Cox z-statistic from the 1.96 significance boundary, rescaled to a 0-to-1 scale (SFQ = d / (1 + d), where d = ||z| - 1.96|). A higher SFQ means a more stable significance classification. Computed from a published hazard ratio and its confidence interval; no patient-level data required.",
+      "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
+    },
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://fragilitymetrics.org/survival.php#srq",
+      "name": "Survival Robustness Quotient",
+      "alternateName": "SRQ",
+      "termCode": "SRQ",
+      "description": "The robustness (nb) metric for time-to-event outcomes: the distance of the log hazard ratio from therapeutic neutrality (HR = 1), rescaled to a 0-to-1 scale (SRQ = |ln(HR)| / (1 + |ln(HR)|)). A higher SRQ means the estimate sits farther from neutrality. Computed from the hazard ratio alone.",
+      "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
+    },
+    {
+      "@type": "DefinedTermSet",
+      "@id": "https://fragilitymetrics.org/documentation.php#terms",
+      "name": "Fragility Metrics: the p–fr–nb framework",
+      "url": "https://fragilitymetrics.org/documentation.php"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://orcid.org/0000-0002-5655-2512",
+      "name": "Thomas F. Heston",
+      "sameAs": [
+        "https://orcid.org/0000-0002-5655-2512",
+        "https://github.com/tomheston"
+      ]
+    }
+  ]
+}
+</script>
 
 <?php include 'includes/footer.php'; ?>
