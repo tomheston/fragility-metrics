@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v14.5.1
+# FRAGILITY METRICS v14.5.2
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 **Thomas F. Heston**
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 14.5.1
+**Version:** 14.5.2
 
-**Date:** October 11, 2026
+**Date:** October 17, 2026
 ---
 ## Abstract
 A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone ("partial evidence"), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a native fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
@@ -224,10 +224,10 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Advantages**: use for historical comparison with studies that used FQ
 **Base metric**: FI (Heston fragility index)
 **NBF pair**: RQ
-**Note**: FQ is a legacy metric and is not recommended as the primary fr metric for 2-arm binary outcome studies. GFQ is preferred (path-independent and label-invariant); when large N makes GFI computation intractable, MFQ is the fallback, which is allocation-fair (denominating against the arm actually modified) and label-resistant.
+**Note**: FQ is a legacy metric and is not recommended as the primary fr metric for 2-arm binary outcome studies. GFQ is preferred (path-independent and label-invariant); MFQ is the alternative when comparability with the FI count is required, and it is allocation-fair (denominating against the arm actually modified) and label-resistant.
 
 ### 3.2 MFQ — Modified-arm Fragility Quotient ⭐
-**Application**: Fallback for independent-sample 2×2 binary outcome trials (any allocation ratio) when large sample size (≈5000+) makes GFI computation intractable, or when compatibility with the Walsh FI count is required.
+**Application**: Alternative to GFQ for independent-sample 2×2 binary outcome trials (any allocation ratio) when compatibility with the Walsh FI count is required. GFI remains computable at large N (Part VIII; N = 28,699,989), so large sample size alone does not call for MFQ.
 **Definition**: Proportion of the arm that was actually modified in the Walsh fragility index procedure required to flip statistical significance.
 **Formula**: MFQ = FI / n_mod, where n_mod = sample size of the arm subjected to toggling in the standard FI calculation (i.e., the arm with fewer events; if tied, the smaller arm).
 **Range**: 0 to 1
@@ -235,7 +235,7 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Advantages**: allocation-resistant: minimizes the distortion caused by unequal study allocation; the MFQ is label-resistant but not label independent like the GFQ is.
 **Base metric**: Heston FI 
 **NBF pair**: RQ
-**Note**: For 2×2 binary outcome tables, GFQ is the recommended default (§3.3); use MFQ when GFI is computationally intractable at large N, or when comparability with the universally recognized FI count is needed. MFQ remains allocation-fair by denominating against the arm that actually needs to change. When MFQ is used, pair it as MFQ + RQ.
+**Note**: For 2×2 binary outcome tables, GFQ is the recommended default (§3.3); use MFQ when comparability with the universally recognized FI count is needed; large N alone does not require it, because GFI remains computable (Part VIII). MFQ remains allocation-fair by denominating against the arm that actually needs to change. When MFQ is used, pair it as MFQ + RQ.
 
 ### 3.3 GFQ — Global Fragility Quotient ⭐
 **Application**: Recommended default and gold standard for any r×c contingency table or multinomial outcomes (independent samples), including 2×2 binary outcome trials.
@@ -246,7 +246,7 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **Advantages**: Path-independent, applies to any r×c table
 **Base metric**: GFI (global fragility index)
 **NBF pair**: RQ
-**Note**: Considered the gold standard for binary and multinomial fragility assessment because of its path-independence and label-invariance, and it is the recommended default for 2×2 binary outcome tables. For large sample sizes (≈5000+), computing GFI becomes computationally intractable, and MFQ becomes the practical fallback for two-arm binary outcome studies (§3.2). The GFQ complements RQ, which measures robustness (distance from independence). Both should be reported together — GFQ + RQ is the standard pair for binary and multinomial outcomes. Both the GFI and the GFQ show label-invariance.
+**Note**: Considered the gold standard for binary and multinomial fragility assessment because of its path-independence and label-invariance, and it is the recommended default for 2×2 binary outcome tables. GFI remains computable at large sample sizes: the certified computation in Part VIII (N = 28,699,989) returned GFI = 5,302, so MFQ is not required as a large-N fallback (§3.2). The GFQ complements RQ, which measures robustness (distance from independence). Both should be reported together — GFQ + RQ is the standard pair for binary and multinomial outcomes. Both the GFI and the GFQ show label-invariance.
 
 ### 3.4 DFQ — Diagnostic Fragility Quotient ⭐
 **Application**: Diagnostic metrics from full 2×2 table (TP, FN, FP, TN) with ground truth.
@@ -1160,13 +1160,16 @@ Introduces the Continuous Fragility Index (CFI), which perturbs raw data or gene
 **Heston TF.** *Adjusting fragility metrics for unequal trial randomizations.* *Autoimmun Rev.* 2025;24(12):103935.  
 Demonstrates that Walsh-based fragility measures can misrepresent stability when treatment arms are imbalanced and formalizes the allocation-corrected adjustment that underlies MFQ. Provides the empirical and mathematical justification for normalizing fragility to the arm actually subjected to toggling, resolving the asymmetry and mis-scaling inherent in FQ for unequal randomizations.
 
+**Heston TF.** *Bidirectional fragility is a step forward but not far enough: the case for a global fragility index.* *Internet Med J.* 2026;1(1):e19464166. doi:10.5281/zenodo.19464166  
+Argues that the bidirectional fragility index fixes row margins and therefore searches only a subset of the perturbation space, whereas the GFI fixes no margin and gives the path-independent minimum. Exhaustive enumeration of every 2×2 table with N = 7 to 30 and at least one subject per arm found the UFI not attainable in 5.6% of tables and the bidirectional FI not attainable in 0.1%, with the GFI attainable in all; the GFI was smaller than the bidirectional FI in 21.5% of tables and never larger.
+
 **Heston TF.** *Fragility Metrics Toolkit* Zenodo. 2025;17254763.  
 Open-source reference implementation containing FI, FQ, MFQ, GFI, GFQ, PFI, UFI, and RQ. Establishes computational standards for the core model-free fragility and robustness metrics currently available. Additional metrics (DFI/DFQ, CFS/CFQ, DNB, MeCI, DTI, ANOVA-FQ, ZFQ, ANOVAη²) were originally developed outside the core toolkit and are now integrated into this reference; software implementations will follow in subsequent toolkit releases.
 
 **Heston TF.** *Meaningful Change Index: A P-Value Independent Metric for Assessing Robustness and Fragility in Continuous Outcomes.* SSRN. 2025;5535978.  
 Defines the MeCI robustness metric for continuous outcomes as the minimum distance from group means to their distributional crossover point, normalized by combined standard deviations. Establishes MeCI as p-value independent and sample-size independent, and frames it as the robustness complement to CFQ for continuous-outcome trials. The canonical NBF implementation (this document, §4.3) applies an x/(1+x) bounding map to the primary-paper distance quantity for family consistency with RQ (binary) and DNB (diagnostic).
 
-**Heston TF.** *The Global Fragility Index: A Path-Independent Measure of Statistical Fragility.* SSRN. 2025;5709162.  
+**Heston TF.** *The Global Fragility Index: A Path-Independent Measure of Statistical Fragility.* SSRN. 2025;5709162. doi:10.2139/ssrn.5709162  
 Defines the GFI framework for multinomial tables and proves path-independence of the global cell-move distance to the significance boundary. Basis for GFQ and the GFU unit.
 
 **Heston TF.** *The Modified-Arm Fragility Quotient: An Improved Metric for Assessing Robustness in Clinical Trials.* SSRN. 2025;5425334.  
@@ -1191,6 +1194,13 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the Walsh FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 14.5.2** (October 17, 2026)
+
+- **Removed the statement that GFI computation is intractable at large N (≈5000+)** from the §3.1 note, the §3.2 application and note, and the §3.3 note. It contradicted the v13.0.1 entry ("GFI - now no longer intractable with new computation algorithm") and the certified N = 28,699,989 computation recorded in Part VIII (GFI = 5,302). MFQ is retained as the alternative where comparability with the FI count is required, not as a large-N fallback.
+- **Reference changes**: added doi:10.2139/ssrn.5709162 to the GFI SSRN entry; added Heston TF, *Bidirectional fragility is a step forward but not far enough: the case for a global fragility index* (Internet Med J. 2026;1(1):e19464166, doi:10.5281/zenodo.19464166), which reports the N = 7 to 30 enumeration of GFI attainability.
+- Not changed: the exact-test intractability language for r×c Fisher–Freeman–Halton computation in the GFI entry (Part V). No metric formula, pairing, band cutoff, or existing computed value changed.
+
 
 **Version 14.5.1** (October 11, 2026)
 
