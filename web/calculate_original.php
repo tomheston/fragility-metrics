@@ -75,6 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$page_title = 'Fragility Index Calculator (Walsh 2014): Free 2×2 Trial FI';
+$page_description = 'Free fragility index calculator for 2×2 clinical trial data using the original Walsh (2014) definition, with p-value, Fragility Quotient, Risk Quotient and relative risk. Compare with the Global Fragility Index (GFI).';
+$canonical_url = 'https://fragilitymetrics.org/calculate_original.php';
 include 'includes/header.php';
 ?>
 <style>
@@ -95,8 +98,9 @@ include 'includes/header.php';
   .pfr-citation { font-size: 14px; color: #666; }
 </style>
 <div class="pfr-page">
-  <h2>p-fr-nb plus effect size Calculator (Original Walsh FI)</h2>
-  <p class="pfr-lead">Calculate complete statistical evidence (p-fr-nb triplet plus effect size) for 2×2 independent binary outcome tables. Fragility Index uses the strict original Walsh (2014) definition.</p>
+  <h1>Fragility Index Calculator (Original Walsh 2014)</h1>
+  <p class="pfr-lead">Free fragility index calculator for 2×2 independent binary outcome tables. The Fragility Index (FI) uses the strict original Walsh (2014) definition, and the page also reports the rest of the p-fr-nb evidence triplet (p-value, Risk Quotient) plus relative risk.</p>
+  <p class="pfr-citation">The Walsh FI changes outcomes in one arm only. The <a href="global-fragility-index.php">Global Fragility Index (GFI)</a> searches every possible patient move across the table, so it is always less than or equal to the FI and does not depend on which arm you pick. GFI and GFQ are calculated on the <a href="index.php">main calculator</a>.</p>
   <?php if ($error): ?>
     <div id="pfr-error">
       <strong>Error:</strong> <?= htmlspecialchars($error) ?>
@@ -170,7 +174,9 @@ include 'includes/header.php';
       </p>
       <hr style="margin: 22px 0; border: 0; border-top: 1px solid #ccc;">
       <p class="pfr-citation">
-        <strong>Citation:</strong> Heston TF. Fragility Metrics Calculators. Zenodo. DOI = (pending)
+        <strong>Cite the calculator:</strong> Heston TF. Fragility Metrics Toolkit [Software]. Zenodo. 2025. doi:<a href="https://doi.org/10.5281/zenodo.17254763">10.5281/zenodo.17254763</a><br>
+        <strong>Fragility Index method:</strong> Walsh M, et al. The statistical significance of randomized controlled trial results is frequently fragile: a case for a Fragility Index. J Clin Epidemiol. 2014;67(6):622-628. doi:<a href="https://doi.org/10.1016/j.jclinepi.2013.10.019">10.1016/j.jclinepi.2013.10.019</a><br>
+        <strong>Global Fragility Index:</strong> Heston TF. The Global Fragility Index: a path-independent measure of statistical fragility. SSRN. 2025. doi:<a href="https://doi.org/10.2139/ssrn.5709162">10.2139/ssrn.5709162</a>
       </p>
     </div>
   <?php endif; ?>

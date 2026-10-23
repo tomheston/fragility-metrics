@@ -60,7 +60,7 @@ include 'includes/header.php';
     <p>Traditional reporting provides only p-values and confidence intervals — this is partial evidence. Complete statistical evidence requires three complementary dimensions:</p>
     <ul>
         <li><strong>Significance (p):</strong> Compatibility with null hypothesis</li>
-        <li><strong>Fragility (fr):</strong> Classification stability (<a href="global-fragility-index.php">GFQ</a>, or MFQ when the trial is too large for the exact GFI search)</li>
+        <li><strong>Fragility (fr):</strong> Classification stability (<a href="global-fragility-index.php">GFQ</a> by default, or MFQ when comparability with the Walsh FI count is needed)</li>
         <li><strong>Robustness (nb):</strong> Distance from neutrality (RQ, with NDI as its optional count form)</li>
     </ul>
     <p>Only when all three dimensions align do you have truly convincing, replication-ready evidence. Clinical decisions also need the absolute effect size, such as the absolute risk reduction or number needed to treat: the triplet plus effect size is complete evidence.</p>
@@ -131,7 +131,7 @@ include 'includes/header.php';
           "@id": "https://fragilitymetrics.org/documentation.php#mfq",
           "termCode": "MFQ",
           "name": "Modified-arm Fragility Quotient (MFQ)",
-          "description": "The Heston Fragility Index divided by the size of the arm actually modified. Fallback fragility quotient for two-arm binary trials when the exact GFI search is computationally intractable at large sample sizes; allocation-fair and label-resistant.",
+          "description": "The Heston Fragility Index divided by the size of the arm actually modified. Alternative fragility quotient for two-arm binary trials when comparability with the Walsh FI count is needed; allocation-fair and label-resistant. Large sample size alone does not call for MFQ, because the GFI remains computable at large N.",
           "inDefinedTermSet": { "@id": "https://fragilitymetrics.org/documentation.php#terms" }
         },
         {
