@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v14.5.2
+# FRAGILITY METRICS v14.5.4
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 **Thomas F. Heston**
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 14.5.2
+**Version:** 14.5.4
 
-**Date:** October 17, 2026
+**Date:** October 29, 2026
 ---
 ## Abstract
 A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone ("partial evidence"), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a native fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
@@ -18,7 +18,7 @@ This document finalizes the integration of continuous-outcome measures (CFQ, MeC
 **Keywords**: statistical fragility, statistical robustness, neutrality boundary framework, fragility index, continuous fragility quotient, evidence quality metrics, p-value limitations, model-free statistics
 ---
 ## Executive Summary
-> **Whereas p < 0.05 establishes statistical significance, a concordant p–fr–nb triplet (low p + high fr + high nb) establishes convincing, complete statistical evidence.**
+> **Whereas p < 0.05 establishes statistical significance, a concordant and stable p–fr–nb triplet (low p + high fr + high nb) establishes convincing, complete statistical evidence.**
 Traditional practice reports only the p-value for a given analysis, which we term partial evidence: it addresses compatibility with the null but not the stability of that decision or the distance from therapeutic neutrality. We define complete statistical evidence as the triplet (p, fr, nb), where p quantifies statistical significance; fr is the native fragility quotient for the design (MFQ, GFQ, CFQ, etc.), a 0–1 measure of the proportion of data or SE-shift needed to flip significance — high fr means the classification is stable, low fr means unstable; and nb is a 0–1 robustness metric measuring geometric distance from the neutrality boundary. Only when all three dimensions align (low p, high fr, high nb for "effect exists" claims) do we regard the statistical evidence as complete in the sense of being decision-ready and replication-ready.
 Reporting only p-values yields partial evidence, because it ignores both the stability of the conclusion (fragility) and the distance from neutrality (robustness). The p–fr–nb triplet restores these missing dimensions and constitutes complete statistical evidence for a result.
 ## Quick Start: Your First p–fr–nb Triplet
@@ -140,7 +140,7 @@ The matching quotients retain their existing definitions: MFQ = FI / n_mod; GFQ 
 
 **Relation to the framework.** The taxonomy is broader than the triplet's fr coordinate. Analysis and resampling assessments and the secondary SFM describe other sources of classification instability; they do not replace fr or nb. Correlation with the p-value does not, by itself, establish that different forms measure the same quantity. The model-free requirement for operational framework metrics and the distinction between significance-boundary fragility and neutrality-boundary robustness remain in force.
 
-**Source:** Thomas F. Heston, *A Taxonomy of Statistical Fragility in Clinical Trials: Analysis, Resampling, Perturbation, and Scaling*, supplied manuscript `manuscript04_v4.docx`. This section incorporates its conceptual taxonomy; metric formulas retain the canonical definitions given in this document.
+**Source:** Heston TF. *Statistical Fragility and Robustness in Pharmaceutical Trials.* In: Sahu P, ed. *Emerging Trends in Pharmaceutical Sciences and Clinical Studies.* Vol 1. ZenToks Publication; 2026. p. 64–72. ISBN 978-81-958975-3-7. This section incorporates its conceptual taxonomy; metric formulas retain the canonical definitions given in this document.
 
 #### 3. Robustness (Geometric Distance)
 * **Concept**: Quantifies the distance from therapeutic neutrality on a scale of 0 (neutral) to 1 (robust separation).
@@ -161,6 +161,23 @@ Fragility (fr) behaves differently:
 * **Low fr** (near 0): unstable — small outcome changes flip the significance classification
 * **High fr** (near 1): stable — the significance classification is well-supported
 Unlike nb, fr is claim-invariant: higher fr always strengthens confidence in the observed classification — whether significant or nonsignificant — and lower fr always weakens it. Only nb's interpretation flips with the claim.
+
+### The Verdict Layer: Concordance and Claim Verdict
+
+Near, intermediate, and far describe geometry. Readers also need a verdict word. The verdict layer supplies two derived descriptors read directly from the triplet; neither is a new measurement.
+
+**Concordance (p–nb relation).** A result is **concordant** when the nb band agrees with the significance classification: significant with far nb, or nonsignificant with near nb. It is **discordant** when they cross. The two discordant patterns are distinct diagnoses and are always named separately:
+
+* Significant with near nb — significance without separation from neutrality (typically overpowered detection of a negligible effect).
+* Nonsignificant with far nb — separation without significance (typically an underpowered study that may have missed a real effect).
+
+Intermediate nb is **indeterminate**: neither concordant nor discordant.
+
+**Claim verdict (full triplet).** The claim consistent with the significance classification is **supported** when the result is concordant and the classification is stable; otherwise the verdict is **inconclusive**, with the reason named (unstable classification, discordance, or indeterminate nb). At very large N the fragility band is read per Part VIII, and the verdict follows that reading.
+
+Example reads: "p = 0.003, fr stable, nb far — concordant; effect-exists claim supported." "p = 0.03, fr stable, nb near — discordant (significance without separation from neutrality); inconclusive."
+
+Verdict-layer words never replace band labels: the nb bands remain near/intermediate/far, and "robust"/"not robust" are never used as concordance verdicts — robustness remains the name of the nb dimension.
 
 ---
 
@@ -1184,6 +1201,9 @@ Develops PFI for fixed-margin designs and motivates the joint use of fragility (
 **Heston TF.** *Resampling Fragility, Perturbation Fragility, and Why the Global Fragility Index Is Not a P-Value in Disguise.* *Internet Med J.* 2026;1:e22059146. doi:10.5281/zenodo.22059146
 Separates resampling fragility (the probability that the significance verdict changes in a new sample of the same size — a probability, and strongly associated with the p-value) from perturbation fragility (the number of recorded outcomes that must change before the observed table crosses the threshold — a count, GFI, or a proportion, GFQ). Shows with three pairs of published trials matched on p-value that GFQ differs 21-fold, 30-fold, and 2-fold within pairs, establishing that the redundancy critique applies to resampling fragility and not to the fragility index. Source of the Part I definitions.
 
+**Heston TF.** *Statistical Fragility and Robustness in Pharmaceutical Trials.* In: Sahu P, ed. *Emerging Trends in Pharmaceutical Sciences and Clinical Studies.* Vol 1. ZenToks Publication; 2026. p. 64–72. ISBN 978-81-958975-3-7.
+Chapter-length published statement of the framework: the full taxonomy of statistical fragility (analysis, resampling, perturbation, scaling), the neutrality boundary formula, and complete statistical evidence as the p–fr–nb triplet, with worked examples (CENTAUR/PHOENIX, CENTURY, DELI). Published source of the Part I taxonomy and designated framework hub citation; the Cureus empirical hub (2025;17(12):e100494) is unchanged.
+
 **Khan MS, Fonarow GC, Friede T, Lateef N, Khan SU, Anker SD, et al.** Application of the reverse fragility index to statistically nonsignificant randomized clinical trial results. *JAMA Netw Open.* 2020;3(8):e2012469.  
 Reverse FI extends the Walsh FI toggling logic to nonsignificant results. This extension does not require a separate fragility construct because fragility can be defined uniformly as the minimal perturbation required to cross the significance boundary in either direction. The Heston FI formalizes this bidirectional definition while retaining a single-arm toggle rule for both significant and nonsignificant baseline tables. Creating a separate “reverse” metric therefore duplicates the underlying mechanism without adding theoretical clarity. The unified fragility framework (MFQ/GFQ/CFQ/DFQ) further removes the need for a significant-versus-nonsignificant distinction by treating fragility as classification stability regardless of which side of the significance boundary the observed result occupies.
 
@@ -1194,6 +1214,19 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the Walsh FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 14.5.4** (October 29, 2026)
+
+- **Added the published book chapter as the framework hub citation**: Heston TF, *Statistical Fragility and Robustness in Pharmaceutical Trials*. In: Sahu P, ed. *Emerging Trends in Pharmaceutical Sciences and Clinical Studies*. Vol 1. ZenToks Publication; 2026. p. 64–72. ISBN 978-81-958975-3-7 — the single-source published statement of the taxonomy of statistical fragility, the neutrality boundary formula, and the p–fr–nb triplet. The Cureus empirical hub (2025;17(12):e100494) is unchanged.
+- Replaced the Part I taxonomy source attribution (previously the supplied manuscript `manuscript04_v4.docx`) with the published chapter citation; added the annotated reference entry.
+- No metric formula, pairing, band cutoff, or existing computed value changed.
+
+**Version 14.5.3** (October 26, 2026)
+
+- **Added the Verdict Layer (Part I, after The Interpretation Layer)**: two derived descriptors read from the triplet. Concordance names the p–nb relation (concordant: significant + far or nonsignificant + near; discordant: the two crossed patterns, always named separately; indeterminate: intermediate nb). The claim verdict is **supported** (concordant and stable) or **inconclusive**, with the reason named. At very large N the fr gate follows the Part VIII reading.
+- **Aligned the Executive Summary whereas-line** with the new defined terms ("concordant and stable").
+- Term discipline: verdict-layer words never replace band labels. A robust / weakly robust / not robust concordance vocabulary was considered and rejected: it would overload the dimension name and reintroduce quality-sounding labels deprecated in v13.7.0.
+- No metric formula, pairing, band cutoff, or existing computed value changed.
 
 **Version 14.5.2** (October 17, 2026)
 

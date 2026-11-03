@@ -1,6 +1,6 @@
 # Expanded Glossary: Fragility–Robustness Framework
 
-This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.4.0). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
+This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.5.3). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
 
 ## Core Concepts
 
@@ -17,7 +17,7 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 | **Complete statistical evidence** | Reporting p, fr, and nb together. This assesses whether the result is significant, whether that classification is stable, and whether the point estimate is separated from neutrality. |
 | **Complete evidence** | Complete statistical evidence plus the study’s absolute effect size. Clinical interpretation needs both the p–fr–nb triplet and the effect size in meaningful clinical units. |
 | **Partial evidence** | Reporting only the p-value, or only p-values and confidence intervals. It does not directly report classification stability or standardized distance from neutrality. |
-| **Effect size** | The size of the observed treatment difference. In this framework, **nb** captures a relative standardized magnitude, whereas the reported effect size captures the absolute magnitude in clinical units, such as risk difference, NNT, or months of survival gained. |
+| **Effect size** | The size of the observed treatment difference. In this framework, **nb** captures a relative standardized magnitude, whereas the reported effect size captures the absolute magnitude in clinical units, such as risk difference, NNT, or months of survival gained. Absolute magnitude is not generally recoverable from nb alone; for a single independent-sample 2×2 with both arms nonempty, ARR = RQ / [4f(1 − f)] once the allocation fraction is known (canon v14.5.1). The quartet still reports absolute magnitude explicitly. |
 | **Model-free** | A framework metric calculated from observed counts or published summary statistics, without reconstructing patient-level data, simulating data, or fitting covariate models. |
 
 ## Fragility and Classification Stability
@@ -27,7 +27,7 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 | **Fragility (fr)** | **Fragility measures how much the data must change before the statistical-significance classification flips.** A result is **unstable** when a small change flips the classification and **stable** when a larger change is required. The dimension name remains fragility; the category pair is stable / unstable. |
 | **Unstable fragility classification** | An unstable result is close to the p = 0.05 decision boundary. A small perturbation in outcomes or in the test-statistic scale can change it from significant to nonsignificant, or the reverse. Banded as **GFI = 1 or GFQ < 0.01** (see Fragility bands). Canon v13.9.0 uses **unstable** in place of the earlier category label **fragile**. |
 | **Stable fragility classification** | A stable result is farther from the p = 0.05 decision boundary. A larger perturbation is needed before its significant/nonsignificant classification changes. Banded as GFI > 1 and GFQ ≥ 0.01. |
-| **Fragility bands** | A 2×2 result is **unstable** when **GFI = 1 or GFQ < 0.01**, and **stable** otherwise. GFI = 1 is unstable *by definition*: above the small-N floor it is the smallest perturbation the metric admits, so one patient recorded differently reverses the classification. GFQ < 0.01 is a *declared convention*, justified by tolerance rather than derived, and revisable. The two conditions cover disjoint cases, since GFI = 1 with GFQ ≥ 0.01 happens only when N ≤ 100. Stated for GFQ; native quotients for other designs stay qualitative within their design family. |
+| **Fragility bands** | A 2×2 result is **unstable** when **GFI = 1 or GFQ < 0.01**, and **stable** otherwise. GFI = 1 is unstable *by definition*: above the small-N floor it is the smallest perturbation the metric admits, so one patient recorded differently reverses the classification. GFQ < 0.01 is a *declared convention*, justified by tolerance rather than derived, and revisable. The two conditions cover disjoint cases, since GFI = 1 with GFQ ≥ 0.01 happens only when N ≤ 100. Stated for GFQ; native quotients for other designs stay qualitative within their design family. At very large N, GFQ < 0.01 in a mega-trial reports a small absolute effect rather than sampling instability; the unstable label stands under the band definition, but the replicate/more-data actions do not apply — the operative action is the near-nb action (canon v14.4.1). |
 | **Native fragility quotient** | The design-specific 0–1 fragility measure used as **fr** in the triplet. Lower values indicate an unstable classification; higher values indicate a stable classification. |
 | **Raw fragility count** | The unnormalized number of outcome changes or reallocations required to flip the significance classification. A quotient converts this count to a proportion for that design. |
 | **Fragility quotient** | A 0–1 proportion describing how much of the relevant data must change to reverse the significance classification. It is usually the preferred way to report fragility. |
@@ -36,7 +36,7 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 | **Analysis fragility** | The observed data stay fixed and the analytical rule changes: the test, covariate adjustment, handling of missing data, multiplicity correction, stopping rule, or significance threshold. It comes first in the logical order, because every data-fragility assessment needs a fixed analytical rule. |
 | **Perturbation fragility** | The number of recorded outcomes in the observed table that must change before the significance classification flips, or that number as a proportion. The **fr** coordinate of the p–fr–nb triplet is always a native perturbation-fragility quotient. Not every fragility metric in the framework is a perturbation metric: SFM is scaling fragility. |
 | **Resampling fragility (RF)** | The probability that the significance classification would change in a new sample of the same size under a specified replication model. It is not part of the p–fr–nb triplet: it requires a replication model and re-expresses the significance axis. Under the normal approximation RF is a function of the p-value alone, at any sample size. The early program label RV (resampling variability) is retired; RF is the canonical name. |
-| **NNR — Number Needed to Reverse** | NNR = 1/RF: the number of identical repeat trials expected to produce one reversal of the significance classification. The replication companion of the number needed to treat — no information beyond RF, restated in counted trials. NNR = 2 at p = 0.05 (a coin flip), about 4 at p = 0.01, about 11 at p = 0.001, at any sample size. Claim-symmetric: for a significant baseline it counts expected repeats until a nonsignificant result, and the reverse for a nonsignificant baseline. Like RF, it sits outside the p–fr–nb triplet. |
+| **NNR — Number Needed to Reverse** | NNR = 1/RF: the number of identical repeat trials expected to produce one reversal of the significance classification. The replication companion of the number needed to treat — no information beyond RF, restated in counted trials. NNR = 2 at p = 0.05 (a coin flip), about 4 at p = 0.01, about 11 at p = 0.001, at any sample size. Claim-symmetric: for a significant baseline it counts expected repeats until a nonsignificant result, and the reverse for a nonsignificant baseline. Like RF, it sits outside the p–fr–nb triplet. Omit NNR when RF is below the enumeration error bound. |
 | **Scaling fragility** | The effect of changing the amount of data while the observed proportions, allocation ratio, and analytical rule stay fixed. Measured by SFM, the factor by which the table must grow or shrink to reverse the classification. |
 | **Index vs distance** | An **index** is a constrained path length in moves (toggle or transfer) with N or margins held fixed. A **distance** is the unconstrained L1 minimum in patients added to or removed from any cell, with N free. There is one fragility distance (FD); the indices are its constrained upper bounds. |
 | **Distance-to-critical-value family** | A family of fragility metrics for continuous, ANOVA, correlation, ordinal, and survival analyses. Each calculates the distance from the observed test statistic to its p = 0.05 critical value. |
@@ -48,7 +48,7 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 |---|---|
 | **FI — Heston Fragility Index** | The minimum number of within-arm outcome toggles needed to flip a 2×2 table’s significance classification, using two-sided Fisher’s exact test. It is defined for both significant and nonsignificant starting results. |
 | **FQ — Fragility Quotient** | The legacy fragility quotient for a 2×2 binary table: **FI divided by total sample size (N)**. It is retained mainly for comparison with earlier fragility-index reports. |
-| **MFQ — Modified-arm Fragility Quotient** | The proportion of the arm actually changed in the FI procedure that must switch outcomes to flip significance. It is the practical fallback for two-arm binary trials when GFI computation is impractical. |
+| **MFQ — Modified-arm Fragility Quotient** | The proportion of the arm actually changed in the FI procedure that must switch outcomes to flip significance. It is the alternative for two-arm binary trials when comparability with the FI toggle count is required; it is not a large-N fallback, because GFI is computable even at very large N (canon v14.5.2). |
 | **GFI — Global Fragility Index** | The minimum number of cell-to-cell reallocations required to flip the statistical-significance classification in an r×c contingency table. It searches all admissible cell movements using the same significance test throughout. |
 | **GFU — Global Fragility Unit** | The unit of one global reallocation expressed relative to total sample size: **1/N**. It is the basic unit underlying GFI and GFQ. |
 | **GFQ — Global Fragility Quotient** | The GFI divided by total sample size: **GFQ = GFI/N**. It is the recommended default fragility measure for binary and multinomial tables because it is path-independent and label-invariant. |
@@ -120,7 +120,7 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 
 | Term | Plain-language definition |
 |---|---|
-| **RQ — Risk Quotient** | The primary robustness metric for independent-sample binary or multinomial tables. It measures geometric distance from independence, which is the no-effect point for those tables. |
+| **RQ — Risk Quotient** | The primary robustness metric for independent-sample binary or multinomial tables. It measures geometric distance from independence, which is the no-effect point for those tables. For any 2×2, RQ = 4f(1 − f) × ARR, where f is the allocation fraction; at 1:1 allocation RQ equals the absolute risk reduction exactly (canon v14.4.1). Unsigned RQ does not carry direction. |
 | **sRQ — Signed Risk Quotient** | A signed version of RQ that preserves direction as well as distance from neutrality. Its sign depends on the declared orientation of the table. |
 | **wsRQ — Weighted Signed Risk Quotient** | The N-weighted pooled sRQ for a binary-outcome meta-analysis. It summarizes the overall signed distance from therapeutic neutrality across studies. |
 | **wGFQ — Weighted Global Fragility Quotient** | The N-weighted pooled GFQ for a binary-outcome meta-analysis. It summarizes the average proportion of data that would need to change across the component studies. |
@@ -167,16 +167,30 @@ A MID is never only a number. It is a number plus a stated level of decision, be
 
 Reference: Rose G. Sick individuals and sick populations. *Int J Epidemiol.* 1985;14(1):32–38.
 
+## The Verdict Layer (canon v14.5.3)
+
+Near, intermediate, and far describe geometry. The verdict layer supplies two derived descriptors read directly from the triplet; neither is a new measurement.
+
+| Term | Plain-language definition |
+|---|---|
+| **Concordant** | The nb band agrees with the significance classification: significant with far nb, or nonsignificant with near nb. |
+| **Discordant** | The nb band and the significance classification cross. The two discordant patterns are distinct diagnoses and are always named separately: significant with near nb is significance without separation from neutrality (typically overpowered detection of a negligible effect); nonsignificant with far nb is separation without significance (typically an underpowered study that may have missed a real effect). Neither is a statement of weakness. |
+| **Indeterminate** | Intermediate nb: neither concordant nor discordant. |
+| **Supported** | The claim verdict when the result is concordant and the classification is stable. The supported claim is the one consistent with the significance classification. |
+| **Inconclusive** | The claim verdict otherwise, with the reason named: unstable classification, discordance, or indeterminate nb. At very large N the fragility gate follows the canon's Part VIII reading. |
+
+Verdict-layer words never replace band labels: the nb bands remain near/intermediate/far, and "robust"/"not robust" are never used as concordance verdicts — robustness remains the name of the nb dimension.
+
 ## Reading the Triplet
 
 | Claim being evaluated | Desired p–fr–nb pattern | Plain-language meaning |
 |---|---|---|
-| **An effect exists** | Low p, stable fr, far nb | The result is significant, the classification is hard to reverse, and the point estimate is far from no effect. |
-| **No effect exists** | High p, stable fr, near nb | The result is nonsignificant, the classification is hard to reverse, and the point estimate is close to no effect. |
-| **Inconclusive finding** | Unstable fr and/or nb inconsistent with the claim | The significance label is easily changed, the point estimate does not fit the claim, or both. Further evidence is needed. |
+| **An effect exists** | Low p, stable fr, far nb | Concordant and stable: the result is significant, the classification is hard to reverse, and the point estimate is far from no effect. Claim **supported**. |
+| **No effect exists** | High p, stable fr, near nb | Concordant and stable: the result is nonsignificant, the classification is hard to reverse, and the point estimate is close to no effect. Claim **supported**. |
+| **Inconclusive finding** | Unstable fr, discordant p–nb, or indeterminate nb | The significance label is easily changed, the point estimate does not fit the claim, or the nb band is intermediate. Verdict **inconclusive**, with the reason named. Further evidence is needed. |
 
 > **Band names.** Robustness (nb) bands: **near** (close to neutrality), **intermediate**, and **far** (far from neutrality). These labels describe the distance being measured without suggesting that a low nb is inherently unfavorable. The earlier labels weak, moderate, and strong are deprecated as of canon v13.7.0; articles published before that release still use them.
 >
 > Fragility (fr) category pair: **unstable** / **stable**. The earlier pole label **fragile** is deprecated as of canon v13.9.0. The dimension name remains **fragility**; metric names that contain “fragility” are unchanged. The published corpus, including the hub paper’s significant-fragile-weak (SFW) pattern, still uses the older pair; under current canon that pattern is significant-unstable-near.
 
-*Source: FRAGILITY_METRICS.md, version 14.4.0.*
+*Source: FRAGILITY_METRICS.md, version 14.5.3.*
