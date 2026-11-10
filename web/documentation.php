@@ -200,13 +200,13 @@ if ($markdown === null) {
 
     <div class="intro" style="margin-bottom: 1.5rem; line-height: 1.6;">
         <p>
-            Fragility metrics provide a general framework for quantifying how robust or fragile
-            statistical results are to small changes in the underlying data. The p–fr–nb framework
-            described here is designed to apply across a wide range of study designs, including
+            The p–fr–nb framework quantifies two separate properties of a statistical result: fragility, how stable
+            its significance classification is to small changes in the underlying data, and robustness, how far it sits from therapeutic neutrality. The framework
+            is designed to apply across a wide range of study designs, including
             binary, continuous, and time-to-event outcomes.
         </p>
         <p>
-            This documentation covers classical fragility measures such as the Fragility Index (FI),
+            This documentation covers established fragility measures such as the Fragility Index (FI),
             Fragility Quotient (FQ), and Modified-arm Fragility Quotient (MFQ), as well as more general
             extensions including the <a href="global-fragility-index.php">Global Fragility Index (GFI)</a> and GFQ, and the <a href="fragility-distance.php">Fragility Distance (FD)</a> and FDQ. It also outlines fragility methods for ANOVA,
             regression models, and other settings beyond simple two-arm 2×2 tables.
