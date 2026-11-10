@@ -18,7 +18,7 @@ include 'includes/header.php';
 </style>
 
 <h1>What is the Fragility Distance?</h1>
-<p class="fd-small">The unconstrained distance from a clinical trial result to the p = 0.05 boundary, counted in patients.</p>
+<p class="fd-small">The unconstrained distance from a clinical trial result to the p = 0.05 boundary, counted in patients. · <a href="fragility-distance-zh.php" lang="zh-Hans" hreflang="zh-Hans">中文版</a></p>
 
 <p id="definition" class="fd-definition"><strong>The Fragility Distance (FD)</strong> is the minimum number of single-patient edits, each adding one patient to any cell of a clinical trial's 2×2 table or removing one patient from any cell, that moves the trial across p = 0.05 under the two-sided Fisher's exact test: a significant result becomes nonsignificant, or a nonsignificant result becomes significant. Total enrollment, arm sizes, and outcome totals are all free to change. FD is the L1 (taxicab) edit distance from the observed table to the nearest table on the other side of the significance boundary, so every constrained fragility index, including the Fragility Index and the Global Fragility Index, bounds it from above. Dividing by the smallest margin of the observed table gives the Fragility Distance Quotient (FDQ). The FD was defined by Thomas F. Heston in a 2026 Internet Medical Journal article.</p>
 

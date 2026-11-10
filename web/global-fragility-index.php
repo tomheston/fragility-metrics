@@ -17,7 +17,7 @@ include 'includes/header.php';
 </style>
 
 <h1>What is the Global Fragility Index?</h1>
-<p class="gfi-small">A fragility index for clinical trial results, not a ranking of fragile states.</p>
+<p class="gfi-small">A fragility index for clinical trial results, not a ranking of fragile states. · <a href="global-fragility-index-zh.php" lang="zh-Hans" hreflang="zh-Hans">中文版</a></p>
 
 <p id="definition" class="gfi-definition"><strong>The Global Fragility Index (GFI)</strong> is the minimum number of patients who must be moved between the cells of a clinical trial's contingency table, with the total sample size held fixed, to reverse the trial's statistical significance: a significant result becomes nonsignificant, or a nonsignificant result becomes significant. Unlike the original Fragility Index, which changes outcomes in one treatment arm only, the GFI searches every possible reallocation across all cells, so its value does not depend on the path taken or on how the groups are labeled. Dividing by the sample size gives the Global Fragility Quotient (GFQ = GFI / N). The GFI was defined by Thomas F. Heston in a 2025 SSRN paper.</p>
 
