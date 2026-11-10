@@ -60,7 +60,7 @@ include 'includes/header.php';
 <p class="gfi-small">p-values are two-sided Fisher's exact. Each GFI was checked by scoring all 1,373,701 possible 2×2 tables with N = 200.</p>
 
 <h2>Where the GFI fits</h2>
-<p>A p-value alone is partial evidence. The p–fr–nb framework reports three dimensions: significance (p), fragility (fr), and robustness (nb). For 2×2 and multinomial tables the GFQ is the recommended fragility metric, paired with the Risk Quotient (RQ), which measures distance from neutrality. When a very large sample makes the exact GFI search intractable, the Modified-Arm Fragility Quotient (MFQ) is the fallback. See the <a href="documentation.php">full documentation</a>.</p>
+<p>A p-value alone is partial evidence. The p–fr–nb framework reports three dimensions: significance (p), fragility (fr), and robustness (nb). For 2×2 and multinomial tables the GFQ is the recommended fragility metric, paired with the Risk Quotient (RQ), which measures distance from neutrality. The Modified-Arm Fragility Quotient (MFQ) is the alternative when comparability with the Fragility Index count is required; a large sample alone does not call for it, because the GFI remains computable at large N. The <a href="fragility-distance.php">Fragility Distance (FD)</a> removes the fixed-N constraint and is never more than twice the GFI: FD ≤ 2·GFI. See the <a href="documentation.php">full documentation</a>.</p>
 
 <section id="faq">
 <h2>Frequently asked questions</h2>
@@ -106,7 +106,7 @@ include 'includes/header.php';
 <p style="font-size:14px; color:#666;">
   <strong>Cite the GFI as:</strong> Heston TF. The Global Fragility Index: a path-independent measure of statistical fragility. SSRN. 2025. doi:<a href="https://doi.org/10.2139/ssrn.5709162">10.2139/ssrn.5709162</a>
 </p>
-<p class="gfi-small">Last updated September 12, 2026.</p>
+<p class="gfi-small">Last updated November 9, 2026.</p>
 
 <script type="application/ld+json">
 {
@@ -120,7 +120,7 @@ include 'includes/header.php';
       "description": "The Global Fragility Index (GFI) is a clinical trial fragility index: the minimum number of patients that must be moved between cells of a trial table, sample size fixed, to reverse its statistical significance.",
       "inLanguage": "en",
       "datePublished": "2026-09-12",
-      "dateModified": "2026-09-12",
+      "dateModified": "2026-11-09",
       "isPartOf": {
         "@type": "WebSite",
         "@id": "https://fragilitymetrics.org/#website",

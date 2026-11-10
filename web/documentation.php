@@ -208,7 +208,7 @@ if ($markdown === null) {
         <p>
             This documentation covers classical fragility measures such as the Fragility Index (FI),
             Fragility Quotient (FQ), and Modified-arm Fragility Quotient (MFQ), as well as more general
-            extensions including the <a href="global-fragility-index.php">Global Fragility Index (GFI)</a> and GFQ. It also outlines fragility methods for ANOVA,
+            extensions including the <a href="global-fragility-index.php">Global Fragility Index (GFI)</a> and GFQ, and the <a href="fragility-distance.php">Fragility Distance (FD)</a> and FDQ. It also outlines fragility methods for ANOVA,
             regression models, and other settings beyond simple two-arm 2×2 tables.
         </p>
         <p>
