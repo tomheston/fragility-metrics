@@ -1,0 +1,56 @@
+cff-version: 1.2.0
+message: "If you use this toolkit, please cite it using the metadata below."
+type: software
+title: "Fragility Metrics Toolkit"
+abstract: >-
+  Open-source implementation of the p-fr-nb framework for complete
+  statistical evidence assessment. Every statistical result is reported
+  with three measurements: p (statistical significance), fr (fragility:
+  how stable that significance is) and nb (robustness: how far the result
+  is from neutrality). Includes Python notebook calculators for binary
+  2x2 tables, matched 2x2 tables, diagnostic metrics, proportion versus
+  benchmark, correlation and continuous outcomes.
+authors:
+  - family-names: Heston
+    given-names: Thomas F.
+    orcid: "https://orcid.org/0000-0002-1895-651X"
+doi: 10.5281/zenodo.17254763
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17254763
+    description: "Concept DOI (always resolves to the latest version)"
+repository-code: "https://github.com/tomheston/fragility-metrics"
+license: CC-BY-4.0
+keywords:
+  - p-fr-nb framework
+  - statistical fragility
+  - fragility index
+  - fragility quotient
+  - robustness quotient
+  - clinical trials
+  - evidence assessment
+  - Python
+preferred-citation:
+  type: book
+  title: "Statistical Fragility and Robustness in Pharmaceutical Trials"
+  authors:
+    - family-names: Heston
+      given-names: Thomas F.
+      orcid: "https://orcid.org/0000-0002-1895-651X"
+      affiliation: "Department of Family Medicine, University of Washington, Seattle, Washington, USA"
+  collection-title: "Emerging Trends in Pharmaceutical Sciences and Clinical Studies"
+  collection-type: book
+  editors:
+    - family-names: Sahu
+      given-names: P.
+  volume: 1
+  section: "11"
+  edition: "1st"
+  start: 64
+  end: 72
+  year: 2026
+  publisher:
+    name: "ZenToks Publication"
+    country: IN
+  isbn: "978-81-958975-3-7"
+  doi: 10.5281/zenodo.23454675
