@@ -53,7 +53,7 @@ Output: p (baseline Welch t-test p-value), fr (CFS/CFQ), nb (MeCI)
 
 ## Citation
 If you use this toolkit, please cite:
-> Heston, TF (2025). *Fragility Metrics Toolkit* [Software]. Zenodo. https://doi.org/10.5281/zenodo.17254763
+> Heston, T. F. (2026). *Fragility Metrics Toolkit* (Version 14.1.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.17254763
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17254763.svg)](https://doi.org/10.5281/zenodo.17254763)
 
