@@ -1,6 +1,6 @@
 # Expanded Glossary: Fragility–Robustness Framework
 
-This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.5.3). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
+This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.6.1). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
 
 ## Core Concepts
 
@@ -48,7 +48,7 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 |---|---|
 | **FI — Heston Fragility Index** | The minimum number of within-arm outcome toggles needed to flip a 2×2 table’s significance classification, using two-sided Fisher’s exact test. It is defined for both significant and nonsignificant starting results. |
 | **FQ — Fragility Quotient** | The legacy fragility quotient for a 2×2 binary table: **FI divided by total sample size (N)**. It is retained mainly for comparison with earlier fragility-index reports. |
-| **MFQ — Modified-arm Fragility Quotient** | The proportion of the arm actually changed in the FI procedure that must switch outcomes to flip significance. It is the alternative for two-arm binary trials when comparability with the FI toggle count is required; it is not a large-N fallback, because GFI is computable even at very large N (canon v14.5.2). |
+| **MFQ — Modified-arm Fragility Quotient** | The proportion of the arm actually changed in the FI procedure that must switch outcomes to flip significance. Secondary (canon v14.6.0): retained for comparability with the FI toggle count and FI-based reports; it is not the fr coordinate, which for 2×2 tables is GFQ. |
 | **GFI — Global Fragility Index** | The minimum number of cell-to-cell reallocations required to flip the statistical-significance classification in an r×c contingency table. It searches all admissible cell movements using the same significance test throughout. |
 | **GFU — Global Fragility Unit** | The unit of one global reallocation expressed relative to total sample size: **1/N**. It is the basic unit underlying GFI and GFQ. |
 | **GFQ — Global Fragility Quotient** | The GFI divided by total sample size: **GFQ = GFI/N**. It is the recommended default fragility measure for binary and multinomial tables because it is path-independent and label-invariant. |
@@ -99,8 +99,8 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 | **OFQ — Ordinal Fragility Quotient** | The 0–1 classification-stability measure for ordinal outcomes. It uses the distance of an ordinal test z-statistic from the p = 0.05 boundary. |
 | **SFQ — Survival Fragility Quotient** | The 0–1 classification-stability measure for survival analyses. It uses the Cox regression z-statistic’s distance from the p = 0.05 boundary. |
 | **WFS — Wald Fragility Score** | The raw distance between the absolute Wald z-statistic and the p = 0.05 critical value: WFS = \|\|z\| − 1.96\|. When only a 95% confidence interval is reported, z is reconstructed from it (SE = CI width divided by 2 × 1.96; z = estimate/SE), and the result is asymptotic. If the source used a small-sample t reference, its t critical value replaces 1.96, and that substitution is stated. |
-| **WFQ — Wald Fragility Quotient** | The bounded 0–1 form of WFS: WFQ = WFS/(1 + WFS). It is the generic fallback fragility measure for any effect estimate reported with a Wald z or a 95% confidence interval — regression coefficients, trend slopes, risk differences, adjusted changes — when no design-native metric applies. Precedence rule: WFQ is never used where a design-native metric is computable (hazard ratio → SFQ, generalized odds ratio → OFQ, correlation → ZFQ, two-group continuous → CFQ, F statistic → ANOVA-FQ, contingency table → GFQ or MFQ). |
-| **Incomplete triplet (WFQ, non-ratio estimates)** | For non-ratio coefficients no robustness (nb) metric is defined. Report p and fr plus the absolute effect size, and state that nb is unavailable. Do not improvise an nb transform. |
+| **WFQ — Wald Fragility Quotient** | The bounded 0–1 form of WFS: WFQ = WFS/(1 + WFS). It is the generic fallback fragility measure for any effect estimate reported with a Wald z or a 95% confidence interval — regression coefficients, trend slopes, risk differences, adjusted changes, and ratio estimates with no design-native metric (prevalence or rate ratios, on the log scale) — when no design-native metric applies. Precedence rule: WFQ is never used where a design-native metric is computable (hazard ratio → SFQ, generalized odds ratio → OFQ, correlation → ZFQ, two-group continuous → CFQ, F statistic → ANOVA-FQ, contingency table → GFQ). |
+| **Incomplete triplet (WFQ, non-ratio estimates)** | For non-ratio coefficients, and for ratio estimates without a design-native metric (canon v14.6.1), no robustness (nb) metric is defined. Report p and fr plus the absolute effect size, and state that nb is unavailable. Do not improvise an nb transform. |
 
 ## Robustness and Distance From Neutrality
 
@@ -193,4 +193,4 @@ Verdict-layer words never replace band labels: the nb bands remain near/intermed
 >
 > Fragility (fr) category pair: **unstable** / **stable**. The earlier pole label **fragile** is deprecated as of canon v13.9.0. The dimension name remains **fragility**; metric names that contain “fragility” are unchanged. The published corpus, including the hub paper’s significant-fragile-weak (SFW) pattern, still uses the older pair; under current canon that pattern is significant-unstable-near.
 
-*Source: FRAGILITY_METRICS.md, version 14.5.3.*
+*Source: FRAGILITY_METRICS.md, version 14.6.1.*

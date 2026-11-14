@@ -1,16 +1,16 @@
-# FRAGILITY METRICS v14.5.4
+# FRAGILITY METRICS v14.6.1
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 **Thomas F. Heston**
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 14.5.4
+**Version:** 14.6.1
 
-**Date:** October 29, 2026
+**Date:** November 11, 2026
 ---
 ## Abstract
 A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone ("partial evidence"), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a native fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
-**Fragility (fr)** is first quantified by native fragility quotients that measure the proportion of relevant data (or SE-scale shift) required to flip significance classification within a given design, with primary metrics MFQ, GFQ (gold standard for r×c and multinomial), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), SFQ (survival outcomes via Cox regression z-statistic), and WFQ (the Wald Fragility Quotient; fallback for any effect estimate reported with a Wald z-statistic or 95% CI when no design-native metric applies). fr is the native fragility quotient for the design at hand (MFQ, GFQ, CFQ, …), computed directly from the observed data; high fr indicates a stable classification, low fr indicates fragility. Native quotients are not numerically comparable across designs; a cross-design percentile scale is a deferred extension (see Part I).
+**Fragility (fr)** is first quantified by native fragility quotients that measure the proportion of relevant data (or SE-scale shift) required to flip significance classification within a given design, with primary metrics GFQ (gold standard for 2×2, r×c, and multinomial tables), DFQ (diagnostic benchmarks), BFQ (single-arm benchmarks), CFQ (continuous outcomes via Welch t-geometry), PFI (fixed-margin designs), ANOVA-FQ (multi-group continuous outcomes), ZFQ (the Fisher-z Fragility Quotient; correlations), OFQ (ordinal outcomes via Wilcoxon-Mann-Whitney z-statistic), SFQ (survival outcomes via Cox regression z-statistic), and WFQ (the Wald Fragility Quotient; fallback for any effect estimate reported with a Wald z-statistic or 95% CI when no design-native metric applies). fr is the native fragility quotient for the design at hand (GFQ, CFQ, …), computed directly from the observed data; high fr indicates a stable classification, low fr indicates fragility. Native quotients are not numerically comparable across designs; a cross-design percentile scale is a deferred extension (see Part I).
 **Robustness (nb)** quantifies geometric distance from therapeutic neutrality via the Neutrality Boundary Framework (NBF), with primary metrics RQ (independent-sample binary/multinomial), MHQ (matched-pair/fixed-margin designs), DNB (diagnostic odds ratio), Proportion-NBF (single-arm benchmarks and agreement vs chance), MeCI (continuous means), DTI (correlation), ANOVAη² (multi-group), ORQ (ordinal outcomes), and SRQ (survival outcomes).
 All metrics use only observed counts or published summary statistics; no raw data, simulation, reconstruction, or covariate models permitted. Fragility always measures classification stability (high fr is desirable when the p-value supports the claim). Robustness interpretation is claim-dependent: high nb supports "effect exists" claims, undermines "no effect" claims.
 This document finalizes the integration of continuous-outcome measures (CFQ, MeCI, ANOVA-FQ, ZFQ), single-arm benchmark measures (BFQ + Proportion-NBF), and the unified fr/nb notation, providing a complete evidence-quality system applicable to nearly every standard study design with minimal assumptions. We define "complete statistical evidence" as the p–fr–nb triplet: p for significance, fr for fragility, and nb for robustness, replacing partial evidence based only on statistical significance or nonsignificance.
@@ -19,7 +19,7 @@ This document finalizes the integration of continuous-outcome measures (CFQ, MeC
 ---
 ## Executive Summary
 > **Whereas p < 0.05 establishes statistical significance, a concordant and stable p–fr–nb triplet (low p + high fr + high nb) establishes convincing, complete statistical evidence.**
-Traditional practice reports only the p-value for a given analysis, which we term partial evidence: it addresses compatibility with the null but not the stability of that decision or the distance from therapeutic neutrality. We define complete statistical evidence as the triplet (p, fr, nb), where p quantifies statistical significance; fr is the native fragility quotient for the design (MFQ, GFQ, CFQ, etc.), a 0–1 measure of the proportion of data or SE-shift needed to flip significance — high fr means the classification is stable, low fr means unstable; and nb is a 0–1 robustness metric measuring geometric distance from the neutrality boundary. Only when all three dimensions align (low p, high fr, high nb for "effect exists" claims) do we regard the statistical evidence as complete in the sense of being decision-ready and replication-ready.
+Traditional practice reports only the p-value for a given analysis, which we term partial evidence: it addresses compatibility with the null but not the stability of that decision or the distance from therapeutic neutrality. We define complete statistical evidence as the triplet (p, fr, nb), where p quantifies statistical significance; fr is the native fragility quotient for the design (GFQ, CFQ, etc.), a 0–1 measure of the proportion of data or SE-shift needed to flip significance — high fr means the classification is stable, low fr means unstable; and nb is a 0–1 robustness metric measuring geometric distance from the neutrality boundary. Only when all three dimensions align (low p, high fr, high nb for "effect exists" claims) do we regard the statistical evidence as complete in the sense of being decision-ready and replication-ready.
 Reporting only p-values yields partial evidence, because it ignores both the stability of the conclusion (fragility) and the distance from neutrality (robustness). The p–fr–nb triplet restores these missing dimensions and constitutes complete statistical evidence for a result.
 ## Quick Start: Your First p–fr–nb Triplet
 **You have a 2×2 table from a binary outcome trial:**
@@ -29,7 +29,7 @@ Reporting only p-values yields partial evidence, because it ignores both the sta
 | Control | 25 | 75 |
 **Calculate:**
 - p = 0.046 (Fisher's exact, two-sided)
-- fr = MFQ = 0.01 (1 toggle / 100 in the treatment arm; changing a single treatment-arm outcome from non-event to event raises p to 0.073, losing significance)
+- fr = GFQ = 0.005 (GFI = 1 reallocation / N = 200; reallocating a single treatment-arm patient from non-event to event raises p to 0.073, losing significance)
 - nb = RQ = 0.12 (|ad − bc| / (N²/4) = 1200 / 10000)
 **Interpret:** p-significant, fr-unstable, nb-intermediate → **Classic unstable result: significance rests on a single outcome. Treat as low-quality evidence; replicate before use.**
 **Calculators:** https://doi.org/10.5281/zenodo.17254763
@@ -43,7 +43,7 @@ Modern evidence assessment rests on three complementary statistical dimensions p
 Only when **all three dimensions align strongly** (low p + high fr + high nb) do we have truly compelling, replication-ready evidence that an intervention works.
 ### Definitions
 **Probability (p-value)**: the p-value quantifies the compatibility of the observed data with the null hypothesis (no effect). Lower p-values indicate stronger evidence against the null hypothesis. Conventional threshold: p < 0.05 for "statistically significant."
-**Fragility (fr)**: the fragility summary statistic, fr, measures the stability of the significance classification. **A high fr indicates stability**, i.e., it takes a significant shift in outcomes to flip significance. **A low fr indicates fragility**, i.e., it takes only a slight change in outcomes to flip significance. Fragility quantifies the minimal perturbation to the data required to reverse the p-value decision. fr ∈ [0,1] is the native fragility quotient for the design (e.g., MFQ, GFQ, CFQ), computed directly from the observed data. fr is a **perturbation-fragility** metric. Part I places it within the broader taxonomy of analysis fragility and data fragility, with resampling, perturbation, and scaling as the three data-fragility forms.
+**Fragility (fr)**: the fragility summary statistic, fr, measures the stability of the significance classification. **A high fr indicates stability**, i.e., it takes a significant shift in outcomes to flip significance. **A low fr indicates fragility**, i.e., it takes only a slight change in outcomes to flip significance. Fragility quantifies the minimal perturbation to the data required to reverse the p-value decision. fr ∈ [0,1] is the native fragility quotient for the design (e.g., GFQ, CFQ), computed directly from the observed data. fr is a **perturbation-fragility** metric. Part I places it within the broader taxonomy of analysis fragility and data fragility, with resampling, perturbation, and scaling as the three data-fragility forms.
 **Robustness (nb)**: The robustness summary statistic, nb, measures how far the observed result sits from therapeutic neutrality (no effect), expressed as a bounded, sign-agnostic **standardized effect magnitude** on a 0–1 scale. nb ∈ [0,1] where high nb = far from neutrality and low nb = near neutrality. nb is a property of the point estimate: it is computed from the observed effect magnitude, **not** from its precision — sampling uncertainty is carried by p and by fragility, not by nb. This separation is deliberate: it is what lets the triplet distinguish a large-but-imprecise effect (high nb, unstable) from a genuinely null one (low nb), and it is what the founding metric RQ already does (RQ is scale-invariant — multiplying every cell of a 2×2 by a constant leaves it unchanged). Here "robustness" denotes distance from therapeutic neutrality — a standardized effect magnitude — and **not** the classical statistical sense of insensitivity to modeling assumptions or outliers. **A high nb** indicates the result is far from neutrality; **a low nb** indicates it is statistically close to neutrality (which is not, by itself, affirmative evidence that no effect exists). nb is comparable across trials **within a design**; native nb values are **not** equivalent across designs (empirically they diverge), so cross-design nb supports a common interpretive language (near/intermediate/far), not numerical equivalence.
 **Effect size**: the magnitude of the observed effect. The framework reports both a standardized distance from neutrality and an absolute magnitude in clinical units. The standardized distance — how far the effect sits from no effect on a bounded 0–1 scale — is captured by nb itself: SRQ reparametrizes ln(HR), DTI reparametrizes atanh(r), and the rest of the transform family behaves the same way. The absolute magnitude — mean difference in native units, absolute risk reduction, number needed to treat, months of survival gained — is not generally recoverable from nb alone. For a single independent-sample 2×2 table with both arms nonempty, however, §4.1 gives ARR = RQ / [4f(1 − f)] once the allocation fraction f is known; at 1:1 allocation RQ = ARR exactly. Here ARR denotes the magnitude of the absolute risk difference. Unsigned RQ does not recover effect direction; direction requires sRQ with a declared table orientation or the arm-specific event proportions. Like nb, the absolute effect size is a property of the point estimate, independent of statistical significance and sampling uncertainty. The fourth element reports that magnitude directly in clinical units, even when it is algebraically recoverable from nb and the required design information. Thus nb is not uniformly a relative-effect measure: RQ is an allocation-scaled absolute risk difference for a 2×2 table. A large relative effect can still be a small absolute one: halving risk from 2% to 1% gives ARR = 0.01 and a number needed to treat of 100; RQ = 0.01 at 1:1 allocation and is smaller under unequal allocation, placing it near neutrality under the RQ bands. **Complete evidence therefore pairs the triplet with the absolute effect size; clinical decisions require both.**
 **Partial Evidence**: reporting of p-values alone or p-values with 95% CIs only constitutes "partial evidence."
@@ -81,7 +81,7 @@ Prefer **high p**, **high fr**, **low nb**.
 
 The measurements are universal; the interpretation is claim-dependent.
 
-In most common trial designs, the framework provides **paired metrics** (both fr and nb) so stability and distance from neutrality can be evaluated together (e.g., MFQ + RQ, PFI + RQ, DFQ + DNB, CFQ + MeCI, ANOVA-FQ + ANOVAη²).
+In most common trial designs, the framework provides **paired metrics** (both fr and nb) so stability and distance from neutrality can be evaluated together (e.g., GFQ + RQ, PFI + RQ, DFQ + DNB, CFQ + MeCI, ANOVA-FQ + ANOVAη²).
 
 ---
 
@@ -102,8 +102,8 @@ In most common trial designs, the framework provides **paired metrics** (both fr
 * Native notation: q_m ∈ [0,1] for each metric m.
 * Measures: Proportion of the sample (binary/diagnostic) or proportion of an SE-scale shift (continuous) required to flip the p-value classification.
 * Scale: 0 to 1 (native fragility quotients).
-* Primary native metrics: FQ, MFQ, GFQ, DFQ, BFQ, PFI, CFQ, ANOVA-FQ, ZFQ, OFQ, SFQ, WFQ (generic Wald fallback).
-* Secondary metrics: FI, SFI, GFI, FD (the fragility distance, with aFD, dFD), DFI, CFS, WFS (raw counts/units).
+* Primary native metrics: GFQ, DFQ, BFQ, PFI, CFQ, ANOVA-FQ, ZFQ, OFQ, SFQ, WFQ (generic Wald fallback).
+* Secondary metrics: MFQ (FI-count comparability), FQ (legacy), FI, SFI, GFI, FD (the fragility distance, with aFD, dFD), DFI, CFS, WFS (raw counts/units).
 * Interpretation (native): Lower q_m = less stable; higher q_m = more stable.
 
 #### Cross-Design Comparability
@@ -185,7 +185,7 @@ Verdict-layer words never replace band labels: the nb bands remain near/intermed
 | Metric            | Type       | Scale | Primary/Secondary     | Formula (core)                                                  | Purpose                                           |
 |-------------------|------------|-------|-----------------------|-----------------------------------------------------------------|---------------------------------------------------|
 | **FQ**            | Fragility  | 0–1   | LEGACY                | FI / N                                                          | Proportion to flip (Walsh-derived, total N)       |
-| **MFQ**           | Fragility  | 0–1   | PRIMARY               | FI / n_mod                                                      | Proportion to flip (arm-specific)                 |
+| **MFQ**           | Fragility  | 0–1   | Secondary             | FI / n_mod                                                      | Proportion to flip (arm-specific)                 |
 | **GFQ**           | Fragility  | 0–1   | PRIMARY               | GFI / N                                                         | Proportion to flip (global, r×c)                  |
 | **DFQ**           | Fragility  | 0–1   | PRIMARY               | DFI / n_relevant                                                | Proportion to flip (diagnostic)                   |
 | **BFQ**           | Fragility  | 0–1   | PRIMARY               | BFI / n_relevant (n_relevant = n)                               | Proportion to flip (single-arm vs benchmark)      |
@@ -230,7 +230,7 @@ Verdict-layer words never replace band labels: the nb bands remain near/intermed
 ### Core Concept
 **Naming rule (Walsh FI).** The 2014 single-arm toggle index is referred to as the Walsh FI (or, for the bidirectional minimum, the Heston FI). The adjective "classic" is banned as a name for it throughout canon, manuscripts, and code comments: it asserts stature, not definition. Refer to metrics by originator or by mechanism (single-arm toggle, transfer, edit).
 
-Fragility quotients measure the proportion of the sample (binary/diagnostic) or the proportion of SE-scale movement (continuous) required to flip statistical significance. All primary native fragility quotients range 0–1 (MFQ, GFQ, CFQ, SFQ, etc.). fr is the native fragility quotient for the design at hand, computed directly from the observed data. Cross-design percentile normalization is a deferred extension (see Part I), not part of the operational framework.
+Fragility quotients measure the proportion of the sample (binary/diagnostic) or the proportion of SE-scale movement (continuous) required to flip statistical significance. All primary native fragility quotients range 0–1 (GFQ, CFQ, SFQ, etc.). fr is the native fragility quotient for the design at hand, computed directly from the observed data. Cross-design percentile normalization is a deferred extension (see Part I), not part of the operational framework.
 
 ### 3.1 FQ — Fragility Quotient
 **Application**: Legacy metric for any binary outcome 2×2 table (independent samples) using total N denominator.
@@ -243,16 +243,16 @@ Fragility quotients measure the proportion of the sample (binary/diagnostic) or 
 **NBF pair**: RQ
 **Note**: FQ is a legacy metric and is not recommended as the primary fr metric for 2-arm binary outcome studies. GFQ is preferred (path-independent and label-invariant); MFQ is the alternative when comparability with the FI count is required, and it is allocation-fair (denominating against the arm actually modified) and label-resistant.
 
-### 3.2 MFQ — Modified-arm Fragility Quotient ⭐
-**Application**: Alternative to GFQ for independent-sample 2×2 binary outcome trials (any allocation ratio) when compatibility with the Walsh FI count is required. GFI remains computable at large N (Part VIII; N = 28,699,989), so large sample size alone does not call for MFQ.
+### 3.2 MFQ — Modified-arm Fragility Quotient
+**Application**: Secondary metric (v14.6.0) for independent-sample 2×2 binary outcome trials (any allocation ratio), retained for comparability with the FI toggle count and with published FI-based reports. It is not the fr coordinate of the triplet; GFQ is (§3.3). GFI remains computable at large N (Part VIII; N = 28,699,989), so large sample size alone does not call for MFQ.
 **Definition**: Proportion of the arm that was actually modified in the Walsh fragility index procedure required to flip statistical significance.
 **Formula**: MFQ = FI / n_mod, where n_mod = sample size of the arm subjected to toggling in the standard FI calculation (i.e., the arm with fewer events; if tied, the smaller arm).
 **Range**: 0 to 1
-**Interpretation**: fr = MFQ. Example: MFQ = 0.05 means 5% of patients in the arm that was toggled would need to switch outcome to flip significance.
+**Interpretation**: Reported beside fr (GFQ), not as fr. Example: MFQ = 0.05 means 5% of patients in the arm that was toggled would need to switch outcome to flip significance.
 **Advantages**: allocation-resistant: minimizes the distortion caused by unequal study allocation; the MFQ is label-resistant but not label independent like the GFQ is.
 **Base metric**: Heston FI 
 **NBF pair**: RQ
-**Note**: For 2×2 binary outcome tables, GFQ is the recommended default (§3.3); use MFQ when comparability with the universally recognized FI count is needed; large N alone does not require it, because GFI remains computable (Part VIII). MFQ remains allocation-fair by denominating against the arm that actually needs to change. When MFQ is used, pair it as MFQ + RQ.
+**Note**: For 2×2 binary outcome tables, GFQ is the recommended default (§3.3); use MFQ when comparability with the universally recognized FI count is needed; large N alone does not require it, because GFI remains computable (Part VIII). MFQ remains allocation-fair by denominating against the arm that actually needs to change. When MFQ is reported, it accompanies the primary pair GFQ + RQ; it does not replace GFQ.
 
 ### 3.3 GFQ — Global Fragility Quotient ⭐
 **Application**: Recommended default and gold standard for any r×c contingency table or multinomial outcomes (independent samples), including 2×2 binary outcome trials.
@@ -442,10 +442,10 @@ Then:
 
 ### 3.12 WFQ — Wald Fragility Quotient ⭐
 
-**Application**: Fallback metric for any effect estimate reported with a Wald-type z-statistic, or with a 95% confidence interval from which one can be reconstructed, when no design-native metric in this document applies — e.g., regression coefficients (linear, logistic, Poisson, survey-weighted), prevalence or trend slopes, risk differences, and adjusted mean changes.
-**Precedence rule**: WFQ is never used where a design-native metric is computable. A Cox hazard ratio takes SFQ; a generalized odds ratio takes OFQ; a correlation takes ZFQ; two-group continuous summary statistics take CFQ; a multi-group F-test takes ANOVA-FQ; a contingency table takes GFQ (or MFQ at large N). WFQ covers the remainder.
+**Application**: Fallback metric for any effect estimate reported with a Wald-type z-statistic, or with a 95% confidence interval from which one can be reconstructed, when no design-native metric in this document applies — e.g., regression coefficients (linear, logistic, Poisson, survey-weighted), prevalence or trend slopes, risk differences, adjusted mean changes, and ratio estimates that have no design-native metric (e.g., prevalence ratios and rate ratios).
+**Precedence rule**: WFQ is never used where a design-native metric is computable. A Cox hazard ratio takes SFQ; a generalized odds ratio takes OFQ; a correlation takes ZFQ; two-group continuous summary statistics take CFQ; a multi-group F-test takes ANOVA-FQ; a contingency table takes GFQ. WFQ covers the remainder.
 **Definition**: Bounded distance, in standard-error units, between the observed Wald z-statistic and the two-sided α = 0.05 critical value.
-**Formula**: Let θ̂ = reported effect estimate with 95% CI [CI_lower, CI_upper] on the same scale (for ratio measures — which the precedence rule routes to their native metrics — the estimate and CI are log-transformed first).
+**Formula**: Let θ̂ = reported effect estimate with 95% CI [CI_lower, CI_upper] on the same scale (for ratio measures the estimate and CI are log-transformed first; a ratio with a design-native metric is routed there by the precedence rule).
 Calculate:
 - SE ≈ (CI_upper − CI_lower) / (2 × 1.96) (standard error reconstructed from the confidence interval; when the analysis reports z, or t with large df, directly, use it and skip the reconstruction)
 - z = θ̂ / SE (Wald z-statistic)
@@ -456,7 +456,7 @@ Then:
 **Interpretation**: fr = WFQ. Defined for both significant and nonsignificant baselines (classification stability in either direction). Example: WFQ = 0.48 means the z-statistic sits 0.92 SE units from the p = 0.05 boundary (the map is invertible: WFS = WFQ/(1 − WFQ)); higher values indicate a more stable significance classification.
 **Advantages**: Works directly from the estimate + 95% CI pair, the most common summary format in the literature. No raw data, no model refitting. Structurally identical to CFQ, ANOVA-FQ, ZFQ, OFQ, and SFQ, extending the fragility framework to designs the named metrics do not reach.
 **Base metric**: WFS
-**NBF pair**: none for non-ratio estimates. Ratio estimates never reach WFQ (the precedence rule routes them to native metrics with native NBF pairs). For non-ratio coefficients — slopes, differences, adjusted changes — no nb metric is currently defined: the triplet is incomplete for this design, and results are reported as p–fr plus the absolute effect size with an explicit statement that nb is unavailable. Do not improvise an nb transform; defining one is future work.
+**NBF pair**: none. Ratio estimates with a design-native metric never reach WFQ (the precedence rule routes them to native metrics with native NBF pairs). A ratio estimate with no design-native metric (e.g., a prevalence ratio or rate ratio) takes WFQ on the log scale, and no nb metric is currently defined for it; the triplet is incomplete, reported as for non-ratio estimates below. For non-ratio coefficients — slopes, differences, adjusted changes — no nb metric is currently defined: the triplet is incomplete for this design, and results are reported as p–fr plus the absolute effect size with an explicit statement that nb is unavailable. Do not improvise an nb transform; defining one is future work.
 **Note**: z reconstructed from a CI is a Wald approximation, so WFQ values are asymptotic, matching the CI-only conventions of CFQ, OFQ, and SFQ. The critical value is fixed at 1.96 (normal approximation); when the source analysis used a t-reference with small degrees of freedom, use that t-critical value in place of 1.96 and state so. Because WFQ is a deterministic monotone function of |z| alone, within this design it is a re-expression of the reported test onto the boundary-distance scale — it adds interpretive resolution near the α boundary, not information beyond the reported statistic; design-native metrics that read table geometry (GFQ) remain preferred wherever computable, per the precedence rule. Case matters in the acronym family: uppercase-W WFQ/WFS are the generic Wald metrics; lowercase-w metrics (wGFQ, wsRQ, wFDQ) are the weighted meta-analytic pooled forms, and the two groups are unrelated.
 
 ## Part IV: Primary Robustness Metrics
@@ -797,7 +797,7 @@ Given unit size f, Walter defines UFI as the minimum number k of these fixed-mar
 - Feinstein UFI: the unit size f.  
 - Walter UFI: the toggle count k, giving total shift k·f.  
 
-**Note**: Both strictly fixed-margin constructs. Conceptual precursors to PFI. Modern analyses use PFI for fixed margins and MFQ/GFQ otherwise.  
+**Note**: Both strictly fixed-margin constructs. Conceptual precursors to PFI. Modern analyses use PFI for fixed margins and GFQ otherwise.  
 **Note**: The Walter coupled fixed-margin move-set is reused by NDI (Part V), which counts the same moves to the neutrality boundary (RR = 1) rather than to the significance boundary (p = 0.05). UFI and NDI therefore instantiate both boundaries of the framework with a single move-set.  
 
 ### **MFI — Modified Fragility Index**  
@@ -946,7 +946,7 @@ Far (far from neutrality):     RQ >  0.227
 
 ### Strength-of-Evidence under the p–fr–nb framework  
 
-The following strength-of-evidence tables are calibrated for 2×2 binary trials using MFQ. For other designs, analogous tables use the native fragility quotient for that design, interpreted within its family.
+The following strength-of-evidence tables are calibrated for 2×2 binary trials using GFQ, with the fragility band GFI = 1 or GFQ < 0.01. For other designs, analogous tables use the native fragility quotient for that design, interpreted within its family.
 
 **When p ≤ 0.05 (statistically significant)**
 
@@ -1063,8 +1063,8 @@ The modern statistical evidence framework consists of three complementary dimens
    * Ordinal: OFQ (Wilcoxon-Mann-Whitney / proportional odds)
    * Survival: SFQ (Cox regression hazard ratios)
    * Correlation: ZFQ (Fisher-z distance from the α=0.05 boundary)
-   * Generic Wald fallback (regression coefficients, trend slopes, risk differences, adjusted changes — only when no design-native metric applies): WFQ (with WFS as the underlying SE-scale distance). For non-ratio estimates no nb partner is defined; report p–fr plus absolute effect size and state that nb is unavailable.
-   * For each design, the native fragility quotient q_m (e.g., MFQ, GFQ, CFQ) is computed directly from the observed data and serves as fr, the fragility coordinate of the p–fr–nb triplet.
+   * Generic Wald fallback (regression coefficients, trend slopes, risk differences, adjusted changes — only when no design-native metric applies): WFQ (with WFS as the underlying SE-scale distance). For non-ratio estimates and for ratio estimates without a design-native metric, no nb partner is defined; report p–fr plus absolute effect size and state that nb is unavailable.
+   * For each design, the native fragility quotient q_m (e.g., GFQ, CFQ) is computed directly from the observed data and serves as fr, the fragility coordinate of the p–fr–nb triplet.
 
 3. **ROBUSTNESS** (NBF-based): How far from neutrality?  
 
@@ -1214,6 +1214,20 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the Walsh FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 14.6.1** (November 11, 2026)
+
+- **WFQ scope gap closed for ratio estimates without a native metric.** §3.12 stated that ratio estimates never reach WFQ, yet prevalence ratios and rate ratios (e.g., GEE log-link or Poisson models) have no design-native fragility metric. Such ratios now take WFQ on the log scale; no nb metric is defined for them, so the triplet is incomplete and reported as p–fr plus absolute effect size with nb stated unavailable. Edited: §3.12 Application, Formula note, and NBF pair; Part X WFQ bullet. Ratios with a native metric (HR → SFQ, gOR → OFQ) are unchanged.
+- No formula, band cutoff, pairing, or computed value changed.
+
+**Version 14.6.0** (November 10, 2026)
+
+- **Demoted MFQ from primary to secondary.** GFQ is now the sole primary fragility (fr) coordinate for independent-sample 2×2 tables. Since v14.5.2 MFQ's only remaining role was comparability with the FI toggle count, a historical-comparison role; GFQ is path-independent and label-invariant, the fragility band is stated for GFQ, and GFI is computable at large N. MFQ remains defined (§3.2, ⭐ removed; Part II row marked Secondary) for comparability with FI-based reports and for its large-N limit (MFQ → ARR).
+- **Quick Start fr line** changed from MFQ = 0.01 to GFQ = 0.005 (GFI = 1, N = 200; verified: single reallocation raises Fisher p from 0.046 to 0.073). Interpretation unchanged: unstable, nb intermediate.
+- **Strength-of-evidence tables** now state calibration on GFQ with the band GFI = 1 or GFQ < 0.01. The tables are categorical (stable/unstable); no row changes.
+- Removed MFQ from primary-metric and fr-example lists (Abstract, Executive Summary, Definitions, Key Insight pairing example, Part I primary list, Part III core concept, Part X); added it to the Part I secondary list. WFQ precedence rule corrected: a contingency table takes GFQ (the stale "or MFQ at large N" contradicted v14.5.2). UFI note updated to "GFQ otherwise."
+- Removed FQ from the Part I primary native-metric list and added it to the secondary list as legacy, consistent with §3.1.
+- Section numbering and anchors unchanged. No formula, band cutoff, or computed value changed.
 
 **Version 14.5.4** (October 29, 2026)
 
