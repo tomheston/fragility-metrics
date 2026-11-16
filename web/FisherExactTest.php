@@ -17,8 +17,18 @@
  * Zenodo. https://doi.org/10.5281/zenodo.17254763
  */
 
+require_once __DIR__ . '/GlobalFragilityIndex.php';
+
 class FisherExactTest {
-    
+
+    /**
+     * Above this N the p-value comes from the large-N engine in
+     * GlobalFragilityIndex.php (SciPy probability-ordering rule, constant
+     * memory). The exact log-factorial table below grows with N and would
+     * exhaust a 128 MB memory limit near N = 5 million.
+     */
+    const LARGE_N = 100000;
+
     /**
      * Calculate two-sided Fisher's exact test p-value
      * Uses "sum lesser probabilities" method (same as scipy default)
@@ -39,7 +49,10 @@ class FisherExactTest {
         if ($n == 0) {
             return 1.0;
         }
-        
+        if ($n > self::LARGE_N) {
+            return GlobalFragilityIndex::fisherPLargeN((int)$a, (int)$b, (int)$c, (int)$d);
+        }
+
         // Calculate observed probability
         $observedProb = self::hypergeometricProb($a, $b, $c, $d);
         

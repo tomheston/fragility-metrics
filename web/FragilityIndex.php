@@ -13,12 +13,24 @@
  */
 
 require_once 'FisherExactTest.php';
+require_once 'GlobalFragilityIndex.php';
 
 class FragilityIndex {
-    
+
     private const ALPHA = 0.05;
     /** Matches max_iter = 10**6 in the reference Python implementation. */
     private const MAX_ITERATIONS = 1000000;
+
+    /**
+     * Above this N the toggle scan uses the large-N Fisher engine (SciPy
+     * probability-ordering rule, as in the reference Python), whose cost per
+     * step does not grow with N. At or below it the original exact scan runs
+     * unchanged.
+     */
+    private const FAST_ENGINE_N = 2000;
+
+    /** Wall-clock budget for the large-N scan; on timeout FI is not reported. */
+    private const MAX_SECONDS = 4.0;
     
     /**
      * Calculate FI, FQ, MFQ for a 2×2 table
@@ -54,20 +66,48 @@ class FragilityIndex {
             ];
         }
         
-        // Get baseline p-value and state.
-        // Significance is strict: p = alpha counts as non-significant, matching
-        // the reference Python implementation and GlobalFragilityIndex.
-        $baseline_p = FisherExactTest::calculate($a, $b, $c, $d);
-        $baseline_sig = ($baseline_p < $alpha);
-        $baseline_state = $baseline_sig ? 'significant' : 'non-significant';
-        
         // Choose arm using Walsh tie-breaking logic
         $arm = self::chooseArm($a, $b, $c, $d);
-        
-        // Try both directions (increase events, decrease events)
-        $up = self::stepsToFlip($a, $b, $c, $d, $arm, 'up', $baseline_sig, $alpha);
-        $down = self::stepsToFlip($a, $b, $c, $d, $arm, 'down', $baseline_sig, $alpha);
-        
+
+        if ($N > self::FAST_ENGINE_N) {
+            // Baseline and every step scored by the same large-N engine, so
+            // the verdicts being compared can never disagree at a knife edge.
+            $baseline_p = GlobalFragilityIndex::fisherPLargeN($a, $b, $c, $d);
+            $baseline_sig = !GlobalFragilityIndex::acceptsMargins($a, $a + $b, $a + $c, $N, $alpha);
+            $scan = self::fastScan($a, $b, $c, $d, $arm, $baseline_sig, $alpha);
+            if ($scan['timed_out']) {
+                $n_mod = ($arm === 'A') ? ($a + $b) : ($c + $d);
+                return [
+                    'FI' => null,
+                    'FQ' => null,
+                    'MFQ' => null,
+                    'baseline_p' => $baseline_p,
+                    'baseline_state' => $baseline_sig ? 'significant' : 'non-significant',
+                    'arm' => $arm,
+                    'direction' => null,
+                    'n_mod' => $n_mod,
+                    'final_p' => null,
+                    'post_toggle' => ['a' => null, 'b' => null, 'c' => null, 'd' => null],
+                    'timed_out' => true,
+                    'note' => sprintf('FI not computed: more than %s toggles, beyond the web time limit.',
+                                      number_format($scan['scanned']))
+                ];
+            }
+            $up = $scan['up'];
+            $down = $scan['down'];
+        } else {
+            // Get baseline p-value and state.
+            // Significance is strict: p = alpha counts as non-significant, matching
+            // the reference Python implementation and GlobalFragilityIndex.
+            $baseline_p = FisherExactTest::calculate($a, $b, $c, $d);
+            $baseline_sig = ($baseline_p < $alpha);
+
+            // Try both directions (increase events, decrease events)
+            $up = self::stepsToFlip($a, $b, $c, $d, $arm, 'up', $baseline_sig, $alpha);
+            $down = self::stepsToFlip($a, $b, $c, $d, $arm, 'down', $baseline_sig, $alpha);
+        }
+        $baseline_state = $baseline_sig ? 'significant' : 'non-significant';
+
         // Choose minimum steps
         $candidates = [];
         if ($up['steps'] !== null) {
@@ -182,8 +222,51 @@ class FragilityIndex {
     }
     
     /**
+     * Large-N toggle scan. Steps both directions in lockstep (up then down at
+     * each step), so the first flip found is the minimum over the two
+     * directions, with ties going to 'up' exactly as the usort below does.
+     * Returns the same 'up' / 'down' shapes as stepsToFlip(); the direction
+     * that did not win is reported as not attained, which the caller never
+     * uses because only the minimum is reported.
+     */
+    private static function fastScan($a, $b, $c, $d, $arm, $baseline_sig, $alpha) {
+        $N = $a + $b + $c + $d;
+        $R = $a + $b;
+        $C0 = $a + $c;
+        $upMax = min(($arm === 'A') ? $b : $d, self::MAX_ITERATIONS);
+        $downMax = min(($arm === 'A') ? $a : $c, self::MAX_ITERATIONS);
+        $kMax = max($upMax, $downMax);
+        $none = ['steps' => null, 'final_p' => null];
+        $deadline = microtime(true) + self::MAX_SECONDS;
+
+        for ($k = 1; $k <= $kMax; $k++) {
+            if (($k & 0xFF) === 0 && microtime(true) > $deadline) {
+                return ['timed_out' => true, 'scanned' => $k - 1, 'up' => $none, 'down' => $none];
+            }
+            foreach (['up' => $k, 'down' => -$k] as $dir => $s) {
+                if (($dir === 'up' && $k > $upMax) || ($dir === 'down' && $k > $downMax)) {
+                    continue;
+                }
+                // Arm A toggles move a (and the event total); arm B toggles move c only.
+                $x = ($arm === 'A') ? $a + $s : $a;
+                $C = $C0 + $s;
+                $sig = !GlobalFragilityIndex::acceptsMargins($x, $R, $C, $N, $alpha);
+                if ($sig !== $baseline_sig) {
+                    $hit = ['steps' => $k, 'final_p' => GlobalFragilityIndex::fisherPMargins($x, $R, $C, $N)];
+                    return [
+                        'timed_out' => false, 'scanned' => $k,
+                        'up' => ($dir === 'up') ? $hit : $none,
+                        'down' => ($dir === 'down') ? $hit : $none,
+                    ];
+                }
+            }
+        }
+        return ['timed_out' => false, 'scanned' => $kMax, 'up' => $none, 'down' => $none];
+    }
+
+    /**
      * Count steps to flip significance in one direction
-     * 
+     *
      * @param int $a Arm A events
      * @param int $b Arm A non-events
      * @param int $c Arm B events

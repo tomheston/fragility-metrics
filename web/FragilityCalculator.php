@@ -19,6 +19,7 @@
 require_once 'FisherExactTest.php';
 require_once 'FragilityIndex.php';
 require_once 'GlobalFragilityIndex.php';
+require_once 'LinFragilityIndex.php';
 require_once 'RiskQuotient.php';
 require_once 'NeutralityDistanceIndex.php';
 require_once 'RelativeRisk.php';
@@ -26,7 +27,13 @@ require_once 'RiskDifference.php';
 require_once 'ResamplingFragility.php';
 
 class FragilityCalculator {
-    
+
+    /**
+     * Largest total N the web calculator accepts. Above it the page sends
+     * the user to the Python toolkit instead of attempting the computation.
+     */
+    const MAX_N = 1000000000;
+
     /**
      * Calculate complete p-fr-nb triplet for 2×2 table
      * 
@@ -110,6 +117,21 @@ class FragilityCalculator {
 	    $gfi_result['post_GFI_p'] = $gfi_result['final_p'];
 	}
 
+        // GFI too large to certify within the web time budget: report the
+        // Lin Fragility Index (bidirectional, either or both arms) instead.
+        // GFI <= LinFI <= FI, and LinFI stays cheap where GFI does not.
+        $lin_result = null;
+        if ($gfi_result['verified'] !== true) {
+            // The post-FI table is a Lin witness (toggles in one arm), so it
+            // seeds the scan: LinFI <= FI even if the scan hits its time limit.
+            $lin_result = LinFragilityIndex::calculate($a, $b, $c, $d, $alpha, $postFI);
+            // Every Lin toggle is also a GFI move, so LinFI bounds GFI above.
+            if ($lin_result['LinFI'] !== null &&
+                (!isset($gfi_result['upper_bound']) || $lin_result['LinFI'] < $gfi_result['upper_bound'])) {
+                $gfi_result['upper_bound'] = $lin_result['LinFI'];
+            }
+        }
+
         
         // Calculate robustness
         $rq_result = RiskQuotient::calculate($a, $b, $c, $d);
@@ -146,7 +168,8 @@ class FragilityCalculator {
                 'direction' => $fi_result['direction'],
                 'post_toggle' => $fi_result['post_toggle'],
 		'post_FI' => $fi_result['post_FI'] ?? null,
-    	        'post_FI_p' => $fi_result['post_FI_p'] ?? null
+    	        'post_FI_p' => $fi_result['post_FI_p'] ?? null,
+                'note' => $fi_result['note'] ?? null
             ],
             'gfi' => [
                 'GFI' => $gfi_result['GFI'],
@@ -160,8 +183,11 @@ class FragilityCalculator {
                 'post_toggle' => $gfi_result['post_toggle'],
                 'note' => $gfi_result['note'],
 		'post_GFI' => $gfi_result['post_GFI'] ?? null,
-		'post_GFI_p' => $gfi_result['post_GFI_p'] ?? null
+		'post_GFI_p' => $gfi_result['post_GFI_p'] ?? null,
+                'lower_bound' => $gfi_result['lower_bound'] ?? null,
+                'upper_bound' => $gfi_result['upper_bound'] ?? null
             ],
+            'lin' => $lin_result,
             'nb' => [
                 'NDI' => $ndi_result['NDI'],
                 'RQ' => $rq_result['RQ'],

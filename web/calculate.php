@@ -10,11 +10,15 @@
  * https://creativecommons.org/licenses/by/4.0/
  */
 
+require_once 'includes/safety_net.php';
 require_once 'FragilityCalculator.php';
 require_once 'DatabaseManager.php';
 
+fm_install_safety_net('p-fr-nb plus effect size Calculator', 'index.php');
+
 $result = null;
 $error = null;
+$too_large = false;
 $saved_id = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -26,11 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // is_int() rejects both invalid values (false) and missing fields (null).
     if (!is_int($a) || !is_int($b) || !is_int($c) || !is_int($d) || $a < 0 || $b < 0 || $c < 0 || $d < 0) {
         $error = "All values must be non-negative integers.";
+    } elseif ($a > FragilityCalculator::MAX_N || $b > FragilityCalculator::MAX_N ||
+              $c > FragilityCalculator::MAX_N || $d > FragilityCalculator::MAX_N ||
+              $a + $b + $c + $d > FragilityCalculator::MAX_N) {
+        $too_large = true;
     } else {
         try {
             $result = FragilityCalculator::calculate($a, $b, $c, $d);
             $saved_id = DatabaseManager::saveCalculation($result);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $error = "Calculation error: " . $e->getMessage();
         }
     }
@@ -63,6 +71,9 @@ include 'includes/header.php';
       <strong>Error:</strong> <?= htmlspecialchars($error) ?>
     </div>
   <?php endif; ?>
+  <?php if ($too_large): ?>
+    <?= fm_colab_notice_html('The web calculator accepts tables with a total N of up to ' . number_format(FragilityCalculator::MAX_N) . '.') ?>
+  <?php endif; ?>
   <form id="pfr-form" method="POST" class="pfr-form">
     <div class="pfr-grid">
       <div>
@@ -94,28 +105,40 @@ include 'includes/header.php';
   <?php if ($result): ?>
     <div id="pfr-result">
       <?php
-        // p-fr-nb triplet: GFQ is the recommended fr for 2x2 tables, MFQ the fallback; nb is RQ.
+        // p-fr-nb triplet: GFQ is the recommended fr for 2x2 tables. When the
+        // GFI is too large to certify within the web time budget, LinFQ is
+        // reported instead; MFQ is the last resort. nb is RQ.
+        $gfiOverBudget = is_array($result['gfi'] ?? null) && empty($result['gfi']['verified']);
+        $lin = $result['lin'] ?? null;
         $frName = null;
         $frVal = null;
-        if (isset($result['gfi']['GFQ'])) {
+        $frRel = '=';
+        if (!$gfiOverBudget && isset($result['gfi']['GFQ'])) {
             $frName = 'GFQ';
             $frVal = $result['gfi']['GFQ'];
+        } elseif (is_array($lin) && $lin['LinFQ'] !== null) {
+            $frName = 'LinFQ';
+            $frVal = $lin['LinFQ'];
+            $frRel = $lin['verified'] ? '=' : '≤';
         } elseif (isset($result['fr']['MFQ'])) {
             $frName = 'MFQ';
             $frVal = $result['fr']['MFQ'];
         }
         $nbVal = $result['nb']['RQ'] ?? null;
       ?>
+      <?php if ($gfiOverBudget): ?>
+        <?= fm_colab_notice_html('The Global Fragility Index (GFI) for this table is too large for the web calculator to certify within its time limit, so fragility is reported as LinFQ, the Lin Fragility Quotient (LinFI / N), instead of GFQ.') ?>
+      <?php endif; ?>
       <p><strong>p–fr–nb triplet:</strong> p = <?= number_format($result['p']['value'] ?? 0, 6) ?>,
-      fr = <?= $frName !== null ? $frName . ' = ' . number_format($frVal, 4) : 'not defined' ?>,
+      fr = <?= $frName !== null ? $frName . ' ' . $frRel . ' ' . number_format($frVal, 4) : 'not defined' ?>,
       nb = <?= $nbVal !== null ? 'RQ = ' . number_format($nbVal, 4) : 'not defined' ?><br>
-      <span style="font-size:13px; color:#555;">GFQ is the recommended fragility (fr) metric for 2×2 tables; MFQ is used when GFI is not computed.</span></p>
+      <span style="font-size:13px; color:#555;">GFQ is the recommended fragility (fr) metric for 2×2 tables. When the GFI is too large to certify here, LinFQ is reported instead; MFQ is used when neither is available.</span></p>
       <h3>Significance (p)</h3>
       <p>baseline p-value = <?= number_format($result['p']['value'] ?? 0, 6) ?><br>
       [two-sided Fisher's exact test, alpha = <?= number_format($result['p']['alpha'] ?? 0.05, 2) ?>]
       </p>
       <h3>Fragility (fr)</h3>
-      <p>FI (Fragility Index) = <?= $result['fr']['FI'] ?? 'NULL' ?><br>
+      <p>FI (Fragility Index) = <?= $result['fr']['FI'] ?? 'NULL' ?><?= ($result['fr']['FI'] === null && !empty($result['fr']['note'])) ? ' (' . htmlspecialchars($result['fr']['note']) . ')' : '' ?><br>
       FQ (Fragility Quotient, legacy) = <?= $result['fr']['FQ'] !== null ? number_format($result['fr']['FQ'], 4) : 'NULL' ?><br>
       MFQ (Modified-Arm Fragility Quotient) = <?= $result['fr']['MFQ'] !== null ? number_format($result['fr']['MFQ'], 4) : 'NULL' ?><br>
       <?php if (!empty($result['fr']['post_FI'])): ?>
@@ -123,7 +146,25 @@ include 'includes/header.php';
       Post-FI p-value = <?= number_format((float)($result['fr']['post_FI_p'] ?? 0), 6) ?><br>
       <?php endif; ?>
       <br>
-      <?php if (isset($result['gfi']) && $result['gfi']['GFI'] !== null): ?>
+      <?php if ($gfiOverBudget): ?>
+        <?php
+          $gLo = $result['gfi']['lower_bound'] ?? null;
+          $gHi = $result['gfi']['upper_bound'] ?? null;
+          $nTot = (int)($result['input']['N'] ?? 0);
+        ?>
+        GFI (Global Fragility Index) = not certified within the web time limit<?php if ($gLo !== null && $gHi !== null): ?> (proven bracket: <?= number_format($gLo) ?> ≤ GFI ≤ <?= number_format($gHi) ?>)<?php elseif ($gLo !== null): ?> (proven: GFI ≥ <?= number_format($gLo) ?>)<?php elseif ($gHi !== null): ?> (proven: GFI ≤ <?= number_format($gHi) ?>)<?php endif; ?><br>
+        GFQ (Global Fragility Quotient) = not certified<?php if ($gLo !== null && $gHi !== null && $nTot > 0): ?> (<?= number_format($gLo / $nTot, 4) ?> ≤ GFQ ≤ <?= number_format($gHi / $nTot, 4) ?>)<?php elseif ($gHi !== null && $nTot > 0): ?> (GFQ ≤ <?= number_format($gHi / $nTot, 4) ?>)<?php endif; ?><br>
+        <br>
+        <?php if (is_array($lin) && $lin['LinFI'] !== null): ?>
+        LinFI (Lin Fragility Index) <?= $lin['verified'] ? '=' : '≤' ?> <?= number_format($lin['LinFI']) ?><?= $lin['verified'] ? '' : ' (upper bound; scan stopped at the web time limit)' ?><br>
+        LinFQ (Lin Fragility Quotient = LinFI / N) <?= $lin['verified'] ? '=' : '≤' ?> <?= number_format($lin['LinFQ'], 4) ?><br>
+        [minimum within-arm outcome toggles, in either or both arms and in either direction, that reverse the significance classification; arm sizes fixed; two-sided Fisher's exact]<br>
+        Post-LinFI table: {<?= (int)$lin['post_table']['a'] ?>, <?= (int)$lin['post_table']['b'] ?>, <?= (int)$lin['post_table']['c'] ?>, <?= (int)$lin['post_table']['d'] ?>}<br>
+        Post-LinFI p-value = <?= number_format((float)$lin['final_p'], 6) ?><br>
+        <?php else: ?>
+        LinFI (Lin Fragility Index) = NULL<?= (is_array($lin) && !empty($lin['note'])) ? ' (' . htmlspecialchars($lin['note']) . ')' : '' ?><br>
+        <?php endif; ?>
+      <?php elseif (isset($result['gfi']) && $result['gfi']['GFI'] !== null): ?>
         GFI (Global Fragility Index) = <?= $result['gfi']['GFI'] ?? 'NULL' ?><br>
         GFQ (Global Fragility Quotient) = <?= number_format($result['gfi']['GFQ'] ?? 0, 4) ?> (<?= $result['gfi']['verified'] ? 'Exact' : 'Estimated' ?>)<br>
         [GFI significance test: two-sided Fisher's exact; baseline p = <?= number_format((float)($result['gfi']['baseline_p'] ?? 0), 6) ?>]<br>

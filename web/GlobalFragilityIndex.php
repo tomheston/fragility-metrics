@@ -47,6 +47,16 @@
  * the work or time budget returns the incumbent labelled as an upper bound
  * (verified = false) with the proven bracket in the note.
  *
+ * WEB TIME BUDGETS
+ * ----------------
+ * The budgets below are sized so a web request always finishes well inside
+ * the host's PHP time limit and Cloudflare's 100-second proxy timeout. The
+ * shell search hands over after a few seconds (the margin method is far
+ * faster once GFI is past a few dozen), and the margin certification stops
+ * after MARGIN_MAX_SECONDS. A result with verified = false tells the page to
+ * fall back to the Lin Fragility Index and point to the Python toolkit,
+ * which has no such limit.
+ *
  * Citation: Heston, T. F. (2025). Fragility Metrics Toolkit [Software].
  * Zenodo. https://doi.org/10.5281/zenodo.17254763
  *
@@ -69,7 +79,7 @@ class GlobalFragilityIndex {
     const MARGIN_MAX_CANDIDATES = 50000000;
 
     /** Margin-coordinate certification: wall-clock budget in seconds. */
-    const MARGIN_MAX_SECONDS = 90.0;
+    const MARGIN_MAX_SECONDS = 8.0;
 
     /** Candidate rows accumulated per certification batch (reference GROUP_ROWS). */
     const MARGIN_GROUP_ROWS = 1000000;
@@ -77,11 +87,11 @@ class GlobalFragilityIndex {
     /** Probability-ordering tolerance of the reference engine (SciPy rule). */
     const MARGIN_GAMMA = 1.00000000000001;
 
-    /** Work budget: candidate tables examined before the search gives up. */
-    const MAX_CANDIDATES = 50000000;
+    /** Shell search work budget: candidate tables before handing over. */
+    const MAX_CANDIDATES = 2000000;
 
-    /** Wall-clock budget in seconds before the search gives up. */
-    const MAX_SECONDS = 90.0;
+    /** Shell search wall-clock budget in seconds before handing over. */
+    const MAX_SECONDS = 3.0;
 
     /** Relative tolerance when summing Fisher point probabilities <= observed. */
     const FISHER_TOL = 1.0e-7;
@@ -379,24 +389,29 @@ class GlobalFragilityIndex {
 
         $baselineP = self::mFisherP($a, $R0, $C0, $N);
         $baseSig = ($baselineP < $alpha);
+        $deadline = $started + self::MARGIN_MAX_SECONDS;
 
         // ---- 1. rigorous incumbent ----
-        $best = self::mInitialIncumbent($origin, $baseSig, $alpha);
+        // Both steps are linear in N or in the incumbent, so at very large N
+        // they check the deadline too; a timed-out step keeps whatever real
+        // flipping table it already found, which is still a valid upper bound.
+        $timedOut = false;
+        $best = self::mInitialIncumbent($origin, $baseSig, $alpha, $deadline, $timedOut);
         if ($best === null) {
             $bestD = $N + 1;
             $bestT = null;
         } else {
-            list($bestD, $bestT) = self::mTightenRays($origin, $best[0], $best[1], $baseSig, $alpha);
+            list($bestD, $bestT) = self::mTightenRays($origin, $best[0], $best[1], $baseSig, $alpha, $deadline, $timedOut);
         }
 
         // ---- 2. level-ascending certification ----
         $examined = 0;
-        $aborted = false;
+        $aborted = $timedOut;
         $levelDone = 0;
         $gU = array(); $gV = array();
 
         $D = 1;
-        while ($D < $bestD) {
+        while (!$aborted && $D < $bestD) {
             $lim = $bestD - 1;
             foreach (self::mLevelPairs($D, $N, $R0, $C0) as $uv) {
                 $gU[] = $uv[0];
@@ -424,10 +439,13 @@ class GlobalFragilityIndex {
 
         if ($bestT === null) {
             if ($aborted) {
-                return self::nullResult('fisher_exact', $baselineP, $baseSig, sprintf(
+                $out = self::nullResult('fisher_exact', $baselineP, $baseSig, sprintf(
                     'GFI not computed: certification stopped after %s candidate margin pairs ' .
                     'with no flipping table found. Proven lower bound: GFI >= %d.',
                     number_format($examined), $levelDone + 1), $examined);
+                $out['method'] = 'margin_budget_exhausted';
+                $out['lower_bound'] = $levelDone + 1;
+                return $out;
             }
             return array(
                 'GFI' => null, 'GFQ' => null, 'verified' => true,
@@ -462,6 +480,10 @@ class GlobalFragilityIndex {
             'post_toggle' => array('a' => $bestT[0], 'b' => $bestT[1], 'c' => $bestT[2], 'd' => $bestT[3]),
             'candidates_evaluated' => $examined,
         );
+        if ($aborted) {
+            $out['lower_bound'] = $levelDone + 1;
+            $out['upper_bound'] = (int)$bestD;
+        }
         $out['note'] = $aborted
             ? sprintf('GFI <= %d: UPPER BOUND; certification stopped at the work/time budget after %s ' .
                       'candidate margin pairs. Proven bracket: %d <= GFI <= %d.',
@@ -473,7 +495,7 @@ class GlobalFragilityIndex {
     }
 
     /** Rigorous starting incumbent: a real opposite-classification table. */
-    private static function mInitialIncumbent($origin, $baseSig, $alpha) {
+    private static function mInitialIncumbent($origin, $baseSig, $alpha, $deadline, &$timedOut) {
         list($a, $b, $c, $d) = $origin;
         $N = $a + $b + $c + $d;
 
@@ -500,6 +522,10 @@ class GlobalFragilityIndex {
         $best = null;
         foreach (array(0, 1) as $form) {
             for ($k = 0; $k <= $N; $k++) {
+                if (($k & 0xFFFF) === 0xFFFF && microtime(true) > $deadline) {
+                    $timedOut = true;
+                    return $best;
+                }
                 $t = ($form === 0) ? array($k, 0, 0, $N - $k) : array(0, $k, $N - $k, 0);
                 $dist = self::mTransfer($origin, $t);
                 if ($best !== null && $dist >= $best[0]) {
@@ -514,7 +540,7 @@ class GlobalFragilityIndex {
     }
 
     /** All 12 single-transfer rays, every integer step evaluated. */
-    private static function mTightenRays($origin, $bestD, $bestT, $baseSig, $alpha) {
+    private static function mTightenRays($origin, $bestD, $bestT, $baseSig, $alpha, $deadline, &$timedOut) {
         $N = array_sum($origin);
         for ($src = 0; $src < 4; $src++) {
             for ($dst = 0; $dst < 4; $dst++) {
@@ -523,6 +549,10 @@ class GlobalFragilityIndex {
                 }
                 $top = min($origin[$src], $bestD - 1);
                 for ($k = 1; $k <= $top; $k++) {
+                    if (($k & 0x3FF) === 0 && microtime(true) > $deadline) {
+                        $timedOut = true;
+                        return array($bestD, $bestT);
+                    }
                     $t = $origin;
                     $t[$src] -= $k;
                     $t[$dst] += $k;
@@ -817,6 +847,26 @@ class GlobalFragilityIndex {
             return false;
         }
         return self::mFisherP($x, $R, $C, $N) >= $alpha;
+    }
+
+    // ---- Public access to the large-N Fisher engine ----
+    // Used by FisherExactTest (large N), FragilityIndex (large N) and
+    // LinFragilityIndex. Memory use is constant in N (Stirling series above
+    // n = 1023) and the cost grows only with the width of the pmf, not with N.
+
+    /** Two-sided Fisher p for the table {a, b, c, d}, SciPy probability-ordering rule. */
+    public static function fisherPLargeN($a, $b, $c, $d) {
+        return self::fisherPMargins($a, $a + $b, $a + $c, $a + $b + $c + $d);
+    }
+
+    /** Two-sided Fisher p for upper-left cell x with row-1 total R, column-1 total C, grand total N. */
+    public static function fisherPMargins($x, $R, $C, $N) {
+        return self::mFisherP((int)$x, (int)$R, (int)$C, (int)$N);
+    }
+
+    /** True when p >= alpha (not significant); same decision as fisherPMargins(...) >= alpha. */
+    public static function acceptsMargins($x, $R, $C, $N, $alpha = self::ALPHA) {
+        return self::mAccepts((int)$x, (int)$R, (int)$C, (int)$N, $alpha);
     }
 
     private static function nullResult($testUsed, $baselineP, $baseSig, $note, $evaluated = 0) {

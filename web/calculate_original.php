@@ -14,10 +14,15 @@
  * https://creativecommons.org/licenses/by/4.0/
  */
 
+require_once 'includes/safety_net.php';
 require_once 'FisherExactTest.php';
 require_once 'FragilityIndexWalsh.php';
 require_once 'RiskQuotient.php';
 require_once 'RelativeRisk.php';
+
+// The Walsh toggle scan grows with FI x N; very large tables hit the time
+// limit, and this shows the Colab message instead of a broken page.
+fm_install_safety_net('Walsh 2014 FI Calculator', 'calculate_original.php');
 
 $result = null;
 $error  = null;

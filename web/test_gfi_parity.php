@@ -9,6 +9,10 @@
  * Fisher's exact for ALL significance decisions, alpha = 0.05).
  * A green board means the PHP port agrees with the Python program on GFI,
  * on the exact post-GFI table reached, and on the p-value at the flip.
+ * When a case is finished by the margin certification instead of the shell
+ * search (the shell search has a few-second web budget), the witness table
+ * is checked for validity rather than matched, since several tables can sit
+ * at the same minimum distance.
  *
  * Also checks the structural invariant GFI <= FI (with a single shared
  * significance test, the global search can never need more moves than the
@@ -120,6 +124,21 @@ foreach ($cases as $case) {
     $okFinalP = ($expFinalP === null)
         ? ($gotFinalP === null)
         : ($gotFinalP !== null && abs($gotFinalP - $expFinalP) < 1e-6);
+
+    // The shell search hands over to the margin certification after a few
+    // seconds, so on a slower machine a case can switch methods. The minimum
+    // is the same, but the witness may be a different, equally minimal table
+    // (the one the current r12 reference reports; e.g. {90,10,10,90} ->
+    // {32,39,40,89}). For a margin result, check the witness itself: exact
+    // distance GFI, same N, opposite verdict, and final p recomputed.
+    if ($r['method'] !== 'exhaustive' && $gotTable !== null && $expTable !== null) {
+        $wDist = (abs($gotTable[0] - $a) + abs($gotTable[1] - $b) +
+                  abs($gotTable[2] - $c) + abs($gotTable[3] - $d)) / 2;
+        $wP = GlobalFragilityIndex::fisherPLargeN($gotTable[0], $gotTable[1], $gotTable[2], $gotTable[3]);
+        $okTable = ((int)$wDist === $gotGfi && array_sum($gotTable) === $a + $b + $c + $d &&
+                    (($wP < 0.05) !== $r['baseline_significant']));
+        $okFinalP = ($gotFinalP !== null && abs($gotFinalP - $wP) < 1e-9);
+    }
     $ok = $okGfi && $okTable && $okFinalP && $okTest && $okInvariant;
     if ($ok) { $pass++; }
 
