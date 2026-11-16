@@ -1,6 +1,6 @@
 # Expanded Glossary: Fragility–Robustness Framework
 
-This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.6.1). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
+This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.7.0). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
 
 ## Core Concepts
 
@@ -178,6 +178,7 @@ Near, intermediate, and far describe geometry. The verdict layer supplies two de
 | **Indeterminate** | Intermediate nb: neither concordant nor discordant. |
 | **Supported** | The claim verdict when the result is concordant and the classification is stable. The supported claim is the one consistent with the significance classification. |
 | **Inconclusive** | The claim verdict otherwise, with the reason named: unstable classification, discordance, or indeterminate nb. At very large N the fragility gate follows the canon's Part VIII reading. |
+| **Durable evidence** (canon v14.7.0) | Evidence whose significance classification is stable and concordant: the plain-language name for a supported claim verdict, for either claim. It describes the evidence, not the persistence of a treatment effect over time. |
 
 Verdict-layer words never replace band labels: the nb bands remain near/intermediate/far, and "robust"/"not robust" are never used as concordance verdicts — robustness remains the name of the nb dimension.
 
@@ -193,4 +194,4 @@ Verdict-layer words never replace band labels: the nb bands remain near/intermed
 >
 > Fragility (fr) category pair: **unstable** / **stable**. The earlier pole label **fragile** is deprecated as of canon v13.9.0. The dimension name remains **fragility**; metric names that contain “fragility” are unchanged. The published corpus, including the hub paper’s significant-fragile-weak (SFW) pattern, still uses the older pair; under current canon that pattern is significant-unstable-near.
 
-*Source: FRAGILITY_METRICS.md, version 14.6.1.*
+*Source: FRAGILITY_METRICS.md, version 14.7.0.*

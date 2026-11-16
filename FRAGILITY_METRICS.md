@@ -1,12 +1,12 @@
-# FRAGILITY METRICS v14.6.1
+# FRAGILITY METRICS v14.7.0
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 **Thomas F. Heston**
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 14.6.1
+**Version:** 14.7.0
 
-**Date:** November 11, 2026
+**Date:** November 16, 2026
 ---
 ## Abstract
 A p-value of 0.049 and a p-value of 0.0001 are both reported as 'statistically significant'—but they represent vastly different levels of evidence quality. The p–fr–nb framework fixes this. Instead of reporting p-values alone ("partial evidence"), we propose complete statistical evidence, defined as the triplet p–fr–nb: the p-value (significance), a native fragility quotient fr (classification stability), and a neutrality-boundary robustness metric nb (distance from therapeutic neutrality).
@@ -174,6 +174,8 @@ Near, intermediate, and far describe geometry. Readers also need a verdict word.
 Intermediate nb is **indeterminate**: neither concordant nor discordant.
 
 **Claim verdict (full triplet).** The claim consistent with the significance classification is **supported** when the result is concordant and the classification is stable; otherwise the verdict is **inconclusive**, with the reason named (unstable classification, discordance, or indeterminate nb). At very large N the fragility band is read per Part VIII, and the verdict follows that reading.
+
+**Durable evidence.** Evidence is **durable** when the significance classification is stable and concordant: the plain-language name for a supported claim verdict. It applies to either claim (effect exists or no effect). Durable describes the evidence, not the persistence of a treatment effect over time.
 
 Example reads: "p = 0.003, fr stable, nb far — concordant; effect-exists claim supported." "p = 0.03, fr stable, nb near — discordant (significance without separation from neutrality); inconclusive."
 
@@ -1214,6 +1216,11 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the Walsh FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 14.7.0** (November 16, 2026)
+
+- **Added "durable evidence" to the Verdict Layer (Part I).** Evidence is durable when the significance classification is stable and concordant; durable is the plain-language name for a supported claim verdict, for either claim. It describes the evidence, not the persistence of a treatment effect over time (the clinical sense of "durable response"). Motivation: give public-facing text a verdict word in the slot general usage fills with "robust," which canon reserves for the nb dimension.
+- No formula, band cutoff, pairing, or computed value changed.
 
 **Version 14.6.1** (November 11, 2026)
 
