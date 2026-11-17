@@ -2879,7 +2879,7 @@ def compute_av(a, b, c, d, alpha=ALPHA):
             "sig_pearson_yates": None,
             "alpha": float(alpha),
             "note": (
-                "NA: ineligible input for AV. A marginal total is "
+                "NA: ineligible input for AF. A marginal total is "
                 "zero, where every test returns p = 1 by convention, "
                 "so sensitivity to test choice cannot be assessed."
             ),
@@ -2984,7 +2984,7 @@ def compute_rr(a, b, c, d, alpha=ALPHA):
         base["RR"] = 0.0
         base["note"] = (
             "RR = 0 (zero events in Arm A); Katz CI undefined, so "
-            "RR_signif and RR_CI_discordant are NA. No continuity "
+            "RR_signif and RR_CI_flip are NA. No continuity "
             "correction applied."
         )
         return base
@@ -3193,7 +3193,7 @@ def compute_rv(a, b, c, d, alpha=ALPHA):
     if pA in (0.0, 1.0) or pB in (0.0, 1.0):
         notes.append(
             "A fitted arm proportion is 0 or 1, so that arm is "
-            "deterministic in every replicate; RV may understate "
+            "deterministic in every replicate; RF may understate "
             "real-world variability."
         )
 
@@ -3215,7 +3215,7 @@ def compute_rv(a, b, c, d, alpha=ALPHA):
             "p_replicate_significant": float(sig_mass),
         })
         notes.insert(0, (
-            f"RV = {flip_mass:.7f}, exact to within {err:.2e} "
+            f"RF = {flip_mass:.7f}, exact to within {err:.2e} "
             f"(binomial tail truncation, union bound) over {pairs:,} "
             "enumerated replicate tables."
         ))
@@ -3238,7 +3238,7 @@ def compute_rv(a, b, c, d, alpha=ALPHA):
             "mc_seed": int(RV_MC_SEED),
         })
         notes.insert(0, (
-            f"RV = {rv:.5f} by seeded Monte Carlo ({RV_MC_REPS:,} "
+            f"RF = {rv:.5f} by seeded Monte Carlo ({RV_MC_REPS:,} "
             f"replicates, SE ~ {se:.5f}, seed {RV_MC_SEED}): the exact "
             f"grid would need {pairs:,} pairs "
             f"(> RV_MAX_PAIRS = {RV_MAX_PAIRS:,})."
@@ -3639,7 +3639,7 @@ def _fragility_summary(a, b, c, d, alpha=ALPHA, quiet=False,
     res_other = reuse("other", lambda: compute_ufi_pfi(a, b, c, d, alpha))
     res_av = reuse("AV", lambda: compute_av(a, b, c, d, alpha))
     if not quiet and "RV" not in cached:
-        print("Computing RV (resampling variability) ...", flush=True)
+        print("Computing RF (resampling fragility) ...", flush=True)
     res_rv = reuse("RV", lambda: compute_rv(a, b, c, d, alpha))
     res_rr = reuse("RR", lambda: compute_rr(a, b, c, d, alpha))
 
@@ -3665,6 +3665,9 @@ def _fragility_summary(a, b, c, d, alpha=ALPHA, quiet=False,
     RR_signif = res_rr.get("RR_signif")
     RR_CI_discordant = res_rr.get("RR_CI_discordant")
     AD_any = compute_ad_any(res_av, res_rr)
+    GFQ = res_gfi.get("GFQ")
+    NNR = (1.0 / RV if RV is not None and RV > 0
+           and RV > (res_rv.get("truncation_error_bound") or 0.0) else None)
 
     # ---- structural checks. A violation of a proven inequality by a
     # ---- CERTIFIED value means a defect, so that value is withheld.
@@ -3696,10 +3699,10 @@ def _fragility_summary(a, b, c, d, alpha=ALPHA, quiet=False,
 
     headers = [
         "baseline_pvalue", "FI", "FQ", "MFQ", "chosen_arm",
-        "post_toggle_pvalue", "MFI", "GFI", "SFI", "RQ", "UFI",
-        "PFI_Pearson", "SFM", "FD", "AV_discordant", "AV_which", "RV",
+        "post_toggle_pvalue", "MFI", "GFI", "GFQ", "SFI", "RQ", "UFI",
+        "PFI_Pearson", "SFM", "FD", "AF_flip", "AF_which", "RF", "NNR",
         "RR", "RR_CI_low", "RR_CI_high", "RR_signif",
-        "RR_CI_discordant", "AD_any",
+        "RR_CI_flip", "AF_any",
     ]
     values = [
         fmt_p(baseline_p),
@@ -3710,6 +3713,7 @@ def _fragility_summary(a, b, c, d, alpha=ALPHA, quiet=False,
         fmt_p(post_p),
         fmt_i(MFI),
         fmt_i(GFI),
+        fmt_f(GFQ),
         fmt_i(SFI),
         fmt_f(RQ),
         fmt_i(UFI),
@@ -3717,8 +3721,10 @@ def _fragility_summary(a, b, c, d, alpha=ALPHA, quiet=False,
         fmt_f(SFM),
         fmt_i(nGFI),
         fmt_i(AV_discordant),
-        AV_which if AV_which is not None else "NA",
+        ("none" if AV_which == "concordant" else AV_which)
+        if AV_which is not None else "NA",
         fmt_f(RV),
+        fmt_f(NNR),
         fmt_f(RR),
         fmt_f(RR_CI_low),
         fmt_f(RR_CI_high),
@@ -3810,42 +3816,45 @@ def _fragility_summary(a, b, c, d, alpha=ALPHA, quiet=False,
     # ---- AV diagnostics ----
     print()
     if AV_discordant is None:
-        print("AV = NA (ineligible input)")
-        print("AV note:", res_av.get("note", ""))
+        print("AF = NA (ineligible input)")
+        print("AF note:", res_av.get("note", ""))
     else:
-        print(f"AV (analysis variability) at alpha = {alpha}:")
+        print(f"AF (analysis fragility) at alpha = {alpha}:")
         print(f"  fisher_exact   p = {fmt_p(res_av.get('p_fisher'))} "
               f"({state_label(res_av['p_fisher'], alpha)})")
         print(f"  pearson_chi2   p = {fmt_p(res_av.get('p_pearson'))} "
               f"({state_label(res_av['p_pearson'], alpha)})")
         print(f"  pearson_yates  p = {fmt_p(res_av.get('p_pearson_yates'))} "
               f"({state_label(res_av['p_pearson_yates'], alpha)})")
-        print(f"  AV_discordant = {res_av['AV_discordant']}; "
-              f"AV_which = {res_av['AV_which']}")
+        af_which = ("none" if res_av['AV_which'] == "concordant"
+                    else res_av['AV_which'])
+        print(f"  AF_flip = {res_av['AV_discordant']}; "
+              f"AF_which = {af_which}")
 
     # ---- RV diagnostics ----
     print()
     if RV is not None:
-        print(f"RV (resampling variability): {RV:.7f}")
-        print("RV method:", res_rv.get("method"))
-        print("RV replicate tables examined:",
+        print(f"RF (resampling fragility): {RV:.7f}")
+        print("NNR (number needed to reverse = 1/RF):", fmt_f(NNR))
+        print("RF method:", res_rv.get("method"))
+        print("RF replicate tables examined:",
               f"{res_rv.get('pairs_examined', 0):,}")
         if res_rv.get("method") == "exact enumeration":
-            print("RV truncation error bound:",
+            print("RF truncation error bound:",
                   f"{res_rv.get('truncation_error_bound'):.2e}")
         else:
-            print("RV Monte Carlo SE:", fmt_f(res_rv.get("mc_se")),
+            print("RF Monte Carlo SE:", fmt_f(res_rv.get("mc_se")),
                   f"(seed {res_rv.get('mc_seed')})")
-        print("RV fitted model: pA =", fmt_f(res_rv.get("pA")),
+        print("RF fitted model: pA =", fmt_f(res_rv.get("pA")),
               " pB =", fmt_f(res_rv.get("pB")),
               f" (nA = {res_rv.get('nA')}, nB = {res_rv.get('nB')})")
-        print("RV P(replicate significant):",
+        print("RF P(replicate significant):",
               fmt_f(res_rv.get("p_replicate_significant")))
         if res_rv.get("note"):
-            print("RV note:", res_rv.get("note"))
+            print("RF note:", res_rv.get("note"))
     else:
-        print("RV = NA")
-        print("RV note:", res_rv.get("note", ""))
+        print("RF = NA")
+        print("RF note:", res_rv.get("note", ""))
 
     # ---- RR diagnostics ----
     print()
@@ -3861,8 +3870,8 @@ def _fragility_summary(a, b, c, d, alpha=ALPHA, quiet=False,
     else:
         print("RR CI = NA")
     if RR_CI_discordant is not None:
-        print(f"RR_CI_discordant = {RR_CI_discordant}")
-        print("  (RR_CI_discordant compares the CI classification "
+        print(f"RR_CI_flip = {RR_CI_discordant}")
+        print("  (RR_CI_flip compares the CI classification "
               "against the TWO-SIDED FISHER EXACT classification, the "
               "module's authoritative test. The Katz interval inverts "
               "a Wald z-test on log RR, not Fisher's test, so "
@@ -3873,10 +3882,10 @@ def _fragility_summary(a, b, c, d, alpha=ALPHA, quiet=False,
     # ---- AD_any diagnostics ----
     print()
     if AD_any is not None:
-        print(f"AD_any = {AD_any} (analysis discordance on any tier: "
-              "1 iff AV_discordant = 1 OR RR_CI_discordant = 1)")
+        print(f"AF_any = {AD_any} (analysis fragility on any tier: "
+              "1 iff AF_flip = 1 OR RR_CI_flip = 1)")
     else:
-        print("AD_any = NA (both discordance tiers are NA)")
+        print("AF_any = NA (both analysis-fragility tiers are NA)")
 
     # ---- one combined confirmation, only when something is qualified ----
     need_gfi = (res_gfi.get("GFI") is not None

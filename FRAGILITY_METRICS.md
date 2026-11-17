@@ -1,10 +1,10 @@
-# FRAGILITY METRICS v14.7.0
+# FRAGILITY METRICS v14.8.0
 ## The Fragility-Robustness Framework: Unified Metrics for Statistical Evidence Quality Across Discrete and Continuous Outcome Types
 **Thomas F. Heston**
 *Department of Family Medicine, University of Washington, Seattle, WA, USA*
 *Department of Medical Education and Clinical Sciences, Washington State University, Spokane, WA, USA*
 **ORCID:** [0000-0002-5655-2512](https://orcid.org/0000-0002-5655-2512)
-**Version:** 14.7.0
+**Version:** 14.8.0
 
 **Date:** November 16, 2026
 ---
@@ -124,7 +124,7 @@ Native fragility quotients (MFQ, GFQ, CFQ, SFQ, ZFQ, OFQ, ANOVA-FQ, PFI, DFQ, BF
 | Data fragility | Perturbation | Recorded outcomes or particular patient counts | Analytical rule and the metric's stated constraints | Minimum toggles, transfers, or unit edits; matching quotient, or continuous boundary distance |
 | Data fragility | Scaling | The amount of data | Observed proportions, allocation ratio, and analytical rule | Sample-size fragility multiplier (SFM), a scaling factor |
 
-**Analysis fragility.** The observed data remain fixed while the analytical rule changes. Choices include the statistical test and its convention, covariate adjustment, handling of missing data, multiplicity correction, interim stopping rule, and significance threshold. Analysis fragility comes first in the logical order: each subsequent data-fragility assessment requires a fixed analytical rule. Changing the test during a perturbation search mixes analysis and perturbation fragility and prevents interpretation as a single perturbation count.
+**Analysis fragility (AF).** The observed data remain fixed while the analytical rule changes. Choices include the statistical test and its convention, covariate adjustment, handling of missing data, multiplicity correction, interim stopping rule, and significance threshold. Analysis fragility comes first in the logical order: each subsequent data-fragility assessment requires a fixed analytical rule. Changing the test during a perturbation search mixes analysis and perturbation fragility and prevents interpretation as a single perturbation count. AF was labeled AV (analysis variability) in early program output; AF is the canonical name.
 
 **Resampling fragility (RF).** This is the estimated probability that the original significance classification would reverse in another sample of the same size under a specified data-generating process. It may be estimated by bootstrap resampling or Monte Carlo simulation under a specified or fitted population model, with the analysis and threshold held fixed. It concerns hypothetical samples and depends on the resampling procedure or population model. It is recognized in the taxonomy but remains outside the operational p–fr–nb triplet because it introduces sampling assumptions beyond a direct measurement of the observed evidence. A reversal probability is not an outcome-edit count.
 
@@ -1216,6 +1216,11 @@ Implements a modified FI in which both arms are toggled independently, rather th
 Defines the Walsh FI and the canonical toggle rule on which MFQ is based.  
 
 ### Changelog
+
+**Version 14.8.0** (November 16, 2026)
+
+- **Abbreviated analysis fragility as AF** (Part I) and retired the early program label AV (analysis variability), parallel to RF replacing RV in v14.4.0.
+- No formula, band cutoff, pairing, or computed value changed.
 
 **Version 14.7.0** (November 16, 2026)
 

@@ -1,6 +1,6 @@
 # Expanded Glossary: Fragility–Robustness Framework
 
-This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.7.0). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
+This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.8.0). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
 
 ## Core Concepts
 
@@ -33,7 +33,7 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 | **Fragility quotient** | A 0–1 proportion describing how much of the relevant data must change to reverse the significance classification. It is usually the preferred way to report fragility. |
 | **Classification stability** | The stability of the significant/nonsignificant label, not the size of the treatment effect. It is what fragility measures. |
 | **Taxonomy of statistical fragility** | Statistical fragility divides into **analysis fragility** and **data fragility**; data fragility divides further into **resampling**, **perturbation**, and **scaling** fragility. These are four different forms, not four estimates of one quantity. Name the form before reporting a value. |
-| **Analysis fragility** | The observed data stay fixed and the analytical rule changes: the test, covariate adjustment, handling of missing data, multiplicity correction, stopping rule, or significance threshold. It comes first in the logical order, because every data-fragility assessment needs a fixed analytical rule. |
+| **Analysis fragility (AF)** | The observed data stay fixed and the analytical rule changes: the test, covariate adjustment, handling of missing data, multiplicity correction, stopping rule, or significance threshold. It comes first in the logical order, because every data-fragility assessment needs a fixed analytical rule. The early program label AV (analysis variability) is retired; AF is the canonical name (canon v14.8.0). |
 | **Perturbation fragility** | The number of recorded outcomes in the observed table that must change before the significance classification flips, or that number as a proportion. The **fr** coordinate of the p–fr–nb triplet is always a native perturbation-fragility quotient. Not every fragility metric in the framework is a perturbation metric: SFM is scaling fragility. |
 | **Resampling fragility (RF)** | The probability that the significance classification would change in a new sample of the same size under a specified replication model. It is not part of the p–fr–nb triplet: it requires a replication model and re-expresses the significance axis. Under the normal approximation RF is a function of the p-value alone, at any sample size. The early program label RV (resampling variability) is retired; RF is the canonical name. |
 | **NNR — Number Needed to Reverse** | NNR = 1/RF: the number of identical repeat trials expected to produce one reversal of the significance classification. The replication companion of the number needed to treat — no information beyond RF, restated in counted trials. NNR = 2 at p = 0.05 (a coin flip), about 4 at p = 0.01, about 11 at p = 0.001, at any sample size. Claim-symmetric: for a significant baseline it counts expected repeats until a nonsignificant result, and the reverse for a nonsignificant baseline. Like RF, it sits outside the p–fr–nb triplet. Omit NNR when RF is below the enumeration error bound. |
@@ -194,4 +194,4 @@ Verdict-layer words never replace band labels: the nb bands remain near/intermed
 >
 > Fragility (fr) category pair: **unstable** / **stable**. The earlier pole label **fragile** is deprecated as of canon v13.9.0. The dimension name remains **fragility**; metric names that contain “fragility” are unchanged. The published corpus, including the hub paper’s significant-fragile-weak (SFW) pattern, still uses the older pair; under current canon that pattern is significant-unstable-near.
 
-*Source: FRAGILITY_METRICS.md, version 14.7.0.*
+*Source: FRAGILITY_METRICS.md, version 14.8.0.*
