@@ -1,6 +1,6 @@
 # Expanded Glossary: Fragility–Robustness Framework
 
-This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.8.0). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
+This glossary gives plain-language definitions of the core concepts, metrics, and abbreviations in **FRAGILITY_METRICS.md** (version 14.9.0). The framework reports **p–fr–nb**: significance, fragility, and robustness. Each entry is deliberately brief.
 
 ## Core Concepts
 
@@ -15,9 +15,9 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 | **Neutrality boundary** | The mathematical boundary representing therapeutic neutrality. Robustness measures how far the observed result is from this boundary. |
 | **p–fr–nb triplet** | The three-part summary of statistical evidence: **p** for significance, **fr** for classification stability, and **nb** for distance from therapeutic neutrality. |
 | **Complete statistical evidence** | Reporting p, fr, and nb together. This assesses whether the result is significant, whether that classification is stable, and whether the point estimate is separated from neutrality. |
-| **Complete evidence** | Complete statistical evidence plus the study’s absolute effect size. Clinical interpretation needs both the p–fr–nb triplet and the effect size in meaningful clinical units. |
+| **Complete evidence** | Complete statistical evidence plus a declared judgment of the clinical significance of the absolute effect size (canon v14.9.0). It has two layers: the statistical layer (p–fr–nb), which is unitless and comparable across trials, and the clinical layer, which reports the absolute effect size in clinical units and judges it against a declared threshold (a MID with its level of decision). The clinical layer is bound to its outcome and setting, so it is declared rather than assumed universal. |
 | **Partial evidence** | Reporting only the p-value, or only p-values and confidence intervals. It does not directly report classification stability or standardized distance from neutrality. |
-| **Effect size** | The size of the observed treatment difference. In this framework, **nb** captures a relative standardized magnitude, whereas the reported effect size captures the absolute magnitude in clinical units, such as risk difference, NNT, or months of survival gained. Absolute magnitude is not generally recoverable from nb alone; for a single independent-sample 2×2 with both arms nonempty, ARR = RQ / [4f(1 − f)] once the allocation fraction is known (canon v14.5.1). The quartet still reports absolute magnitude explicitly. |
+| **Effect size** | The size of the observed treatment difference. In this framework, **nb** captures a relative standardized magnitude, whereas the reported effect size captures the absolute magnitude in clinical units, such as risk difference, NNT, or months of survival gained. Absolute magnitude is not generally recoverable from nb alone; for a single independent-sample 2×2 with both arms nonempty, ARR = RQ / [4f(1 − f)] once the allocation fraction is known (canon v14.5.1). Complete evidence still reports absolute magnitude explicitly, in its clinical layer. |
 | **Model-free** | A framework metric calculated from observed counts or published summary statistics, without reconstructing patient-level data, simulating data, or fitting covariate models. |
 
 ## Fragility and Classification Stability
@@ -155,13 +155,13 @@ This glossary gives plain-language definitions of the core concepts, metrics, an
 | **UFI — Unit Fragility Index** | A historical fixed-margin framework that defines a smallest permitted shift and the number of such shifts needed to reverse significance. Modern analyses generally use PFI or the appropriate primary quotient instead. |
 | **Acronym case (W vs w)** | Uppercase-W WFQ and WFS are the generic Wald fragility metrics. Lowercase-w metrics — wGFQ, wsRQ, wFDQ — are the weighted meta-analytic pooled forms. The two groups are unrelated; the case is part of the name. |
 
-## Decision Threshold (Outside the Framework)
+## Clinical Significance Threshold (The Clinical Layer of Complete Evidence)
 
 | Term | Plain-language definition |
 |---|---|
-| **Minimally important difference (MID)** | The smallest change in an outcome that would count as worth having. The MID is not a measurement taken from the data; it is a threshold declared in advance, against which the observed absolute effect size is judged. |
+| **Minimally important difference (MID)** | The smallest change in an outcome that would count as worth having. The MID is not a measurement taken from the data; it is a threshold declared in advance, against which the observed absolute effect size is judged in the clinical layer of complete evidence. |
 
-It sits outside complete evidence. The p–fr–nb triplet gives complete statistical evidence, and adding the absolute effect size gives complete evidence. Judging that effect size against a MID is the further step from evidence to a decision, and it requires clinical judgment the framework does not supply.
+It sits inside complete evidence (canon v14.9.0). The p–fr–nb triplet gives complete statistical evidence; adding the absolute effect size, judged against a declared MID, gives complete evidence. The judgment is clinical and subjective, which is why the threshold and its level of decision must be declared: anyone who adopts the declared threshold reaches the same judgment, and anyone who disagrees can see where. The decision to act, weighing harms, costs, and patient values, follows from complete evidence and is not part of it.
 
 A MID is never only a number. It is a number plus a stated level of decision, because the same outcome carries different thresholds for an individual patient and for a population. A 2 mmHg fall in systolic blood pressure is negligible for one patient and substantial across a population, since a small shift in the whole distribution prevents more events than treating the high-risk tail alone (Rose, 1985). A reported MID that does not say which level it applies to cannot be interpreted.
 
@@ -194,4 +194,4 @@ Verdict-layer words never replace band labels: the nb bands remain near/intermed
 >
 > Fragility (fr) category pair: **unstable** / **stable**. The earlier pole label **fragile** is deprecated as of canon v13.9.0. The dimension name remains **fragility**; metric names that contain “fragility” are unchanged. The published corpus, including the hub paper’s significant-fragile-weak (SFW) pattern, still uses the older pair; under current canon that pattern is significant-unstable-near.
 
-*Source: FRAGILITY_METRICS.md, version 14.8.0.*
+*Source: FRAGILITY_METRICS.md, version 14.9.0.*
